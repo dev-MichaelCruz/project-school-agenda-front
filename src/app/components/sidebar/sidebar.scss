@@ -1,0 +1,20 @@
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  background: var(--primary-color);
+
+  .header-sidebar {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.template {
+  border: 0px solid grey;
+  border-radius: 1rem;
+  background: var(--bg-white);
+
+  width: 85dvw;
+  height: 100%;
+  padding: 1rem;
+}
