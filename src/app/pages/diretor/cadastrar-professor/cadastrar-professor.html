@@ -1,4 +1,4 @@
-<div class="p-2">
+<div class="p-4">
   <h2 class="mb-4">Cadastrar Professor</h2>
 
   @if (sucesso) {
@@ -27,8 +27,6 @@
           }
         </div>
       </div>
-    </div>
-    <div class="row">
       <div class="col-8">
         <div class="mb-3">
           <label class="form-label">Email</label>
@@ -65,7 +63,7 @@
                 class="btn btn-rounded btn-remove-turma btn-danger"
                 (click)="removerTurma($index)"
               >
-                −
+                <i class="bi bi-dash"></i>
               </button>
             }
 
@@ -75,7 +73,7 @@
                 class="btn btn-rounded btn-add-turma btn-primary"
                 (click)="adicionarTurma()"
               >
-                +
+                <i class="bi bi-plus"></i>
               </button>
             }
           </div>
