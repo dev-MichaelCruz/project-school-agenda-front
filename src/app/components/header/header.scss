@@ -1,6 +1,9 @@
 header {
-  background: var(--primary-color);
-  color: var(--text-primary-color);
+  background: var(--bg-color);
+  color: var(--primary-color);
+  h1{
+    font-weight: 700;
+  }
 }
 
 :host{

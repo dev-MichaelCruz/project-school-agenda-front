@@ -1,1 +1,89 @@
-<p>cadastrar-professor works!</p>
+<div>
+  <div class="p-2">
+    <h2 class="mb-4">Cadastrar Professor</h2>
+
+    @if (sucesso) {
+      <div class="alert alert-success">Professor cadastrado com sucesso!</div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="cadastrar()">
+      <div class="row">
+        <div class="col-6">
+          <div class="mb-3">
+            <label class="form-label">Nome</label>
+            <input type="text" class="form-control" formControlName="nome" />
+
+            @if (form.get('nome')?.touched && form.get('nome')?.invalid) {
+              <small class="text-danger">Campo obrigatório</small>
+            }
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="mb-3">
+            <label class="form-label">Sobrenome</label>
+            <input type="text" class="form-control" formControlName="sobrenome" />
+
+            @if (form.get('sobrenome')?.touched && form.get('sobrenome')?.invalid) {
+              <small class="text-danger">Campo obrigatório</small>
+            }
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-8">
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" formControlName="email" />
+
+            @if (form.get('email')?.touched && form.get('email')?.invalid) {
+              <small class="text-danger">Email obrigatório</small>
+            }
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="mb-3">
+            <label class="form-label">Senha para acesso</label>
+            <input type="password" class="form-control" formControlName="senha" />
+
+            @if (form.get('senha')?.touched && form.get('senha')?.invalid) {
+              <small class="text-danger">Campo obrigatório</small>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label">Turma</label>
+
+        <div formArrayName="turmas">
+          @for (turma of turmas.controls; track $index) {
+            <div class="d-flex align-items-center gap-2 mb-3">
+              <input type="text" class="form-control" [formControlName]="$index" />
+
+              @if ($index > 0) {
+                <button
+                  type="button"
+                  class="btn btn-rounded btn-remove-turma btn-danger"
+                  (click)="removerTurma($index)"
+                >
+                  −
+                </button>
+              }
+
+              @if ($index === turmas.length - 1) {
+                <button
+                  type="button"
+                  class="btn btn-rounded btn-add-turma btn-primary"
+                  (click)="adicionarTurma()"
+                >
+                  +
+                </button>
+              }
+            </div>
+          }
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-default-green">Cadastrar</button>
+    </form>
+  </div>
+</div>
