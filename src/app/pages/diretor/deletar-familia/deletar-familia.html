@@ -1,1 +1,43 @@
-<p>deletar-familia works!</p>
+<div class="p-4">
+  <h2 class="mb-4">Deletar família</h2>
+
+  <!-- TOAST -->
+  @if (toastVisivel) {
+    <div class="alert alert-success">{{ toastMensagem }}</div>
+  }
+
+  @for (familia of familias; track familia.id) {
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <span class="nome-familia">
+        {{ familia.nome }}
+      </span>
+
+      <button class="btn btn-delete btn-danger btn-rounded" (click)="abrirModal(familia)">-</button>
+    </div>
+  }
+</div>
+
+<!-- MODAL BOOTSTRAP -->
+<div class="modal fade" id="modalDeleteFamilia" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmar exclusão</h5>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        Deseja deletar
+        <strong>{{ familiaSelecionada?.nome }}</strong
+        >?
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+
+        <button type="button" class="btn btn-danger" (click)="confirmarDelete()">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
