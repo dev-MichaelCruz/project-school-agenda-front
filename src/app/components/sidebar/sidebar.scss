@@ -1,11 +1,17 @@
 .sidebar {
   width: 250px;
   height: 100vh;
-  background: var(--primary-color);
+  background: var(--secondary-color);
 
   .header-sidebar {
     display: flex;
     align-items: center;
+    color: var(--primary-color);
+  }
+
+  ul li a{
+    color: var(--primary-color);
+    font-weight: 700;
   }
 }
 
