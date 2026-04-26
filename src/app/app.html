@@ -1,10 +1,12 @@
-
-
 <div class="d-flex">
   <app-sidebar />
-  <app-header />
 
-  <div class="d-flex mt-3 mx-3 gap-3 w-full">
-    <router-outlet />
+  <div class="w-full container-fluid px-0 d-flex flex-column">
+    <app-header />
+    <div class="main-content">
+      <router-outlet />
+      Test container
+    </div>
+
   </div>
 </div>
