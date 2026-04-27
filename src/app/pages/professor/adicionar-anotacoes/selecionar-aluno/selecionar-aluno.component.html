@@ -1,0 +1,30 @@
+<h2>Adicionar anotação</h2>
+<small class="text-muted">Selecionar aluno</small>
+
+<div class="mt-4 d-flex gap-4 flex-wrap">
+
+  @for (aluno of alunos; track aluno.id) {
+
+    <div
+      class="text-center"
+      style="cursor: pointer"
+      (click)="selecionar.emit(aluno)"
+    >
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+        width="60"
+      />
+
+      <div>{{ aluno.nome }}</div>
+    </div>
+
+  }
+
+</div>
+
+<button
+  class="btn btn-secondary mt-4"
+  (click)="voltar.emit()"
+>
+  Voltar
+</button>

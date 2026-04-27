@@ -1,1 +1,17 @@
-<p>adicionar-anotacoes works!</p>
+<div class="p-4">
+  @if (etapa() === 'turma') {
+    <app-selecionar-turma [turmas]="turmas" (selecionar)="selecionarTurma($event)" />
+  }
+
+  @if (etapa() === 'aluno') {
+    <app-selecionar-aluno
+      [alunos]="alunos"
+      (selecionar)="selecionarAluno($event)"
+      (voltar)="voltarTurma()"
+    />
+  }
+
+  @if (etapa() === 'form') {
+    <app-form-adicionar-anotacao (voltar)="voltarAluno()" (salvar)="salvarAnotacao($event)" />
+  }
+</div>

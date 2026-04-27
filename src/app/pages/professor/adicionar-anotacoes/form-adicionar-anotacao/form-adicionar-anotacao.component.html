@@ -1,0 +1,38 @@
+<h2>Adicionar anotação</h2>
+
+<div class="mt-4">
+
+  <textarea
+    class="form-control"
+    rows="5"
+    [(ngModel)]="texto"
+  ></textarea>
+
+  <div class="d-flex justify-content-between mt-3">
+
+    <div>
+      <input type="checkbox" [(ngModel)]="privado" />
+      Não visível para os tutores
+    </div>
+
+    <div class="d-flex gap-2">
+
+      <button
+        class="btn btn-danger"
+        (click)="voltar.emit()"
+      >
+        Cancelar
+      </button>
+
+      <button
+        class="btn btn-success"
+        (click)="enviar()"
+      >
+        Salvar
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

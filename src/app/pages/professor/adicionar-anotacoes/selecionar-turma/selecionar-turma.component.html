@@ -1,0 +1,15 @@
+<h2>Gerenciar anotações</h2>
+<small class="text-muted">Selecione a sala</small>
+
+<div class="mt-4 d-flex gap-2 flex-wrap">
+
+  @for (turma of turmas; track turma) {
+    <button
+      class="btn btn-warning"
+      (click)="selecionar.emit(turma)"
+    >
+      {{ turma }}
+    </button>
+  }
+
+</div>
