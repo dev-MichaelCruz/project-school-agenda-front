@@ -25,9 +25,9 @@ export class AdicionarAnotacoes {
   turmas = ['Turma 1', 'Turma 2', 'Turma 3'];
 
   alunos = [
-    { id: 1, nome: 'João' },
-    { id: 2, nome: 'Maria' },
-    { id: 3, nome: 'Pedro' }
+    { id: 1, nome: 'João', sexo: 'M' },
+    { id: 2, nome: 'Maria', sexo: 'F' },
+    { id: 3, nome: 'Pedro', sexo: 'M' }
   ];
 
   selecionarTurma(turma: string) {

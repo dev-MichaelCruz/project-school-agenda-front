@@ -1,20 +1,23 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import {
+  Component,
+  input,
+  output
+} from '@angular/core';
+
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-selecionar-aluno',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './selecionar-aluno.component.html'
+  templateUrl: './selecionar-aluno.component.html',
+  styleUrls: ['./selecionar-aluno.component.scss'],
 })
-export class SelecionarAlunoComponent implements OnInit {
+export class SelecionarAlunoComponent {
 
-  @Input() alunos: any[] = [];
+  alunos = input<any[]>([]);
 
-  @Output() selecionar = new EventEmitter<any>();
-  @Output() voltar = new EventEmitter<void>();
-
-  ngOnInit() {
-  }
+  selecionar = output<any>();
+  voltar = output<void>();
 
 }

@@ -1,29 +1,75 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  output,
+  signal,
+  inject
+} from '@angular/core';
+
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  Validators
+} from '@angular/forms';
 
 @Component({
   selector: 'app-form-adicionar-anotacao',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './form-adicionar-anotacao.component.html'
 })
 export class FormAdicionarAnotacaoComponent {
 
-  @Output() salvar = new EventEmitter<any>();
-  @Output() voltar = new EventEmitter<void>();
+  salvar = output<any>();
+  voltar = output<void>();
 
-  texto = '';
-  privado = false;
+  private fb = inject(FormBuilder);
 
-  enviar() {
+  imagemSelecionada = signal<File | null>(null);
+  nomeImagem = signal('');
+
+  form = this.fb.group({
+    texto: ['', Validators.required],
+    privado: [false]
+  });
+
+  abrirSeletor(input: HTMLInputElement): void {
+    input.click();
+  }
+
+  onFileSelected(event: Event): void {
+
+    const input = event.target as HTMLInputElement;
+
+    if (!input.files?.length) return;
+
+    const file = input.files[0];
+
+    this.imagemSelecionada.set(file);
+    this.nomeImagem.set(file.name);
+  }
+
+  enviar(): void {
+
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
     this.salvar.emit({
-      texto: this.texto,
-      privado: this.privado
+      texto: this.form.value.texto,
+      privado: this.form.value.privado,
+      imagem: this.imagemSelecionada()
     });
 
-    this.texto = '';
-    this.privado = false;
+    this.form.reset({
+      texto: '',
+      privado: false
+    });
+
+    this.imagemSelecionada.set(null);
+    this.nomeImagem.set('');
   }
 
 }

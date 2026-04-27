@@ -1,4 +1,9 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  input,
+  output
+} from '@angular/core';
+
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -9,8 +14,8 @@ import { CommonModule } from '@angular/common';
 })
 export class SelecionarTurmaComponent {
 
-  @Input() turmas: string[] = [];
+  turmas = input<string[]>([]);
 
-  @Output() selecionar = new EventEmitter<string>();
+  selecionar = output<string>();
 
 }

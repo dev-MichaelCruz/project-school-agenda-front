@@ -1,38 +1,75 @@
 <h2>Adicionar anotação</h2>
 
-<div class="mt-4">
+<div class="mt-4" [formGroup]="form">
+  <input
+    #fileInput
+    type="file"
+    accept="image/*"
+    hidden
+    (change)="onFileSelected($event)"
+  />
 
   <textarea
+    formControlName="texto"
     class="form-control"
     rows="5"
-    [(ngModel)]="texto"
+    placeholder="Digite sua anotação..."
   ></textarea>
 
+  @if (form.get('texto')?.invalid && form.get('texto')?.touched) {
+    <div class="text-danger mt-1">
+      O campo de mensagem é obrigatório.
+    </div>
+  }
+
   <div class="d-flex justify-content-between mt-3">
-
     <div>
-      <input type="checkbox" [(ngModel)]="privado" />
-      Não visível para os tutores
-    </div>
-
-    <div class="d-flex gap-2">
-
       <button
-        class="btn btn-danger"
-        (click)="voltar.emit()"
+        type="button"
+        class="btn btn-secondary"
+        (click)="abrirSeletor(fileInput)"
       >
-        Cancelar
+        <i class="bi bi-card-image"></i>
+        Adicionar imagem
       </button>
 
-      <button
-        class="btn btn-success"
-        (click)="enviar()"
-      >
-        Salvar
-      </button>
-
+      @if (imagemSelecionada()) {
+        <small class="ms-2 text-muted align-middle">
+          {{ nomeImagem() }}
+        </small>
+      }
     </div>
 
+    <div class="form-check">
+      <input
+        id="privado"
+        formControlName="privado"
+        class="form-check-input"
+        type="checkbox"
+      />
+
+      <label class="form-check-label" for="privado">
+        Não visível para os tutores
+      </label>
+    </div>
   </div>
 
+  <div class="d-flex gap-2 justify-content-end mt-3">
+    <button
+      type="button"
+      class="btn btn-danger"
+      (click)="voltar.emit()"
+    >
+      Cancelar
+    </button>
+
+    <button
+      type="button"
+      class="btn btn-success"
+      (click)="enviar()"
+      [disabled]="form.invalid"
+    >
+      Salvar
+    </button>
+  </div>
 </div>
