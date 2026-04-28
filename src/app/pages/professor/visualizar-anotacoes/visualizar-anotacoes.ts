@@ -1,10 +1,12 @@
 import {
   Component,
   computed,
+  inject,
   signal
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 
 import { AnotacaoCardComponent } from './anotacao-card/anotacao-card.component';
 import { AnotacoesViewComponent } from './anotacoes-view/anotacoes-view.component';
@@ -22,6 +24,20 @@ import { AnotacoesViewComponent } from './anotacoes-view/anotacoes-view.componen
 })
 export class VisualizarAnotacoesComponent {
 
+  private route = inject(ActivatedRoute);
+
+  role = signal<'professor' | 'responsavel'>('professor');
+
+  constructor() {
+
+    const roleRoute = this.route.snapshot.data['role'];
+
+    if (roleRoute) {
+      this.role.set(roleRoute);
+    }
+
+  }
+
   anotacoes = signal([
     {
       id: 1,
@@ -36,20 +52,6 @@ export class VisualizarAnotacoesComponent {
       lida: true,
       visivelTutores: false,
       texto: 'Lipsum dolor sit amet 2'
-    },
-    {
-      id: 3,
-      data: '09/03/2026',
-      lida: false,
-      visivelTutores: true,
-      texto: 'Lipsum dolor sit amet 4'
-    },
-    {
-      id: 4,
-      data: '05/03/2026',
-      lida: true,
-      visivelTutores: true,
-      texto: 'Lipsum dolor sit amet 5'
     }
   ]);
 
@@ -67,20 +69,6 @@ export class VisualizarAnotacoesComponent {
       lida: true,
       visivelTutores: true,
       texto: 'Mensagem enviada pelos pais 2'
-    },
-    {
-      id: 103,
-      data: '12/03/2026',
-      lida: false,
-      visivelTutores: true,
-      texto: 'Mensagem enviada pelos pais 3'
-    },
-    {
-      id: 104,
-      data: '13/03/2026',
-      lida: true,
-      visivelTutores: true,
-      texto: 'Mensagem enviada pelos pais 4'
     }
   ]);
 

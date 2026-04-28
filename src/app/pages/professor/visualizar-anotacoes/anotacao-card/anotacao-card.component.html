@@ -1,24 +1,25 @@
 <div
-    class="anotacao-card"
-    [class.selecionada]="selecionada()"
-    (click)="onClick()">
+  class="anotacao-card"
+  [class.selecionada]="selecionada()"
+  (click)="onClick()"
+>
 
-    <div class="data">
-        {{ data() }}
-    </div>
+  <div class="data">
+    {{ data() }}
+  </div>
 
-    <div class="rodape">
+  <div class="rodape">
 
-        @if (lida()) {
-        <i class="bi bi-envelope-open icone-email-lido"></i>
-        } @else {
-        <i class="bi bi-envelope icone-email-nao-lido"></i>
-        }
+    @if (lida()) {
+      <i class="bi bi-envelope-open icone-email-lido"></i>
+    } @else {
+      <i class="bi bi-envelope icone-email-nao-lido"></i>
+    }
 
-        @if (!visivelTutores()) {
-        <i class="bi bi-eye-slash icone-privado"></i>
-        }
+    @if (role() === 'professor' && !visivelTutores()) {
+      <i class="bi bi-eye-slash icone-privado"></i>
+    }
 
-    </div>
+  </div>
 
 </div>

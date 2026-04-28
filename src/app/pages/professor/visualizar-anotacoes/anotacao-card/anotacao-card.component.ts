@@ -23,6 +23,11 @@ export class AnotacaoCardComponent {
 
   selecionada = input(false);
 
+  /**
+   * professor | responsavel
+   */
+  role = input<'professor' | 'responsavel'>('professor');
+
   abrir = output<void>();
 
   onClick(): void {

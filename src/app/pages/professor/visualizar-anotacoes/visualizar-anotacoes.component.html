@@ -1,51 +1,59 @@
 @if (anotacaoSelecionada()) {
 
-  <app-anotacoes-view
+<app-anotacoes-view
     titulo="Visualizar anotação enviada pelos tutores"
     [data]="anotacaoSelecionada()!.data"
     [texto]="anotacaoSelecionada()!.texto"
     [lida]="anotacaoSelecionada()!.lida"
     (cancelar)="fecharView()"
-    (marcarComoLida)="marcarComoLida()"
-  >
-  </app-anotacoes-view>
+    (marcarComoLida)="marcarComoLida()">
+</app-anotacoes-view>
 
 } @else {
-
-  <h2>
+@if (role() === 'professor') {
+<h2>
     Visualizar anotações enviadas
-  </h2>
+</h2>
 
-  <div class="grid-anotacoes mt-4">
+<div class="grid-anotacoes mt-4">
 
     @for (item of anotacoes(); track item.id) {
-      <app-anotacao-card
+    <app-anotacao-card
         [data]="item.data"
         [lida]="item.lida"
         [visivelTutores]="item.visivelTutores"
+        [role]="role()"
         [selecionada]="selecionadaId() === item.id"
         (abrir)="selecionar(item.id)">
-      </app-anotacao-card>
+    </app-anotacao-card>
     }
 
-  </div>
+</div>
+}
 
-  <h2 class="mt-5">
-    Visualizar anotações enviadas pelos pais
-  </h2>
+@if (role() === 'professor') {
 
-  <div class="grid-anotacoes mt-4">
+    <h2 class="mt-4">
+        Visualizar anotações enviadas pelos pais
+    </h2>
+} @else {
+    <h2>
+        Visualizar anotações
+    </h2>
+}
 
+<div class="grid-anotacoes mt-4">
     @for (item of anotacoesPais(); track item.id) {
-      <app-anotacao-card
+    <app-anotacao-card
         [data]="item.data"
         [lida]="item.lida"
         [visivelTutores]="item.visivelTutores"
+        [role]="role()"
         [selecionada]="selecionadaId() === item.id"
         (abrir)="selecionar(item.id)">
-      </app-anotacao-card>
+    </app-anotacao-card>
     }
 
-  </div>
+</div>
 
 }

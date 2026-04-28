@@ -1,5 +1,13 @@
-import { Component, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  signal
+} from '@angular/core';
+
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+
 import { SelecionarTurmaComponent } from './selecionar-turma/selecionar-turma.component';
 import { SelecionarAlunoComponent } from './selecionar-aluno/selecionar-aluno.component';
 import { FormAdicionarAnotacaoComponent } from './form-adicionar-anotacao/form-adicionar-anotacao.component';
@@ -11,11 +19,15 @@ import { FormAdicionarAnotacaoComponent } from './form-adicionar-anotacao/form-a
     CommonModule,
     SelecionarTurmaComponent,
     SelecionarAlunoComponent,
-    FormAdicionarAnotacaoComponent,
+    FormAdicionarAnotacaoComponent
   ],
   templateUrl: './adicionar-anotacoes.html',
 })
 export class AdicionarAnotacoes {
+
+  private route = inject(ActivatedRoute);
+
+  role = signal<'professor' | 'responsavel'>('professor');
 
   etapa = signal<'turma' | 'aluno' | 'form'>('turma');
 
@@ -24,36 +36,73 @@ export class AdicionarAnotacoes {
 
   turmas = ['Turma 1', 'Turma 2', 'Turma 3'];
 
-  alunos = [
+  alunosProfessor = [
     { id: 1, nome: 'João', sexo: 'M' },
     { id: 2, nome: 'Maria', sexo: 'F' },
     { id: 3, nome: 'Pedro', sexo: 'M' }
   ];
 
-  selecionarTurma(turma: string) {
+  alunosResponsavel = [
+    { id: 1, nome: 'João', sexo: 'M' },
+    { id: 3, nome: 'Pedro', sexo: 'M' }
+  ];
+
+  alunos = computed(() =>
+    this.role() === 'responsavel'
+      ? this.alunosResponsavel
+      : this.alunosProfessor
+  );
+
+  constructor() {
+
+    const roleRoute = this.route.snapshot.data['role'];
+
+    if (roleRoute) {
+      this.role.set(roleRoute);
+    }
+
+    if (this.role() === 'responsavel') {
+      this.etapa.set('aluno');
+    }
+
+  }
+
+  selecionarTurma(turma: string): void {
     this.turmaSelecionada.set(turma);
     this.etapa.set('aluno');
   }
 
-  selecionarAluno(aluno: any) {
+  selecionarAluno(aluno: any): void {
     this.alunoSelecionado.set(aluno);
     this.etapa.set('form');
   }
 
-  voltarTurma() {
+  voltarTurma(): void {
+
+    if (this.role() === 'responsavel') return;
+
     this.etapa.set('turma');
   }
 
-  voltarAluno() {
+  voltarAluno(): void {
     this.etapa.set('aluno');
   }
 
-  salvarAnotacao(dados: any) {
-    console.log('Salvar anotação', dados);
+  salvarAnotacao(dados: any): void {
+
+    console.log({
+      role: this.role(),
+      aluno: this.alunoSelecionado(),
+      ...dados
+    });
 
     alert('Anotação salva com sucesso');
 
-    this.etapa.set('turma');
+    this.etapa.set(
+      this.role() === 'responsavel'
+        ? 'aluno'
+        : 'turma'
+    );
   }
 
 }

@@ -1,17 +1,31 @@
 <div class="p-4">
+
   @if (etapa() === 'turma') {
-    <app-selecionar-turma [turmas]="turmas" (selecionar)="selecionarTurma($event)" />
+    <app-selecionar-turma
+      [turmas]="turmas"
+      (selecionar)="selecionarTurma($event)"
+    />
   }
 
   @if (etapa() === 'aluno') {
     <app-selecionar-aluno
-      [alunos]="alunos"
+      [alunos]="alunos()"
       (selecionar)="selecionarAluno($event)"
       (voltar)="voltarTurma()"
     />
   }
 
   @if (etapa() === 'form') {
-    <app-form-adicionar-anotacao (voltar)="voltarAluno()" (salvar)="salvarAnotacao($event)" />
+    <app-form-adicionar-anotacao
+      [titulo]="
+        role() === 'responsavel'
+          ? 'Enviar anotação ao professor'
+          : 'Adicionar anotação'
+      "
+      [mostrarPrivado]="role() === 'professor'"
+      (voltar)="voltarAluno()"
+      (salvar)="salvarAnotacao($event)"
+    />
   }
+
 </div>
