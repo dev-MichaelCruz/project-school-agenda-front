@@ -2,7 +2,8 @@ import {
   Component,
   output,
   signal,
-  inject
+  inject,
+  input
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -17,9 +18,14 @@ import {
   selector: 'app-form-adicionar-anotacao',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  templateUrl: './form-adicionar-anotacao.component.html'
+  templateUrl: './form-adicionar-anotacao.component.html',
+  styleUrl: './form-adicionar-anotacao.component.scss'
 })
 export class FormAdicionarAnotacaoComponent {
+
+  titulo = input('Adicionar anotação');
+
+  mostrarPrivado = input(true);
 
   salvar = output<any>();
   voltar = output<void>();
@@ -59,7 +65,9 @@ export class FormAdicionarAnotacaoComponent {
 
     this.salvar.emit({
       texto: this.form.value.texto,
-      privado: this.form.value.privado,
+      privado: this.mostrarPrivado()
+        ? this.form.value.privado
+        : false,
       imagem: this.imagemSelecionada()
     });
 

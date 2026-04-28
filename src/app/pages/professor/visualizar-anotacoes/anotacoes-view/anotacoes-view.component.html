@@ -1,0 +1,37 @@
+<div class="anotacao-view">
+
+  <h2>
+    {{ titulo() }}
+  </h2>
+
+  <div class="data mt-4">
+    {{ data() }}
+  </div>
+
+  <div class="mensagem">
+    {{ texto() }}
+  </div>
+
+  <div class="acoes">
+
+    <button
+      type="button"
+      class="btn-cancelar"
+      (click)="cancelar.emit()"
+    >
+      Cancelar
+    </button>
+
+    @if (!lida()) {
+      <button
+        type="button"
+        class="btn-lida"
+        (click)="marcarComoLida.emit()"
+      >
+        Marcar como lida
+      </button>
+    }
+
+  </div>
+
+</div>

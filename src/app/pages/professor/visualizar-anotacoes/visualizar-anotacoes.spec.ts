@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { VisualizarAnotacoes } from './visualizar-anotacoes';
+import { VisualizarAnotacoesComponent } from './visualizar-anotacoes';
 
-describe('VisualizarAnotacoes', () => {
-  let component: VisualizarAnotacoes;
-  let fixture: ComponentFixture<VisualizarAnotacoes>;
+describe('VisualizarAnotacoesComponent', () => {
+  let component: VisualizarAnotacoesComponent;
+  let fixture: ComponentFixture<VisualizarAnotacoesComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [VisualizarAnotacoes]
+      imports: [VisualizarAnotacoesComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(VisualizarAnotacoes);
+    fixture = TestBed.createComponent(VisualizarAnotacoesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

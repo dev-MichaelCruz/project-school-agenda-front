@@ -1,0 +1,51 @@
+@if (anotacaoSelecionada()) {
+
+  <app-anotacoes-view
+    titulo="Visualizar anotação enviada pelos tutores"
+    [data]="anotacaoSelecionada()!.data"
+    [texto]="anotacaoSelecionada()!.texto"
+    [lida]="anotacaoSelecionada()!.lida"
+    (cancelar)="fecharView()"
+    (marcarComoLida)="marcarComoLida()"
+  >
+  </app-anotacoes-view>
+
+} @else {
+
+  <h2>
+    Visualizar anotações enviadas
+  </h2>
+
+  <div class="grid-anotacoes mt-4">
+
+    @for (item of anotacoes(); track item.id) {
+      <app-anotacao-card
+        [data]="item.data"
+        [lida]="item.lida"
+        [visivelTutores]="item.visivelTutores"
+        [selecionada]="selecionadaId() === item.id"
+        (abrir)="selecionar(item.id)">
+      </app-anotacao-card>
+    }
+
+  </div>
+
+  <h2 class="mt-5">
+    Visualizar anotações enviadas pelos pais
+  </h2>
+
+  <div class="grid-anotacoes mt-4">
+
+    @for (item of anotacoesPais(); track item.id) {
+      <app-anotacao-card
+        [data]="item.data"
+        [lida]="item.lida"
+        [visivelTutores]="item.visivelTutores"
+        [selecionada]="selecionadaId() === item.id"
+        (abrir)="selecionar(item.id)">
+      </app-anotacao-card>
+    }
+
+  </div>
+
+}

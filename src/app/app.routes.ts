@@ -70,7 +70,7 @@ export const routes: Routes = [
     path: 'visualizar-anotacoes',
     loadComponent: () =>
       import('./pages/professor/visualizar-anotacoes/visualizar-anotacoes').then(
-        (m) => m.VisualizarAnotacoes,
+        (m) => m.VisualizarAnotacoesComponent,
       ),
     data: {
       label: 'Visualizar Anotações',
