@@ -1,3 +1,5 @@
+// src/app/pages/diretor/cadastrar-professor/cadastrar-professor.ts
+
 import { Component, inject } from '@angular/core';
 import {
   FormArray,
@@ -19,6 +21,15 @@ export class CadastrarProfessor {
   private fb = inject(FormBuilder);
 
   sucesso = false;
+
+  turmasMockadas = [
+    { id: 1, nome: 'Maternal A' },
+    { id: 2, nome: 'Maternal B' },
+    { id: 3, nome: 'Jardim 1' },
+    { id: 4, nome: 'Jardim 2' },
+    { id: 5, nome: '1º Ano A' },
+    { id: 6, nome: '1º Ano B' },
+  ];
 
   form = this.fb.group({
     nome: ['', Validators.required],
@@ -47,6 +58,7 @@ export class CadastrarProfessor {
   }
 
   cadastrar(): void {
+
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -63,8 +75,10 @@ export class CadastrarProfessor {
     this.form.reset();
 
     this.turmas.clear();
+
     this.turmas.push(
       this.fb.control('', Validators.required)
     );
   }
+
 }

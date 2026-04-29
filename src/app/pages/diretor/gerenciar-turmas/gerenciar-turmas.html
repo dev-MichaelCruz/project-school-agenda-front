@@ -1,0 +1,154 @@
+<div class="p-4">
+    <h2 class="mb-4">Gerenciar Turmas</h2>
+
+    <!-- src/app/pages/diretor/gerenciar-turmas/gerenciar-turmas.html -->
+
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body">
+
+            <form
+                [formGroup]="form"
+                (ngSubmit)="cadastrar()">
+                <div class="row">
+                    <div class="col-12">
+                        <label for="addnewclass" class="mb-3">Adicionar nova turma</label>
+                    </div>
+                </div>
+                <div class="row g-2 align-items-start">
+                    <div class="col-md-11">
+                        <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Digite o nome da turma"
+                            formControlName="turma"
+                            id="addnewclass">
+
+                        @if (
+                        (form.controls.turma.touched || submitted()) &&
+                        form.controls.turma.invalid
+                        ) {
+                        <small class="text-danger">
+                            Informe o nome da turma.
+                        </small>
+                        }
+
+                    </div>
+
+                    <div class="col-md-1 d-grid px-3">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary">
+                            Cadastrar
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+
+            <h5 class="mb-3">
+                Turmas cadastradas
+            </h5>
+
+            @if (turmas().length > 0) {
+
+            <div class="list-group">
+
+                @for (turma of turmas(); track turma; let i = $index) {
+
+                <div class="list-group-item">
+
+                    <div
+                        class="d-flex justify-content-between align-items-center">
+
+                        <span>{{ turma }}</span>
+
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-outline-danger"
+                            (click)="abrirModalExcluir(i)"
+                            title="Excluir turma">
+
+                            <i class="bi bi-trash"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+                }
+
+            </div>
+
+            } @else {
+
+            <p class="text-muted mb-0">
+                Nenhuma turma cadastrada.
+            </p>
+
+            }
+
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal excluir -->
+<div
+  class="modal fade"
+  id="modalExcluirTurma"
+  tabindex="-1"
+  aria-hidden="true">
+
+  <div class="modal-dialog modal-dialog-centered">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">
+          Confirmar exclusão
+        </h5>
+
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal">
+        </button>
+      </div>
+
+      <div class="modal-body">
+        Deseja realmente excluir esta turma?
+      </div>
+
+      <div class="modal-footer">
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal">
+          Cancelar
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-danger"
+          (click)="confirmarExclusao()">
+          Excluir
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

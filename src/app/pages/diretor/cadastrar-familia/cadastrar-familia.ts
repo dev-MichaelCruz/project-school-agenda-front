@@ -1,6 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  ReactiveFormsModule,
+  Validators
+} from '@angular/forms';
 
 @Component({
   selector: 'app-cadastrar-familia',
@@ -10,17 +15,26 @@ import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angula
   styleUrl: './cadastrar-familia.scss',
 })
 export class CadastrarFamilia {
+
   private fb = inject(FormBuilder);
 
   toastVisivel = false;
   toastMensagem = '';
+
+  turmasMockadas = [
+    { id: 1, nome: 'Maternal A' },
+    { id: 2, nome: 'Maternal B' },
+    { id: 3, nome: 'Jardim 1' },
+    { id: 4, nome: 'Jardim 2' },
+    { id: 5, nome: '1º Ano A' },
+    { id: 6, nome: '1º Ano B' },
+  ];
 
   form = this.fb.group({
     nome: ['', Validators.required],
     sobrenome: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
     senha: ['', Validators.required],
-
     criancas: this.fb.array([this.criarCrianca()]),
   });
 
@@ -48,6 +62,7 @@ export class CadastrarFamilia {
   }
 
   cadastrar(): void {
+
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -56,7 +71,6 @@ export class CadastrarFamilia {
     console.log(this.form.value);
 
     this.toastMensagem = 'Família cadastrada com sucesso';
-
     this.toastVisivel = true;
 
     setTimeout(() => {
@@ -68,4 +82,5 @@ export class CadastrarFamilia {
     this.criancas.clear();
     this.criancas.push(this.criarCrianca());
   }
+
 }

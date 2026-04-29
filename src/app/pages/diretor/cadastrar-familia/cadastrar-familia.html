@@ -3,9 +3,9 @@
   <h2 class="mb-4">Cadastrar família</h2>
 
   @if (toastVisivel) {
-    <div class="alert alert-success">
-      {{ toastMensagem }}
-    </div>
+  <div class="alert alert-success">
+    {{ toastMensagem }}
+  </div>
   }
 
   <form [formGroup]="form" (ngSubmit)="cadastrar()">
@@ -14,41 +14,41 @@
     <div class="row mb-3">
 
       <div class="col-md-6">
-        <label class="form-label">Nome</label>
+        <label class="form-label" for="name">Nome</label>
         <input
           type="text"
           class="form-control"
           formControlName="nome"
-        />
+          id="name" />
       </div>
 
       <div class="col-md-6">
-        <label class="form-label">Sobrenome</label>
+        <label class="form-label" for="lastname">Sobrenome</label>
         <input
           type="text"
           class="form-control"
-          formControlName="sobrenome"
-        />
+          id="lastname"
+          formControlName="sobrenome" />
       </div>
 
       <div class="col-md-8">
-        <label class="form-label">E-mail</label>
+        <label class="form-label" for="email">E-mail</label>
         <input
           type="email"
           class="form-control"
-          formControlName="email"
-        />
+          id="email"
+          formControlName="email" />
       </div>
 
       <div class="col-md-4">
-        <label class="form-label">
+        <label class="form-label" for="password">
           Senha para acessar o sistema
         </label>
         <input
           type="password"
+          id="password"
           class="form-control"
-          formControlName="senha"
-        />
+          formControlName="senha" />
       </div>
 
     </div>
@@ -57,83 +57,95 @@
 
       @for (crianca of criancas.controls; track $index) {
 
-        <div
-          class="row g-2 align-items-end mb-4"
-          [formGroupName]="$index"
-        >
+      <div
+        class="row g-2 align-items-end mb-4"
+        [formGroupName]="$index">
 
-          <div class="col-md-3">
-            <label class="form-label">
-              Nome da criança
-            </label>
+        <div class="col-md-3">
+          <label class="form-label" [for]="'child_name_'+$index">
+            Nome da criança
+          </label>
 
-            <input
-              type="text"
-              class="form-control"
-              formControlName="nome"
-            />
-          </div>
+          <input
+            type="text"
+            class="form-control"
+            [id]="'child_name_'+$index"
+            formControlName="nome" />
+        </div>
 
-          <div class="col-md-2">
-            <label class="form-label">Sexo</label>
+        <div class="col-md-2">
+          <label class="form-label" [for]="'gender'+$index">Sexo</label>
 
-            <select
-              class="form-select"
-              formControlName="sexo"
-            >
-              <option value="">Selecione</option>
-              <option value="M">Masculino</option>
-              <option value="F">Feminino</option>
-            </select>
-          </div>
+          <select
+            class="form-select"
+            formControlName="sexo"
+            [id]="'gender'+$index">
+            <option value>Selecione</option>
+            <option value="M">Masculino</option>
+            <option value="F">Feminino</option>
+          </select>
+        </div>
 
-          <div class="col-md-2">
-            <label class="form-label">
-              Data de nascimento
-            </label>
+        <div class="col-md-2">
+          <label class="form-label" [for]="'datebirth'+$index">
+            Data de nascimento
+          </label>
 
-            <input
-              type="date"
-              class="form-control"
-              formControlName="nascimento"
-            />
-          </div>
+          <input
+            type="date"
+            class="form-control"
+            [id]="'datebirth'+$index"
+            formControlName="nascimento" />
+        </div>
 
-          <div class="col-md-2">
-            <label class="form-label">Turma</label>
+        <div class="col-md-3">
 
-            <input
-              type="text"
-              class="form-control"
-              formControlName="turma"
-            />
-          </div>
+          <label class="form-label" [for]="'class'+$index">
+            Turma
+          </label>
 
-          @if ($index > 0) {
-            <div class="col-md-1">
-              <button
-                type="button"
-                class="btn-remove-circle btn btn-rounded btn-danger"
-                (click)="removerCrianca($index)"
-              >
-                <i class="bi bi-dash"></i>
-              </button>
-            </div>
-          }
+          <select
+            class="form-select"
+            formControlName="turma"
+            [id]="'class'+$index">
 
-          @if ($index === criancas.length - 1) {
-            <div class="col-md-1">
-              <button
-                type="button"
-                class="btn-add-circle btn btn-rounded btn-secondary"
-                (click)="adicionarCrianca()"
-              >
-                <i class="bi bi-plus"></i>
-              </button>
-            </div>
-          }
+            <option value>
+              Selecione a turma
+            </option>
+
+            @for (turma of turmasMockadas; track turma.id) {
+            <option [value]="turma.nome">
+              {{ turma.nome }}
+            </option>
+            }
+
+          </select>
 
         </div>
+
+        @if ($index > 0) {
+        <div class="col-md-1">
+          <button
+            type="button"
+            class="btn-remove-circle btn btn-rounded btn-danger"
+            (click)="removerCrianca($index)">
+            <i class="bi bi-dash"></i>
+          </button>
+        </div>
+        }
+
+        @if ($index === criancas.length - 1) {
+        <div class="col-md-1">
+          <button
+            type="button"
+            class="btn-add-circle btn btn-rounded btn-secondary"
+            (click)="adicionarCrianca()">
+            <i class="bi bi-plus"></i>
+          </button>
+        </div>
+        }
+
+      </div>
 
       }
 
@@ -141,8 +153,7 @@
 
     <button
       type="submit"
-      class="btn btn-primary btn-default-green mt-3 px-4 "
-    >
+      class="btn btn-primary btn-default-green mt-3 px-4 ">
       Cadastrar
     </button>
 

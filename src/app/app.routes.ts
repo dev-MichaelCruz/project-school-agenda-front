@@ -32,6 +32,22 @@ export const routes: Routes = [
   },
 
   {
+    path: 'gerenciar-turmas',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/diretor/gerenciar-turmas/gerenciar-turmas').then(
+        (m) => m.GerenciarTurmas
+      ),
+    data: {
+      label: 'Gerenciar turmas',
+      role: 'diretor',
+      showInSidebar: true,
+    },
+  },
+
+
+
+  {
     path: 'deletar-familia',
     canActivate: [authGuard],
     loadComponent: () =>
