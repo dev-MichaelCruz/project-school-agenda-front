@@ -1,15 +1,25 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './guards/auth.guard';
+import { guestGuard } from './guards/guest.guard';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'cadastrar-familia',
-    pathMatch: 'full',
+    redirectTo: 'login',
+    pathMatch: 'full'
   },
-
+  {
+    path: 'login',
+    canActivate: [guestGuard],
+    loadComponent: () =>
+      import('./components/login/login/login').then(
+        (m) => m.Login
+      ),
+  },
 
   {
     path: 'cadastrar-familia',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./pages/diretor/cadastrar-familia/cadastrar-familia').then(
         (m) => m.CadastrarFamilia
@@ -23,6 +33,7 @@ export const routes: Routes = [
 
   {
     path: 'deletar-familia',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./pages/diretor/deletar-familia/deletar-familia').then(
         (m) => m.DeletarFamilia
@@ -36,6 +47,7 @@ export const routes: Routes = [
 
   {
     path: 'cadastrar-professor',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./pages/diretor/cadastrar-professor/cadastrar-professor').then(
         (m) => m.CadastrarProfessor
@@ -49,6 +61,7 @@ export const routes: Routes = [
 
   {
     path: 'deletar-professor',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./pages/diretor/deletar-professor/deletar-professor').then(
         (m) => m.DeletarProfessor
@@ -63,6 +76,7 @@ export const routes: Routes = [
 
   {
     path: 'adicionar-anotacoes',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./pages/professor/adicionar-anotacoes/adicionar-anotacoes').then(
         (m) => m.AdicionarAnotacoes
@@ -76,6 +90,7 @@ export const routes: Routes = [
 
   {
     path: 'visualizar-anotacoes',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./pages/professor/visualizar-anotacoes/visualizar-anotacoes').then(
         (m) => m.VisualizarAnotacoesComponent
@@ -89,6 +104,7 @@ export const routes: Routes = [
 
   {
     path: 'responsavel/adicionar-anotacoes',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./pages/professor/adicionar-anotacoes/adicionar-anotacoes').then(
         (m) => m.AdicionarAnotacoes
@@ -102,6 +118,7 @@ export const routes: Routes = [
 
   {
     path: 'responsavel/visualizar-anotacoes',
+    canActivate: [authGuard],
     loadComponent: () =>
       import('./pages/professor/visualizar-anotacoes/visualizar-anotacoes').then(
         (m) => m.VisualizarAnotacoesComponent
@@ -113,7 +130,7 @@ export const routes: Routes = [
     },
   },
 
- 
+
 
   {
     path: 'logout',
@@ -126,6 +143,6 @@ export const routes: Routes = [
 
   {
     path: '**',
-    redirectTo: 'cadastrar-familia',
+    redirectTo: 'login',
   },
 ];

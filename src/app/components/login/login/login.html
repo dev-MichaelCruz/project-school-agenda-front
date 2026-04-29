@@ -1,0 +1,67 @@
+<div class="container mt-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-6 col-lg-4">
+
+            <div class="card shadow">
+
+                <div class="card-body">
+
+                    <h2 class="text-center mb-4">
+                        Login
+                    </h2>
+
+                    <form
+                        [formGroup]="form"
+                        (ngSubmit)="onSubmit()">
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Usuário
+                            </label>
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                formControlName="username" />
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label class="form-label">
+                                Senha
+                            </label>
+
+                            <input
+                                type="password"
+                                class="form-control"
+                                formControlName="password" />
+
+                        </div>
+
+                        <button
+                            class="btn btn-primary w-100"
+                            type="submit">
+                            Entrar
+                        </button>
+
+                    </form>
+
+                    @if (error()) {
+                    <div class="text-danger mt-3">
+                        {{ error() }}
+                    </div>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
