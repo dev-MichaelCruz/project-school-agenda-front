@@ -1,7 +1,11 @@
 <h2>
   Adicionar anotação /
   <small class="text-muted">
-    Selecionar aluno
+    @if (role() === 'responsavel') {
+      Selecione criança
+    } @else {
+      Selecione aluno
+    }
   </small>
 </h2>
 

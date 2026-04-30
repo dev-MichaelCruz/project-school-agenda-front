@@ -27,7 +27,7 @@ export class AdicionarAnotacoes {
 
   private route = inject(ActivatedRoute);
 
-  role = signal<'professor' | 'responsavel'>('professor');
+  role = signal<'professor' | 'responsavel'>('responsavel');
 
   etapa = signal<'turma' | 'aluno' | 'form'>('turma');
 

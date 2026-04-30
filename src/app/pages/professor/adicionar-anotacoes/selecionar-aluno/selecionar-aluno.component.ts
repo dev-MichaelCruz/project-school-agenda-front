@@ -14,10 +14,8 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./selecionar-aluno.component.scss'],
 })
 export class SelecionarAlunoComponent {
-
   alunos = input<any[]>([]);
-
+  role = input<'professor' | 'responsavel'>('professor');
   selecionar = output<any>();
   voltar = output<void>();
-
 }

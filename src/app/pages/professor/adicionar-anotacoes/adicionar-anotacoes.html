@@ -10,6 +10,7 @@
   @if (etapa() === 'aluno') {
     <app-selecionar-aluno
       [alunos]="alunos()"
+      [role]="role()"
       (selecionar)="selecionarAluno($event)"
       (voltar)="voltarTurma()"
     />
