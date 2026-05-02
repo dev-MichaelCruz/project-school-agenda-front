@@ -1,16 +1,8 @@
-import {
-  Component,
-  inject,
-  signal
-} from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 
-import {
-  FormBuilder,
-  ReactiveFormsModule,
-  Validators
-} from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth-service';
@@ -18,15 +10,11 @@ import { AuthService } from '../../../services/auth-service';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule
-  ],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './login.html',
-  styleUrl: './login.scss'
+  styleUrl: './login.scss',
 })
 export class Login {
-
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private auth = inject(AuthService);
@@ -34,35 +22,39 @@ export class Login {
   error = signal('');
 
   form = this.fb.group({
-    username: ['', Validators.required],
-    password: ['', Validators.required]
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', Validators.required],
   });
 
   onSubmit(): void {
-
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
-    const { username, password } = this.form.getRawValue();
+    const { email, password } = this.form.getRawValue();
 
-    /**
-     * MOCK LOGIN
-     */
-    if (
-      username === 'admin' &&
-      password === '123456'
-    ) {
+    this.auth.login(email!, password!).subscribe({
+      next: () => {
+        const role = this.auth.role();
 
-      this.auth.login();
-
-      this.router.navigate(['/cadastrar-familia']);
-
-      return;
-    }
-
-    this.error.set('Credenciais inválidas');
+        /**
+         * Redirecionamento inteligente
+         */
+        if (role === 'diretor') {
+          this.router.navigate(['/cadastrar-familia']);
+        } else if (role === 'professor') {
+          this.router.navigate(['/adicionar-anotacoes']);
+        } else if (role === 'responsavel') {
+          this.router.navigate(['/responsavel/adicionar-anotacoes']);
+        } else {
+          this.router.navigate(['/']);
+        }
+      },
+      error: (err) => {
+        console.error(err);
+        this.error.set('Email ou senha inválidos');
+      },
+    });
   }
-
 }
