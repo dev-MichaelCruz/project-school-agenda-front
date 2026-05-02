@@ -19,11 +19,11 @@
   @if (etapa() === 'form') {
     <app-form-adicionar-anotacao
       [titulo]="
-        role() === 'responsavel'
+        role() === roleEnum.RESPONSIBLE
           ? 'Enviar anotação ao professor'
           : 'Adicionar anotação'
       "
-      [mostrarPrivado]="role() === 'professor'"
+      [mostrarPrivado]="role() === roleEnum.TEACHER"
       (voltar)="voltarAluno()"
       (salvar)="salvarAnotacao($event)"
     />

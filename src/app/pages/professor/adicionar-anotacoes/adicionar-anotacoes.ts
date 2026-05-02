@@ -1,16 +1,19 @@
 import {
   Component,
   computed,
+  effect,
   inject,
   signal
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
 
 import { SelecionarTurmaComponent } from './selecionar-turma/selecionar-turma.component';
 import { SelecionarAlunoComponent } from './selecionar-aluno/selecionar-aluno.component';
 import { FormAdicionarAnotacaoComponent } from './form-adicionar-anotacao/form-adicionar-anotacao.component';
+
+import { AuthService } from '../../../services/auth-service';
+import { roleEnum } from '../../../types/role';
 
 @Component({
   selector: 'app-adicionar-anotacoes',
@@ -25,10 +28,10 @@ import { FormAdicionarAnotacaoComponent } from './form-adicionar-anotacao/form-a
 })
 export class AdicionarAnotacoes {
 
-  private route = inject(ActivatedRoute);
+  private auth = inject(AuthService);
 
-  role = signal<'professor' | 'responsavel'>('responsavel');
-
+  role = this.auth.role;
+  roleEnum = roleEnum;
   etapa = signal<'turma' | 'aluno' | 'form'>('turma');
 
   turmaSelecionada = signal<any>(null);
@@ -48,23 +51,17 @@ export class AdicionarAnotacoes {
   ];
 
   alunos = computed(() =>
-    this.role() === 'responsavel'
+    this.role() === roleEnum.RESPONSIBLE
       ? this.alunosResponsavel
       : this.alunosProfessor
   );
 
   constructor() {
-
-    const roleRoute = this.route.snapshot.data['role'];
-
-    if (roleRoute) {
-      this.role.set(roleRoute);
-    }
-
-    if (this.role() === 'responsavel') {
-      this.etapa.set('aluno');
-    }
-
+    effect(() => {
+      if (this.role() === roleEnum.RESPONSIBLE) {
+        this.etapa.set('aluno');
+      }
+    });
   }
 
   selecionarTurma(turma: string): void {
@@ -78,9 +75,7 @@ export class AdicionarAnotacoes {
   }
 
   voltarTurma(): void {
-
-    if (this.role() === 'responsavel') return;
-
+    if (this.role() === roleEnum.RESPONSIBLE) return;
     this.etapa.set('turma');
   }
 
@@ -99,7 +94,7 @@ export class AdicionarAnotacoes {
     alert('Anotação salva com sucesso');
 
     this.etapa.set(
-      this.role() === 'responsavel'
+      this.role() === roleEnum.RESPONSIBLE
         ? 'aluno'
         : 'turma'
     );
