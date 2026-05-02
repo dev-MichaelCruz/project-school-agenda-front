@@ -1,32 +1,29 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
 import { guestGuard } from './guards/guest.guard';
+import { roleEnum } from './types/role';
+import { logoutGuard } from './guards/logout.guard';
 
 export const routes: Routes = [
   {
     path: '',
     redirectTo: 'login',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'login',
     canActivate: [guestGuard],
-    loadComponent: () =>
-      import('./components/login/login/login').then(
-        (m) => m.Login
-      ),
+    loadComponent: () => import('./components/login/login/login').then((m) => m.Login),
   },
 
   {
     path: 'cadastrar-familia',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('./pages/diretor/cadastrar-familia/cadastrar-familia').then(
-        (m) => m.CadastrarFamilia
-      ),
+      import('./pages/diretor/cadastrar-familia/cadastrar-familia').then((m) => m.CadastrarFamilia),
     data: {
       label: 'Cadastrar Família',
-      role: 'diretor',
+      role: roleEnum.DIRECTOR,
       showInSidebar: true,
     },
   },
@@ -35,28 +32,22 @@ export const routes: Routes = [
     path: 'gerenciar-turmas',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('./pages/diretor/gerenciar-turmas/gerenciar-turmas').then(
-        (m) => m.GerenciarTurmas
-      ),
+      import('./pages/diretor/gerenciar-turmas/gerenciar-turmas').then((m) => m.GerenciarTurmas),
     data: {
       label: 'Gerenciar turmas',
-      role: 'diretor',
+      role: roleEnum.DIRECTOR,
       showInSidebar: true,
     },
   },
-
-
 
   {
     path: 'deletar-familia',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('./pages/diretor/deletar-familia/deletar-familia').then(
-        (m) => m.DeletarFamilia
-      ),
+      import('./pages/diretor/deletar-familia/deletar-familia').then((m) => m.DeletarFamilia),
     data: {
       label: 'Deletar Família',
-      role: 'diretor',
+      role: roleEnum.DIRECTOR,
       showInSidebar: true,
     },
   },
@@ -66,11 +57,11 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () =>
       import('./pages/diretor/cadastrar-professor/cadastrar-professor').then(
-        (m) => m.CadastrarProfessor
+        (m) => m.CadastrarProfessor,
       ),
     data: {
       label: 'Cadastrar Professor',
-      role: 'diretor',
+      role: roleEnum.DIRECTOR,
       showInSidebar: true,
     },
   },
@@ -79,27 +70,24 @@ export const routes: Routes = [
     path: 'deletar-professor',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('./pages/diretor/deletar-professor/deletar-professor').then(
-        (m) => m.DeletarProfessor
-      ),
+      import('./pages/diretor/deletar-professor/deletar-professor').then((m) => m.DeletarProfessor),
     data: {
       label: 'Deletar Professor',
-      role: 'diretor',
+      role: roleEnum.DIRECTOR,
       showInSidebar: true,
     },
   },
-
 
   {
     path: 'adicionar-anotacoes',
     canActivate: [authGuard],
     loadComponent: () =>
       import('./pages/professor/adicionar-anotacoes/adicionar-anotacoes').then(
-        (m) => m.AdicionarAnotacoes
+        (m) => m.AdicionarAnotacoes,
       ),
     data: {
       label: 'Adicionar Anotações',
-      role: 'professor',
+      role: roleEnum.TEACHER,
       showInSidebar: true,
     },
   },
@@ -109,11 +97,11 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () =>
       import('./pages/professor/visualizar-anotacoes/visualizar-anotacoes').then(
-        (m) => m.VisualizarAnotacoesComponent
+        (m) => m.VisualizarAnotacoesComponent,
       ),
     data: {
       label: 'Visualizar Anotações',
-      role: 'professor',
+      role: roleEnum.TEACHER,
       showInSidebar: true,
     },
   },
@@ -123,11 +111,11 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () =>
       import('./pages/professor/adicionar-anotacoes/adicionar-anotacoes').then(
-        (m) => m.AdicionarAnotacoes
+        (m) => m.AdicionarAnotacoes,
       ),
     data: {
       label: 'Adicionar Anotações - pais',
-      role: 'responsavel',
+      role: roleEnum.RESPONSIBLE,
       showInSidebar: true,
     },
   },
@@ -137,20 +125,20 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () =>
       import('./pages/professor/visualizar-anotacoes/visualizar-anotacoes').then(
-        (m) => m.VisualizarAnotacoesComponent
+        (m) => m.VisualizarAnotacoesComponent,
       ),
     data: {
       label: 'Visualizar Anotações - pais',
-      role: 'responsavel',
+      role: roleEnum.RESPONSIBLE,
       showInSidebar: true,
     },
   },
 
-
-
   {
     path: 'logout',
-    redirectTo: '',
+    canActivate: [logoutGuard],
+    loadComponent: () =>
+      import('./components/logout-component/logout-component').then((m) => m.LogoutComponent),
     data: {
       label: 'Logout',
       showInSidebar: true,

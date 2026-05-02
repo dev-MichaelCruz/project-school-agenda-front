@@ -6,6 +6,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth-service';
+import { roleEnum } from '../../../types/role';
 
 @Component({
   selector: 'app-login',
@@ -37,15 +38,11 @@ export class Login {
     this.auth.login(email!, password!).subscribe({
       next: () => {
         const role = this.auth.role();
-
-        /**
-         * Redirecionamento inteligente
-         */
-        if (role === 'diretor') {
+        if (role === roleEnum.DIRECTOR) {
           this.router.navigate(['/cadastrar-familia']);
-        } else if (role === 'professor') {
+        } else if (role === roleEnum.TEACHER) {
           this.router.navigate(['/adicionar-anotacoes']);
-        } else if (role === 'responsavel') {
+        } else if (role === roleEnum.RESPONSIBLE) {
           this.router.navigate(['/responsavel/adicionar-anotacoes']);
         } else {
           this.router.navigate(['/']);

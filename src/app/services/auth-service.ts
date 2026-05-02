@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
+import { Role } from '../types/role';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,9 @@ export class AuthService {
   private _isLoggedIn = signal(!!localStorage.getItem('token'));
   isLoggedIn = this._isLoggedIn.asReadonly();
 
-  private _role = signal<string | null>(localStorage.getItem('role'));
+  private _role = signal<Role | null>(
+    localStorage.getItem('role') as Role | null
+  );
   role = this._role.asReadonly();
 
   constructor(private http: HttpClient) {}
@@ -23,12 +26,16 @@ export class AuthService {
       password
     }).pipe(
       tap((res) => {
-        /**
-         * ⚠️ Aqui depende do backend
-         * Ajuste conforme o retorno real
-         */
-        const token = res.token || res.accessToken;
-        const role = res.role;
+
+        const token = res.token || res.accessToken || res.access_token;
+
+        const role: Role =
+          res.role ||
+          res.user?.role;
+
+        if (!token || !role) {
+          throw new Error('Resposta de login inválida');
+        }
 
         localStorage.setItem('token', token);
         localStorage.setItem('role', role);
@@ -40,7 +47,9 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.clear();
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+
     this._isLoggedIn.set(false);
     this._role.set(null);
   }

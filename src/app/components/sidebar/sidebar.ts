@@ -1,5 +1,6 @@
 import { Component, computed, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   selector: 'app-sidebar',
@@ -10,14 +11,25 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 export class Sidebar {
 
   private router = inject(Router);
+  private auth = inject(AuthService);
 
-  menuItems = computed(() =>
-    this.router.config
-      .filter(route => route.data?.['showInSidebar'])
+  menuItems = computed(() => {
+
+    const role = this.auth.role();
+
+    return this.router.config
+      .filter(route => {
+
+        const show = route.data?.['showInSidebar'];
+        const routeRole = route.data?.['role'];
+
+        return show && (!routeRole || routeRole === role);
+      })
       .map(route => ({
         route: '/' + route.path,
         label: route.data?.['label']
-      }))
-  );
+      }));
+
+  });
 
 }
