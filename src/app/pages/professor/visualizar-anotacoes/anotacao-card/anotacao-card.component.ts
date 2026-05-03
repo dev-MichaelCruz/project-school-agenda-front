@@ -5,6 +5,8 @@ import {
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
+import { Role, roleEnum } from '../../../../types/role';
+
 
 @Component({
   selector: 'app-anotacao-card',
@@ -14,19 +16,13 @@ import { CommonModule } from '@angular/common';
   styleUrl: './anotacao-card.component.scss'
 })
 export class AnotacaoCardComponent {
-
+  roleEnum = roleEnum;
   data = input.required<string>();
-
   lida = input(false);
-
   visivelTutores = input(true);
-
   selecionada = input(false);
 
-  /**
-   * professor | responsavel
-   */
-  role = input<'professor' | 'responsavel'>('professor');
+  role = input<Role | null>(null);
 
   abrir = output<void>();
 

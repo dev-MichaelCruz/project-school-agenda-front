@@ -1,7 +1,7 @@
 @if (anotacaoSelecionada()) {
 
 <app-anotacoes-view
-    titulo="Visualizar anotação enviada pelos tutores"
+    titulo="Visualizar anotação"
     [data]="anotacaoSelecionada()!.data"
     [texto]="anotacaoSelecionada()!.texto"
     [lida]="anotacaoSelecionada()!.lida"
@@ -10,7 +10,8 @@
 </app-anotacoes-view>
 
 } @else {
-@if (role() === 'professor') {
+
+@if (role() === roleEnum.TEACHER) {
 <h2>
     Visualizar anotações enviadas
 </h2>
@@ -22,7 +23,7 @@
         [data]="item.data"
         [lida]="item.lida"
         [visivelTutores]="item.visivelTutores"
-        [role]="role()"
+        [role]="roleEnum.TEACHER"
         [selecionada]="selecionadaId() === item.id"
         (abrir)="selecionar(item.id)">
     </app-anotacao-card>
@@ -31,15 +32,18 @@
 </div>
 }
 
-@if (role() === 'professor') {
+@if (role() === roleEnum.TEACHER) {
 
     <h2 class="mt-4">
-        Visualizar anotações enviadas pelos pais
+        Anotações enviadas pelos pais
     </h2>
+
 } @else {
+
     <h2>
-        Visualizar anotações
+        Suas anotações
     </h2>
+
 }
 
 <div class="grid-anotacoes mt-4">
@@ -48,12 +52,11 @@
         [data]="item.data"
         [lida]="item.lida"
         [visivelTutores]="item.visivelTutores"
-        [role]="role()"
+        [role]="roleEnum.RESPONSIBLE"
         [selecionada]="selecionadaId() === item.id"
         (abrir)="selecionar(item.id)">
     </app-anotacao-card>
     }
-
 </div>
 
 }
