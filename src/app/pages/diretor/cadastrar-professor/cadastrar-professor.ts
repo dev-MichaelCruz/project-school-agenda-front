@@ -1,5 +1,3 @@
-// src/app/pages/diretor/cadastrar-professor/cadastrar-professor.ts
-
 import { Component, inject } from '@angular/core';
 import {
   FormArray,

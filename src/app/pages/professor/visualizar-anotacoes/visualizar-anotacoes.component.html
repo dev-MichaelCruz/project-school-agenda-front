@@ -1,10 +1,14 @@
 <div class="p-4">
+  @if (etapa() === 'turma' && role() === roleEnum.TEACHER) {
+    <app-selecionar-turma [turmas]="turmas()" (selecionar)="selecionarTurma($event)" />
+  }
+
   @if (etapa() === 'aluno') {
     <app-selecionar-aluno
       [alunos]="alunos()"
       [role]="role()"
       (selecionar)="selecionarAluno($event)"
-      (voltar)="voltar()"
+      (voltar)="voltarTurma()"
     />
   }
 

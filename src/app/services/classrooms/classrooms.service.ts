@@ -13,9 +13,6 @@ export class ClassroomsService {
 
   constructor(private http: HttpClient) {}
 
-  // ===============================
-  // GET TURMAS DO PROFESSOR
-  // ===============================
   getMyClassrooms(): Observable<Classroom[]> {
     return this.http.get<ClassroomsResponseDTO>(`${this.api}/classrooms/my/teacher`).pipe(
       map((res: ClassroomsResponseDTO) =>
