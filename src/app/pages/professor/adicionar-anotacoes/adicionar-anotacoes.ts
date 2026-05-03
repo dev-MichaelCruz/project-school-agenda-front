@@ -1,4 +1,12 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import {
+  Component,
+  effect,
+  inject,
+  signal,
+  ElementRef,
+  ViewChild,
+  AfterViewInit,
+} from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 
@@ -8,11 +16,15 @@ import { FormAdicionarAnotacaoComponent } from './form-adicionar-anotacao/form-a
 
 import { AuthService } from '../../../services/auth-service';
 import { roleEnum } from '../../../types/role';
+
 import { StudentsService } from '../../../services/students/students.service';
 import { NotesService } from '../../../services/notes/notes.service';
+import { ClassroomsService } from '../../../services/classrooms/classrooms.service';
 
 import { Student } from '../../../models/students.dto';
-import { ElementRef, ViewChild } from '@angular/core';
+import { Classroom } from '../../../models/classrooms.dto';
+
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-adicionar-anotacoes',
@@ -25,34 +37,33 @@ import { ElementRef, ViewChild } from '@angular/core';
   ],
   templateUrl: './adicionar-anotacoes.html',
 })
-export class AdicionarAnotacoes {
+export class AdicionarAnotacoes implements AfterViewInit {
   private auth = inject(AuthService);
   private studentsService = inject(StudentsService);
   private notesService = inject(NotesService);
+  private classroomsService = inject(ClassroomsService);
 
   role = this.auth.role;
   roleEnum = roleEnum;
 
   etapa = signal<'turma' | 'aluno' | 'form'>('turma');
 
-  turmaSelecionada = signal<any>(null);
+  turmaSelecionada = signal<Classroom | null>(null);
   alunoSelecionado = signal<Student | null>(null);
 
-  turmas = ['Turma 1', 'Turma 2', 'Turma 3'];
-
+  turmas = signal<Classroom[]>([]);
   alunos = signal<Student[]>([]);
 
   modalMensagem = signal('');
 
   @ViewChild('modalRef') modalElement!: ElementRef;
-
   private modalInstance: any;
 
-  private alunosProfessorMock: Student[] = [
-    { id: 1, nome: 'João', sexo: 'M' },
-    { id: 2, nome: 'Maria', sexo: 'F' },
-    { id: 3, nome: 'Pedro', sexo: 'M' },
-  ];
+  ngAfterViewInit() {
+    if (this.modalElement?.nativeElement) {
+      this.modalInstance = new bootstrap.Modal(this.modalElement.nativeElement);
+    }
+  }
 
   constructor() {
     effect(() => {
@@ -60,6 +71,7 @@ export class AdicionarAnotacoes {
 
       if (!role) return;
 
+      // RESPONSIBLE
       if (role === roleEnum.RESPONSIBLE) {
         this.etapa.set('aluno');
 
@@ -69,20 +81,34 @@ export class AdicionarAnotacoes {
         });
       }
 
+      // TEACHER → BUSCAR TURMAS
       if (role === roleEnum.TEACHER) {
-        this.alunos.set(this.alunosProfessorMock);
+        this.classroomsService.getMyClassrooms().subscribe({
+          next: (res) => this.turmas.set(res),
+          error: (err) => {
+            console.error(err);
+            this.turmas.set([]);
+          },
+        });
       }
     });
   }
 
-  ngAfterViewInit() {
-    // @ts-ignore (bootstrap global)
-    this.modalInstance = new window.bootstrap.Modal(this.modalElement.nativeElement);
-  }
-
-  selecionarTurma(turma: string): void {
+  selecionarTurma(turma: Classroom): void {
     this.turmaSelecionada.set(turma);
-    this.etapa.set('aluno');
+    this.alunoSelecionado.set(null);
+    this.alunos.set([]);
+
+    this.classroomsService.getStudentsByClassroom(turma.id).subscribe({
+      next: (alunos) => {
+        this.alunos.set(alunos);
+        this.etapa.set('aluno');
+      },
+      error: (err) => {
+        console.error(err);
+        this.abrirModal('Erro ao carregar alunos da turma');
+      },
+    });
   }
 
   selecionarAluno(aluno: Student): void {
@@ -112,7 +138,6 @@ export class AdicionarAnotacoes {
       },
       error: (err) => {
         console.error(err);
-
         this.abrirModal('Erro ao salvar anotação');
       },
     });
@@ -120,10 +145,10 @@ export class AdicionarAnotacoes {
 
   abrirModal(mensagem: string): void {
     this.modalMensagem.set(mensagem);
-    this.modalInstance.show();
+    this.modalInstance?.show();
   }
 
   fecharModal(): void {
-    this.modalInstance.hide();
+    this.modalInstance?.hide();
   }
 }

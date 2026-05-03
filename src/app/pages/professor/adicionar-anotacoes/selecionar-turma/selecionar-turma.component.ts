@@ -5,6 +5,8 @@ import {
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
+import { Classroom } from '../../../../models/classrooms.dto';
+
 
 @Component({
   selector: 'app-selecionar-turma',
@@ -14,8 +16,7 @@ import { CommonModule } from '@angular/common';
 })
 export class SelecionarTurmaComponent {
 
-  turmas = input<string[]>([]);
+  turmas = input<Classroom[]>([]);
 
-  selecionar = output<string>();
-
+  selecionar = output<Classroom>();
 }

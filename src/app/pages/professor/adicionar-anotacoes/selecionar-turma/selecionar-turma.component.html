@@ -7,13 +7,13 @@
 
 <div class="mt-4 d-flex gap-2 flex-wrap">
 
-  @for (turma of turmas(); track turma) {
+  @for (turma of turmas(); track turma.id) {
 
   <button
     type="button"
     class="btn btn-warning"
     (click)="selecionar.emit(turma)">
-    {{ turma }}
+    {{ turma.nome }}
   </button>
 
   }
