@@ -3,7 +3,10 @@ import {
   computed,
   effect,
   inject,
-  signal
+  signal,
+  ViewChild,
+  ElementRef,
+  AfterViewInit
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -21,19 +24,16 @@ import { StudentsService } from '../../../services/students/students.service';
 import { Note } from '../../../models/notes.dto';
 import { Student } from '../../../models/students.dto';
 
+declare var bootstrap: any;
+
 @Component({
   selector: 'app-visualizar-anotacoes',
   standalone: true,
-  imports: [
-    CommonModule,
-    AnotacaoCardComponent,
-    AnotacoesViewComponent,
-    SelecionarAlunoComponent
-  ],
+  imports: [CommonModule, AnotacaoCardComponent, AnotacoesViewComponent, SelecionarAlunoComponent],
   styleUrls: ['./visualizar-anotacoes.component.scss'],
   templateUrl: './visualizar-anotacoes.component.html',
 })
-export class VisualizarAnotacoesComponent {
+export class VisualizarAnotacoesComponent implements AfterViewInit {
 
   private auth = inject(AuthService);
   private notesService = inject(NotesService);
@@ -52,30 +52,46 @@ export class VisualizarAnotacoesComponent {
 
   selecionadaId = signal<number | null>(null);
 
-  constructor() {
+  @ViewChild('statusModal') modalRef!: ElementRef;
+  private modalInstance: any;
 
+  modalTitulo = signal('');
+  modalMensagem = signal('');
+
+  ngAfterViewInit(): void {
+    if (this.modalRef?.nativeElement) {
+      this.modalInstance = new bootstrap.Modal(this.modalRef.nativeElement);
+    }
+  }
+
+  abrirModal(titulo: string, mensagem: string): void {
+    this.modalTitulo.set(titulo);
+    this.modalMensagem.set(mensagem);
+
+    this.modalInstance?.show();
+  }
+
+  fecharModal(): void {
+    this.modalInstance?.hide();
+  }
+
+  constructor() {
     effect(() => {
       const role = this.role();
 
       if (!role) return;
 
       if (role === roleEnum.RESPONSIBLE) {
-
         this.studentsService.getMyStudentsAsResponsible().subscribe({
           next: (res) => this.alunos.set(res),
-          error: (err) => {
-            console.error(err);
-            this.alunos.set([]);
-          }
+          error: () => this.alunos.set([]),
         });
-
       }
 
-      // Professor (mock por enquanto)
       if (role === roleEnum.TEACHER) {
         this.alunos.set([
           { id: 1, nome: 'João', sexo: 'M' },
-          { id: 2, nome: 'Maria', sexo: 'F' }
+          { id: 2, nome: 'Maria', sexo: 'F' },
         ]);
       }
     });
@@ -88,27 +104,19 @@ export class VisualizarAnotacoesComponent {
 
       this.notesService.getNotesByStudent(aluno.id).subscribe({
         next: (notas) => {
-
           if (role === roleEnum.TEACHER) {
-
-            this.anotacoes.set(notas.filter(n => !n.visivelTutores));
-            this.anotacoesPais.set(notas.filter(n => n.visivelTutores));
-
+            this.anotacoes.set(notas.filter((n) => !n.visivelTutores));
+            this.anotacoesPais.set(notas.filter((n) => n.visivelTutores));
           } else {
-
             this.anotacoes.set([]);
-            this.anotacoesPais.set(notas.filter(n => n.visivelTutores));
-
+            this.anotacoesPais.set(notas.filter((n) => n.visivelTutores));
           }
 
           this.etapa.set('lista');
         },
-        error: (err) => {
-          console.error(err);
-        }
+        error: (err) => console.error(err),
       });
     });
-
   }
 
   anotacaoSelecionada = computed(() => {
@@ -116,12 +124,8 @@ export class VisualizarAnotacoesComponent {
 
     if (!id) return null;
 
-    return [
-      ...this.anotacoes(),
-      ...this.anotacoesPais()
-    ].find(item => item.id === id) ?? null;
+    return [...this.anotacoes(), ...this.anotacoesPais()].find((item) => item.id === id) ?? null;
   });
-
 
   selecionarAluno(aluno: Student): void {
     this.alunoSelecionado.set(aluno);
@@ -140,20 +144,39 @@ export class VisualizarAnotacoesComponent {
   }
 
   marcarComoLida(): void {
+    const nota = this.anotacaoSelecionada();
 
-    const id = this.selecionadaId();
-    if (!id) return;
+    if (!nota) return;
 
-    this.anotacoes.update(lista =>
-      lista.map(item =>
-        item.id === id ? { ...item, lida: true } : item
-      )
-    );
+    this.notesService.updateNoteStatus(nota.raw, 'RESOLVED').subscribe({
+      next: () => {
 
-    this.anotacoesPais.update(lista =>
-      lista.map(item =>
-        item.id === id ? { ...item, lida: true } : item
-      )
-    );
+        // atualiza UI
+        this.anotacoes.update((lista) =>
+          lista.map((item) =>
+            item.id === nota.id ? { ...item, lida: true } : item
+          )
+        );
+
+        this.anotacoesPais.update((lista) =>
+          lista.map((item) =>
+            item.id === nota.id ? { ...item, lida: true } : item
+          )
+        );
+
+        this.abrirModal(
+          'Sucesso',
+          'Anotação marcada como lida com sucesso!'
+        );
+      },
+      error: (err) => {
+        console.error(err);
+
+        this.abrirModal(
+          'Erro',
+          'Não foi possível atualizar a anotação.'
+        );
+      },
+    });
   }
 }

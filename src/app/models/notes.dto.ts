@@ -19,4 +19,5 @@ export interface Note {
   texto: string;
   lida: boolean;
   visivelTutores: boolean;
+  raw: NoteDTO;
 }

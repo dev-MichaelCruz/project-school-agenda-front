@@ -9,7 +9,10 @@ import { FormAdicionarAnotacaoComponent } from './form-adicionar-anotacao/form-a
 import { AuthService } from '../../../services/auth-service';
 import { roleEnum } from '../../../types/role';
 import { StudentsService } from '../../../services/students/students.service';
+import { NotesService } from '../../../services/notes/notes.service';
+
 import { Student } from '../../../models/students.dto';
+import { ElementRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-adicionar-anotacoes',
@@ -25,6 +28,7 @@ import { Student } from '../../../models/students.dto';
 export class AdicionarAnotacoes {
   private auth = inject(AuthService);
   private studentsService = inject(StudentsService);
+  private notesService = inject(NotesService);
 
   role = this.auth.role;
   roleEnum = roleEnum;
@@ -36,13 +40,18 @@ export class AdicionarAnotacoes {
 
   turmas = ['Turma 1', 'Turma 2', 'Turma 3'];
 
-
   alunos = signal<Student[]>([]);
+
+  modalMensagem = signal('');
+
+  @ViewChild('modalRef') modalElement!: ElementRef;
+
+  private modalInstance: any;
 
   private alunosProfessorMock: Student[] = [
     { id: 1, nome: 'João', sexo: 'M' },
     { id: 2, nome: 'Maria', sexo: 'F' },
-    { id: 3, nome: 'Guilherme José', sexo: 'M' },
+    { id: 3, nome: 'Pedro', sexo: 'M' },
   ];
 
   constructor() {
@@ -51,28 +60,24 @@ export class AdicionarAnotacoes {
 
       if (!role) return;
 
-      //
-      // RESPONSIBLE → API
-      //
       if (role === roleEnum.RESPONSIBLE) {
         this.etapa.set('aluno');
 
         this.studentsService.getMyStudentsAsResponsible().subscribe({
           next: (res) => this.alunos.set(res),
-          error: (err) => {
-            console.error(err);
-            this.alunos.set([]);
-          },
+          error: () => this.alunos.set([]),
         });
       }
 
-      //
-      // TEACHER → MOCK (por enquanto)
-      //
       if (role === roleEnum.TEACHER) {
         this.alunos.set(this.alunosProfessorMock);
       }
     });
+  }
+
+  ngAfterViewInit() {
+    // @ts-ignore (bootstrap global)
+    this.modalInstance = new window.bootstrap.Modal(this.modalElement.nativeElement);
   }
 
   selecionarTurma(turma: string): void {
@@ -95,14 +100,30 @@ export class AdicionarAnotacoes {
   }
 
   salvarAnotacao(dados: any): void {
-    console.log({
-      role: this.role(),
-      aluno: this.alunoSelecionado(),
-      ...dados,
+    const aluno = this.alunoSelecionado();
+
+    if (!aluno) return;
+
+    this.notesService.createNote(aluno.id, dados.texto).subscribe({
+      next: () => {
+        this.abrirModal('Anotação salva com sucesso');
+
+        this.etapa.set(this.role() === roleEnum.RESPONSIBLE ? 'aluno' : 'turma');
+      },
+      error: (err) => {
+        console.error(err);
+
+        this.abrirModal('Erro ao salvar anotação');
+      },
     });
+  }
 
-    alert('Anotação salva com sucesso');
+  abrirModal(mensagem: string): void {
+    this.modalMensagem.set(mensagem);
+    this.modalInstance.show();
+  }
 
-    this.etapa.set(this.role() === roleEnum.RESPONSIBLE ? 'aluno' : 'turma');
+  fecharModal(): void {
+    this.modalInstance.hide();
   }
 }
