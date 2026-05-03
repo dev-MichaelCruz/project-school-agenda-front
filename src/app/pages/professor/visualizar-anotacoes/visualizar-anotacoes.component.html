@@ -1,62 +1,48 @@
 @if (anotacaoSelecionada()) {
-
-<app-anotacoes-view
+  <app-anotacoes-view
     titulo="Visualizar anotação"
     [data]="anotacaoSelecionada()!.data"
     [texto]="anotacaoSelecionada()!.texto"
     [lida]="anotacaoSelecionada()!.lida"
     (cancelar)="fecharView()"
-    (marcarComoLida)="marcarComoLida()">
-</app-anotacoes-view>
-
+    (marcarComoLida)="marcarComoLida()"
+  >
+  </app-anotacoes-view>
 } @else {
+  @if (role() === roleEnum.TEACHER) {
+    <h2 class="mb-4">Suas anotações enviadas</h2>
+  } @else {
+    <h2>Suas anotações</h2>
+  }
 
-@if (role() === roleEnum.TEACHER) {
-<h2>
-    Visualizar anotações enviadas
-</h2>
-
-<div class="grid-anotacoes mt-4">
-
-    @for (item of anotacoes(); track item.id) {
-    <app-anotacao-card
-        [data]="item.data"
-        [lida]="item.lida"
-        [visivelTutores]="item.visivelTutores"
-        [role]="roleEnum.TEACHER"
-        [selecionada]="selecionadaId() === item.id"
-        (abrir)="selecionar(item.id)">
-    </app-anotacao-card>
-    }
-
-</div>
-}
-
-@if (role() === roleEnum.TEACHER) {
-
-    <h2 class="mt-4">
-        Anotações enviadas pelos pais
-    </h2>
-
-} @else {
-
-    <h2>
-        Suas anotações
-    </h2>
-
-}
-
-<div class="grid-anotacoes mt-4">
+  <div class="grid-anotacoes mb-4">
     @for (item of anotacoesPais(); track item.id) {
-    <app-anotacao-card
+      <app-anotacao-card
         [data]="item.data"
         [lida]="item.lida"
         [visivelTutores]="item.visivelTutores"
         [role]="roleEnum.RESPONSIBLE"
         [selecionada]="selecionadaId() === item.id"
-        (abrir)="selecionar(item.id)">
-    </app-anotacao-card>
+        (abrir)="selecionar(item.id)"
+      >
+      </app-anotacao-card>
     }
-</div>
+  </div>
+  @if (role() === roleEnum.TEACHER) {
+    <h2>Visualizar anotações enviadas pelos pais</h2>
 
+    <div class="grid-anotacoes mt-4">
+      @for (item of anotacoes(); track item.id) {
+        <app-anotacao-card
+          [data]="item.data"
+          [lida]="item.lida"
+          [visivelTutores]="item.visivelTutores"
+          [role]="roleEnum.TEACHER"
+          [selecionada]="selecionadaId() === item.id"
+          (abrir)="selecionar(item.id)"
+        >
+        </app-anotacao-card>
+      }
+    </div>
+  }
 }
