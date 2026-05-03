@@ -42,7 +42,7 @@ export class AdicionarAnotacoes {
   private alunosProfessorMock: Student[] = [
     { id: 1, nome: 'João', sexo: 'M' },
     { id: 2, nome: 'Maria', sexo: 'F' },
-    { id: 3, nome: 'Pedro', sexo: 'M' },
+    { id: 3, nome: 'Guilherme José', sexo: 'M' },
   ];
 
   constructor() {

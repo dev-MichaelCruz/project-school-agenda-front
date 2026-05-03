@@ -1,48 +1,57 @@
-@if (anotacaoSelecionada()) {
-  <app-anotacoes-view
-    titulo="Visualizar anotação"
-    [data]="anotacaoSelecionada()!.data"
-    [texto]="anotacaoSelecionada()!.texto"
-    [lida]="anotacaoSelecionada()!.lida"
-    (cancelar)="fecharView()"
-    (marcarComoLida)="marcarComoLida()"
-  >
-  </app-anotacoes-view>
-} @else {
-  @if (role() === roleEnum.TEACHER) {
-    <h2 class="mb-4">Suas anotações enviadas</h2>
-  } @else {
-    <h2>Suas anotações</h2>
+<div class="p-4">
+  @if (etapa() === 'aluno') {
+    <app-selecionar-aluno
+      [alunos]="alunos()"
+      [role]="role()"
+      (selecionar)="selecionarAluno($event)"
+      (voltar)="voltar()"
+    />
   }
 
-  <div class="grid-anotacoes mb-4">
-    @for (item of anotacoesPais(); track item.id) {
-      <app-anotacao-card
-        [data]="item.data"
-        [lida]="item.lida"
-        [visivelTutores]="item.visivelTutores"
-        [role]="roleEnum.RESPONSIBLE"
-        [selecionada]="selecionadaId() === item.id"
-        (abrir)="selecionar(item.id)"
-      >
-      </app-anotacao-card>
-    }
-  </div>
-  @if (role() === roleEnum.TEACHER) {
-    <h2>Visualizar anotações enviadas pelos pais</h2>
+  @if (etapa() === 'lista') {
+    @if (anotacaoSelecionada()) {
+      <app-anotacoes-view
+        titulo="Visualizar anotação"
+        [data]="anotacaoSelecionada()!.data"
+        [texto]="anotacaoSelecionada()!.texto"
+        [lida]="anotacaoSelecionada()!.lida"
+        (cancelar)="fecharView()"
+        (marcarComoLida)="marcarComoLida()"
+      />
+    } @else {
+      @if (role() === roleEnum.TEACHER) {
+        <h2>Visualizar anotações enviadas</h2>
 
-    <div class="grid-anotacoes mt-4">
-      @for (item of anotacoes(); track item.id) {
-        <app-anotacao-card
-          [data]="item.data"
-          [lida]="item.lida"
-          [visivelTutores]="item.visivelTutores"
-          [role]="roleEnum.TEACHER"
-          [selecionada]="selecionadaId() === item.id"
-          (abrir)="selecionar(item.id)"
-        >
-        </app-anotacao-card>
+        <div class="grid-anotacoes mt-4">
+          @for (item of anotacoes(); track item.id) {
+            <app-anotacao-card
+              [data]="item.data"
+              [lida]="item.lida"
+              [visivelTutores]="item.visivelTutores"
+              [role]="role()"
+              [selecionada]="selecionadaId() === item.id"
+              (abrir)="selecionar(item.id)"
+            />
+          }
+        </div>
+
+        <h2 class="mt-4">Anotações dos pais</h2>
+      } @else {
+        <h2>Visualizar anotações</h2>
       }
-    </div>
+
+      <div class="grid-anotacoes mt-4">
+        @for (item of anotacoesPais(); track item.id) {
+          <app-anotacao-card
+            [data]="item.data"
+            [lida]="item.lida"
+            [visivelTutores]="item.visivelTutores"
+            [role]="role()"
+            [selecionada]="selecionadaId() === item.id"
+            (abrir)="selecionar(item.id)"
+          />
+        }
+      </div>
+    }
   }
-}
+</div>

@@ -1,5 +1,5 @@
 <h2>
-  Adicionar anotação /
+  Anotações /
   <small class="text-muted">
     @if (role() === roleEnum.RESPONSIBLE) {
       Selecione criança
@@ -11,7 +11,7 @@
 
 <div class="mt-4 d-flex gap-4 flex-wrap">
   @for (aluno of alunos(); track aluno.id) {
-    <div class="text-center" style="cursor: pointer" (click)="selecionar.emit(aluno)">
+    <div class="text-center container_aluno" style="cursor: pointer" (click)="selecionar.emit(aluno)">
       <div>{{ aluno.nome }}</div>
 
       <div class="image-container-rounded">

@@ -16,6 +16,7 @@ export const routes: Routes = [
     loadComponent: () => import('./components/login/login/login').then((m) => m.Login),
   },
 
+  // rotas para a diretoria
   {
     path: 'cadastrar-familia',
     canActivate: [authGuard],
@@ -78,6 +79,7 @@ export const routes: Routes = [
     },
   },
 
+  // rotas para os professores
   {
     path: 'adicionar-anotacoes',
     canActivate: [authGuard],
@@ -106,6 +108,7 @@ export const routes: Routes = [
     },
   },
 
+  // rotas para os pais / responsáveis legais
   {
     path: 'responsavel/adicionar-anotacoes',
     canActivate: [authGuard],
@@ -114,7 +117,7 @@ export const routes: Routes = [
         (m) => m.AdicionarAnotacoes,
       ),
     data: {
-      label: 'Adicionar Anotações - pais',
+      label: 'Adicionar Anotações',
       role: roleEnum.RESPONSIBLE,
       showInSidebar: true,
     },
@@ -128,7 +131,7 @@ export const routes: Routes = [
         (m) => m.VisualizarAnotacoesComponent,
       ),
     data: {
-      label: 'Visualizar Anotações - pais',
+      label: 'Visualizar Anotações',
       role: roleEnum.RESPONSIBLE,
       showInSidebar: true,
     },
