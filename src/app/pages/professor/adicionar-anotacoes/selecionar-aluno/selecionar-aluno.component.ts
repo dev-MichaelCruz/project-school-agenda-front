@@ -15,7 +15,7 @@ import { Role, roleEnum } from '../../../../types/role';
   styleUrls: ['./selecionar-aluno.component.scss'],
 })
 export class SelecionarAlunoComponent {
-  roleEnum = roleEnum; // 👈 ESSENCIAL
+  roleEnum = roleEnum;
 
   alunos = input<any[]>([]);
   role = input<Role | null>(null);

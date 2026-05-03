@@ -34,4 +34,7 @@
   }
 </div>
 
-<button type="button" class="btn btn-secondary mt-4" (click)="voltar.emit()">Voltar</button>
+@if (role() === roleEnum.TEACHER) {
+  <button type="button" class="btn btn-secondary mt-4" (click)="voltar.emit()">Voltar</button>
+}
+

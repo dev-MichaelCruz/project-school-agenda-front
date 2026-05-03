@@ -1,10 +1,4 @@
-import {
-  Component,
-  computed,
-  effect,
-  inject,
-  signal
-} from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 
@@ -14,6 +8,7 @@ import { FormAdicionarAnotacaoComponent } from './form-adicionar-anotacao/form-a
 
 import { AuthService } from '../../../services/auth-service';
 import { roleEnum } from '../../../types/role';
+import { Student, StudentsService } from '../../../services/students/students';
 
 @Component({
   selector: 'app-adicionar-anotacoes',
@@ -22,44 +17,64 @@ import { roleEnum } from '../../../types/role';
     CommonModule,
     SelecionarTurmaComponent,
     SelecionarAlunoComponent,
-    FormAdicionarAnotacaoComponent
+    FormAdicionarAnotacaoComponent,
   ],
   templateUrl: './adicionar-anotacoes.html',
 })
 export class AdicionarAnotacoes {
-
   private auth = inject(AuthService);
+  private studentsService = inject(StudentsService);
 
   role = this.auth.role;
   roleEnum = roleEnum;
+
   etapa = signal<'turma' | 'aluno' | 'form'>('turma');
 
   turmaSelecionada = signal<any>(null);
-  alunoSelecionado = signal<any>(null);
+  alunoSelecionado = signal<Student | null>(null);
 
   turmas = ['Turma 1', 'Turma 2', 'Turma 3'];
 
-  alunosProfessor = [
+  //
+  // 🔹 Agora alunos vem de API ou mock
+  //
+  alunos = signal<Student[]>([]);
+
+  //
+  // 🔹 MOCK temporário (professor)
+  //
+  private alunosProfessorMock: Student[] = [
     { id: 1, nome: 'João', sexo: 'M' },
     { id: 2, nome: 'Maria', sexo: 'F' },
-    { id: 3, nome: 'Pedro', sexo: 'M' }
+    { id: 3, nome: 'Pedro', sexo: 'M' },
   ];
-
-  alunosResponsavel = [
-    { id: 1, nome: 'João', sexo: 'M' },
-    { id: 3, nome: 'Pedro', sexo: 'M' }
-  ];
-
-  alunos = computed(() =>
-    this.role() === roleEnum.RESPONSIBLE
-      ? this.alunosResponsavel
-      : this.alunosProfessor
-  );
 
   constructor() {
     effect(() => {
-      if (this.role() === roleEnum.RESPONSIBLE) {
+      const role = this.role();
+
+      if (!role) return;
+
+      //
+      // RESPONSIBLE → API
+      //
+      if (role === roleEnum.RESPONSIBLE) {
         this.etapa.set('aluno');
+
+        this.studentsService.getMyStudentsAsResponsible().subscribe({
+          next: (res) => this.alunos.set(res),
+          error: (err) => {
+            console.error(err);
+            this.alunos.set([]);
+          },
+        });
+      }
+
+      //
+      // TEACHER → MOCK (por enquanto)
+      //
+      if (role === roleEnum.TEACHER) {
+        this.alunos.set(this.alunosProfessorMock);
       }
     });
   }
@@ -69,7 +84,7 @@ export class AdicionarAnotacoes {
     this.etapa.set('aluno');
   }
 
-  selecionarAluno(aluno: any): void {
+  selecionarAluno(aluno: Student): void {
     this.alunoSelecionado.set(aluno);
     this.etapa.set('form');
   }
@@ -84,20 +99,14 @@ export class AdicionarAnotacoes {
   }
 
   salvarAnotacao(dados: any): void {
-
     console.log({
       role: this.role(),
       aluno: this.alunoSelecionado(),
-      ...dados
+      ...dados,
     });
 
     alert('Anotação salva com sucesso');
 
-    this.etapa.set(
-      this.role() === roleEnum.RESPONSIBLE
-        ? 'aluno'
-        : 'turma'
-    );
+    this.etapa.set(this.role() === roleEnum.RESPONSIBLE ? 'aluno' : 'turma');
   }
-
 }
