@@ -17,13 +17,13 @@ export class NotesService {
       .pipe(map((list: NoteDTO[]) => list.map((item: NoteDTO) => this.mapToUI(item))));
   }
 
-  createNote(studentId: number, texto: string): Observable<any> {
+  createNote(studentId: number, texto: string, visibleToResponsible: boolean): Observable<any> {
     return this.http.post(`${this.api}/notes`, {
       studentId,
       title: 'Anotação',
       content: texto,
       type: 'BEHAVIOR',
-      visibleToResponsible: true,
+      visibleToResponsible,
     });
   }
 

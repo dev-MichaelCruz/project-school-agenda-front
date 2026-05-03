@@ -127,14 +127,20 @@ export class AdicionarAnotacoes implements AfterViewInit {
 
   salvarAnotacao(dados: any): void {
     const aluno = this.alunoSelecionado();
+    const role = this.role();
 
-    if (!aluno) return;
+    if (!aluno || !role) return;
 
-    this.notesService.createNote(aluno.id, dados.texto).subscribe({
+    const visibleToResponsible =
+      role === roleEnum.TEACHER
+        ? !dados.privado
+        : true; // responsible sempre é true
+
+    this.notesService.createNote(aluno.id, dados.texto, visibleToResponsible).subscribe({
       next: () => {
         this.abrirModal('Anotação salva com sucesso');
 
-        this.etapa.set(this.role() === roleEnum.RESPONSIBLE ? 'aluno' : 'turma');
+        // this.etapa.set(role === roleEnum.RESPONSIBLE ? 'aluno' : 'turma');
       },
       error: (err) => {
         console.error(err);

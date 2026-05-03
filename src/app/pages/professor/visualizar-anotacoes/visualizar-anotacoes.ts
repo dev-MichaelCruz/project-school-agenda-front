@@ -151,7 +151,6 @@ export class VisualizarAnotacoesComponent implements AfterViewInit {
     this.notesService.updateNoteStatus(nota.raw, 'RESOLVED').subscribe({
       next: () => {
 
-        // atualiza UI
         this.anotacoes.update((lista) =>
           lista.map((item) =>
             item.id === nota.id ? { ...item, lida: true } : item
@@ -174,7 +173,7 @@ export class VisualizarAnotacoesComponent implements AfterViewInit {
 
         this.abrirModal(
           'Erro',
-          'Não foi possível atualizar a anotação.'
+          'Não foi possível marcar a anotação como lida.'
         );
       },
     });
