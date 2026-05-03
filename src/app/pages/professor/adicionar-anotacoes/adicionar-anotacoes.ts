@@ -8,7 +8,8 @@ import { FormAdicionarAnotacaoComponent } from './form-adicionar-anotacao/form-a
 
 import { AuthService } from '../../../services/auth-service';
 import { roleEnum } from '../../../types/role';
-import { Student, StudentsService } from '../../../services/students/students';
+import { StudentsService } from '../../../services/students/students.service';
+import { Student } from '../../../models/students.dto';
 
 @Component({
   selector: 'app-adicionar-anotacoes',
@@ -35,14 +36,9 @@ export class AdicionarAnotacoes {
 
   turmas = ['Turma 1', 'Turma 2', 'Turma 3'];
 
-  //
-  // 🔹 Agora alunos vem de API ou mock
-  //
+
   alunos = signal<Student[]>([]);
 
-  //
-  // 🔹 MOCK temporário (professor)
-  //
   private alunosProfessorMock: Student[] = [
     { id: 1, nome: 'João', sexo: 'M' },
     { id: 2, nome: 'Maria', sexo: 'F' },
