@@ -2,13 +2,13 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs';
 import { Role } from '../types/role';
-
+import { api_service } from './base-url';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
-  private api = 'https://schoolagenda.duckdns.org/api';
+  
+  private api = api_service;
 
   private _isLoggedIn = signal(!!localStorage.getItem('token'));
   isLoggedIn = this._isLoggedIn.asReadonly();

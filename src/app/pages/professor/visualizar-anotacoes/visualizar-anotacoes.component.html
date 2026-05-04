@@ -1,62 +1,61 @@
 <div class="p-4">
   @if (etapa() === 'turma' && role() === roleEnum.TEACHER) {
-    <app-selecionar-turma [turmas]="turmas()" (selecionar)="selecionarTurma($event)" />
+  <app-selecionar-turma [turmas]="turmas()"
+    (selecionar)="selecionarTurma($event)" />
   }
 
   @if (etapa() === 'aluno') {
-    <app-selecionar-aluno
-      [alunos]="alunos()"
-      [role]="role()"
-      (selecionar)="selecionarAluno($event)"
-      (voltar)="voltarTurma()"
-    />
+  <app-selecionar-aluno
+    [alunos]="alunos()"
+    [role]="role()"
+    (selecionar)="selecionarAluno($event)"
+    (voltar)="voltarTurma()" />
   }
 
   @if (etapa() === 'lista') {
-    @if (anotacaoSelecionada()) {
-      <app-anotacoes-view
-        titulo="Visualizar anotação"
-        [data]="anotacaoSelecionada()!.data"
-        [texto]="anotacaoSelecionada()!.texto"
-        [lida]="anotacaoSelecionada()!.lida"
-        (cancelar)="fecharView()"
-        (marcarComoLida)="marcarComoLida()"
-      />
-    } @else {
-      @if (role() === roleEnum.TEACHER) {
-        <h2>Visualizar anotações enviadas pelos pais</h2>
+  @if (anotacaoSelecionada()) {
+  <app-anotacoes-view
+    titulo="Visualizar anotação"
+    [data]="anotacaoSelecionada()!.data"
+    [texto]="anotacaoSelecionada()!.texto"
+    [lida]="anotacaoSelecionada()!.lida"
+    (cancelar)="fecharView()"
+    (marcarComoLida)="marcarComoLida()"
+    [mostrarBotaoLida]="podeMarcarComoLida()" />
+  } @else {
+  @if (role() === roleEnum.TEACHER) {
+  <h2>Visualizar anotações enviadas pelos pais</h2>
 
-        <div class="grid-anotacoes mt-4">
-          @for (item of anotacoes(); track item.id) {
-            <app-anotacao-card
-              [data]="item.data"
-              [lida]="item.lida"
-              [visivelTutores]="item.visivelTutores"
-              [role]="role()"
-              [selecionada]="selecionadaId() === item.id"
-              (abrir)="selecionar(item.id)"
-            />
-          }
-        </div>
-
-        <h2 class="mt-4">Anotações enviadas por você</h2>
-      } @else {
-        <h2>Visualizar anotações enviadas pelo professor</h2>
-      }
-
-      <div class="grid-anotacoes mt-4">
-        @for (item of anotacoesPais(); track item.id) {
-          <app-anotacao-card
-            [data]="item.data"
-            [lida]="item.lida"
-            [visivelTutores]="item.visivelTutores"
-            [role]="role()"
-            [selecionada]="selecionadaId() === item.id"
-            (abrir)="selecionar(item.id)"
-          />
-        }
-      </div>
+  <div class="grid-anotacoes mt-4">
+    @for (item of anotacoes(); track item.id) {
+    <app-anotacao-card
+      [data]="item.data"
+      [lida]="item.lida"
+      [visivelTutores]="item.visivelTutores"
+      [role]="role()"
+      [selecionada]="selecionadaId() === item.id"
+      (abrir)="selecionar(item.id)"
+      (marcarComoLida)="marcarComoLida()" />
     }
+  </div>
+
+  <h2 class="mt-4">Anotações enviadas por você</h2>
+  } @else {
+  <h2>Visualizar anotações enviadas pelo professor</h2>
+  }
+
+  <div class="grid-anotacoes mt-4">
+    @for (item of anotacoesPais(); track item.id) {
+    <app-anotacao-card
+      [data]="item.data"
+      [lida]="item.lida"
+      [visivelTutores]="item.visivelTutores"
+      [role]="role()"
+      [selecionada]="selecionadaId() === item.id"
+      (abrir)="selecionar(item.id)" />
+    }
+  </div>
+  }
   }
 </div>
 
@@ -65,7 +64,8 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">{{ modalTitulo() }}</h5>
-        <button type="button" class="btn-close" (click)="fecharModal()"></button>
+        <button type="button" class="btn-close"
+          (click)="fecharModal()"></button>
       </div>
 
       <div class="modal-body">
@@ -73,7 +73,8 @@
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="fecharModal()">OK</button>
+        <button type="button" class="btn btn-primary"
+          (click)="fecharModal()">OK</button>
       </div>
     </div>
   </div>

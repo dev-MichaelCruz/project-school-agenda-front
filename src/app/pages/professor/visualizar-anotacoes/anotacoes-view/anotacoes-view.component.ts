@@ -15,6 +15,7 @@ import { CommonModule } from '@angular/common';
 })
 export class AnotacoesViewComponent {
 
+  mostrarBotaoLida = input(true);
   titulo = input('Visualizar anotação enviada pelos tutores');
 
   data = input('');

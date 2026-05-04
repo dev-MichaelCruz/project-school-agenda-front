@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { Student, StudentDTO } from '../../models/students.dto';
+import { api_service } from '../base-url';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StudentsService {
 
-  private api = 'https://schoolagenda.duckdns.org/api';
+  private api = api_service;
 
   constructor(private http: HttpClient) {}
 

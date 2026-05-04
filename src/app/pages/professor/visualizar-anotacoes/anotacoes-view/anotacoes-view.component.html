@@ -16,20 +16,18 @@
 
     <button
       type="button"
-      class="btn-cancelar"
-      (click)="cancelar.emit()"
-    >
-      Cancelar
+      class="btn btn-secondary"
+      (click)="cancelar.emit()">
+      Voltar
     </button>
 
-    @if (!lida()) {
-      <button
-        type="button"
-        class="btn-lida"
-        (click)="marcarComoLida.emit()"
-      >
-        Marcar como lida
-      </button>
+    @if (!lida() && mostrarBotaoLida()) {
+    <button
+      type="button"
+      class="btn-lida"
+      (click)="marcarComoLida.emit()">
+      Marcar como lida
+    </button>
     }
 
   </div>

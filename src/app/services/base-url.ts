@@ -1,0 +1,1 @@
+export const api_service = 'https://schoolagenda.duckdns.org/api';

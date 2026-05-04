@@ -174,6 +174,19 @@ export class VisualizarAnotacoesComponent implements AfterViewInit {
     this.selecionadaId.set(null);
   }
 
+  podeMarcarComoLida(): boolean {
+    const nota = this.anotacaoSelecionada();
+    const role = this.role();
+
+    if (!nota || !role) return false;
+
+    if (role === roleEnum.TEACHER && nota.visivelTutores) {
+      return false;
+    }
+
+    return true;
+  }
+
   marcarComoLida(): void {
     const nota = this.anotacaoSelecionada();
     if (!nota) return;

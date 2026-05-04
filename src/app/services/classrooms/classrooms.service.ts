@@ -4,12 +4,13 @@ import { map, Observable } from 'rxjs';
 
 import { Classroom, ClassroomDTO, ClassroomsResponseDTO, StudentsByClassroomResponseDTO } from '../../models/classrooms.dto';
 import { Student, StudentDTO } from '../../models/students.dto';
+import { api_service } from '../base-url';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ClassroomsService {
-  private api = 'https://schoolagenda.duckdns.org/api';
+  private api = api_service;
 
   constructor(private http: HttpClient) {}
 
