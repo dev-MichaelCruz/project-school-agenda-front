@@ -28,19 +28,6 @@ export const routes: Routes = [
       showInSidebar: true,
     },
   },
-
-  {
-    path: 'gerenciar-turmas',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./pages/diretor/gerenciar-turmas/gerenciar-turmas').then((m) => m.GerenciarTurmas),
-    data: {
-      label: 'Gerenciar turmas',
-      role: roleEnum.DIRECTOR,
-      showInSidebar: true,
-    },
-  },
-
   {
     path: 'deletar-familia',
     canActivate: [authGuard],
@@ -74,6 +61,18 @@ export const routes: Routes = [
       import('./pages/diretor/deletar-professor/deletar-professor').then((m) => m.DeletarProfessor),
     data: {
       label: 'Deletar Professor',
+      role: roleEnum.DIRECTOR,
+      showInSidebar: true,
+    },
+  },
+
+  {
+    path: 'gerenciar-turmas',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/diretor/gerenciar-turmas/gerenciar-turmas').then((m) => m.GerenciarTurmas),
+    data: {
+      label: 'Gerenciar turmas',
       role: roleEnum.DIRECTOR,
       showInSidebar: true,
     },

@@ -3,21 +3,24 @@
 
   <!-- TOAST -->
   @if (toastVisivel) {
-    <div class="alert alert-success">{{ toastMensagem }}</div>
+    <div class="alert alert-success">
+      {{ toastMensagem }}
+    </div>
   }
 
-  @for (familia of familias; track familia.id) {
+  @for (familia of familias; track familia.responsibleId) {
     <div class="d-flex align-items-center justify-content-between mb-4">
       <span class="nome-familia">
-        {{ familia.nome }}
+        {{ familia.name }}
       </span>
 
-      <button class="btn btn-delete btn-danger btn-rounded" (click)="abrirModal(familia)"><i class="bi bi-dash"></i></button>
+      <button class="btn btn-delete btn-danger btn-rounded" (click)="abrirModal(familia)">
+        <i class="bi bi-dash"></i>
+      </button>
     </div>
   }
 </div>
 
-<!-- MODAL BOOTSTRAP -->
 <div class="modal fade" id="modalDeleteFamilia" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -29,7 +32,8 @@
 
       <div class="modal-body">
         Deseja deletar
-        <strong>{{ familiaSelecionada?.nome }}</strong
+        <strong>
+          {{ familiaSelecionada?.name }} </strong
         >?
       </div>
 
