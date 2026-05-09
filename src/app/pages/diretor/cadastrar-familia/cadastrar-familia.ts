@@ -1,11 +1,18 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewChild, ElementRef, AfterViewInit, OnInit } from '@angular/core';
+
 import { CommonModule } from '@angular/common';
-import {
-  FormArray,
-  FormBuilder,
-  ReactiveFormsModule,
-  Validators
-} from '@angular/forms';
+
+import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+
+import { FamilyService } from '../../../services/family/family.service';
+
+import { FamilyDTO } from '../../../models/family.dto';
+
+import { ClassroomsService } from '../../../services/classrooms/classrooms.service';
+
+import { Classroom } from '../../../models/classrooms.dto';
+
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-cadastrar-familia',
@@ -14,29 +21,55 @@ import {
   templateUrl: './cadastrar-familia.html',
   styleUrl: './cadastrar-familia.scss',
 })
-export class CadastrarFamilia {
-
+export class CadastrarFamilia implements AfterViewInit, OnInit {
   private fb = inject(FormBuilder);
 
-  toastVisivel = false;
-  toastMensagem = '';
+  private familyService = inject(FamilyService);
 
-  turmasMockadas = [
-    { id: 1, nome: 'Maternal A' },
-    { id: 2, nome: 'Maternal B' },
-    { id: 3, nome: 'Jardim 1' },
-    { id: 4, nome: 'Jardim 2' },
-    { id: 5, nome: '1º Ano A' },
-    { id: 6, nome: '1º Ano B' },
-  ];
+  private classroomsService = inject(ClassroomsService);
+
+  @ViewChild('statusModal')
+  modalElement!: ElementRef;
+
+  private modalInstance: any;
+
+  modalTitulo = '';
+
+  modalMensagem = '';
+
+  turmas = [] as Classroom[];
 
   form = this.fb.group({
-    nome: ['', Validators.required],
-    sobrenome: ['', Validators.required],
+    nome: ['', [Validators.required, Validators.minLength(2)]],
+
+    sobrenome: ['', [Validators.required, Validators.minLength(2)]],
+
     email: ['', [Validators.required, Validators.email]],
-    senha: ['', Validators.required],
+
+    senha: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(255)]],
+
     criancas: this.fb.array([this.criarCrianca()]),
   });
+
+  ngOnInit(): void {
+    this.classroomsService.getAllClassrooms().subscribe({
+      next: (res) => {
+        this.turmas = res;
+      },
+
+      error: (err) => {
+        console.error(err);
+
+        this.abrirModal('Erro', 'Não foi possível carregar as turmas.');
+      },
+    });
+  }
+
+  ngAfterViewInit(): void {
+    if (this.modalElement?.nativeElement) {
+      this.modalInstance = new bootstrap.Modal(this.modalElement.nativeElement);
+    }
+  }
 
   get criancas(): FormArray {
     return this.form.get('criancas') as FormArray;
@@ -45,8 +78,11 @@ export class CadastrarFamilia {
   criarCrianca() {
     return this.fb.group({
       nome: ['', Validators.required],
+
       sexo: ['', Validators.required],
+
       nascimento: ['', Validators.required],
+
       turma: ['', Validators.required],
     });
   }
@@ -61,26 +97,75 @@ export class CadastrarFamilia {
     }
   }
 
-  cadastrar(): void {
+  abrirModal(titulo: string, mensagem: string): void {
+    this.modalTitulo = titulo;
 
-    if (this.form.invalid) {
+    this.modalMensagem = mensagem;
+
+    this.modalInstance?.show();
+  }
+
+  fecharModal(): void {
+    this.modalInstance?.hide();
+  }
+
+  cadastrar(): void {
+    if (this.form.invalid || this.criancas.length === 0) {
       this.form.markAllAsTouched();
+
       return;
     }
 
-    console.log(this.form.value);
+    const formValue = this.form.getRawValue();
 
-    this.toastMensagem = 'Família cadastrada com sucesso';
-    this.toastVisivel = true;
+    const familiaDTO: FamilyDTO = {
+      firstName: formValue.nome ?? '',
 
-    setTimeout(() => {
-      this.toastVisivel = false;
-    }, 3000);
+      lastName: formValue.sobrenome ?? '',
 
-    this.form.reset();
+      email: formValue.email ?? '',
 
-    this.criancas.clear();
-    this.criancas.push(this.criarCrianca());
+      password: formValue.senha ?? '',
+
+      children: (formValue.criancas ?? []).map((crianca) => ({
+        name: crianca.nome ?? '',
+
+        gender: crianca.sexo === 'M' ? 'MALE' : 'FEMALE',
+
+        birthDate: crianca.nascimento ?? '',
+
+        classroomId: this.turmas.find((turma) => turma.nome === crianca.turma)?.id ?? 0,
+      })),
+    };
+
+    this.familyService.cadastrarFamilia(familiaDTO).subscribe({
+      next: (response) => {
+        this.abrirModal('Sucesso', `Família ${response.name} cadastrada com sucesso!`);
+
+        this.form.reset();
+
+        this.criancas.clear();
+
+        this.criancas.push(this.criarCrianca());
+      },
+
+      error: (error) => {
+        console.error(error);
+
+        let mensagem = 'Erro desconhecido ao cadastrar família.';
+
+        if (typeof error?.error === 'string') {
+          mensagem = error.error;
+        } else if (error?.error?.message) {
+          mensagem = error.error.message;
+        } else if (error?.error?.error) {
+          mensagem = error.error.error;
+        } else if (Array.isArray(error?.error?.errors)) {
+          mensagem = error.error.errors.join(', ');
+        }
+
+        this.abrirModal('Erro', mensagem);
+      },
+    });
   }
-
 }

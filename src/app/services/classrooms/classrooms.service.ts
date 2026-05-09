@@ -1,9 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+
 import { map, Observable } from 'rxjs';
 
-import { Classroom, ClassroomDTO, ClassroomsResponseDTO, StudentsByClassroomResponseDTO } from '../../models/classrooms.dto';
+import {
+  Classroom,
+  ClassroomDTO,
+  ClassroomsResponseDTO,
+  StudentsByClassroomResponseDTO,
+} from '../../models/classrooms.dto';
+
 import { Student, StudentDTO } from '../../models/students.dto';
+
 import { api_service } from '../base-url';
 
 @Injectable({
@@ -25,6 +33,17 @@ export class ClassroomsService {
     );
   }
 
+  getAllClassrooms(): Observable<Classroom[]> {
+    return this.http.get<ClassroomDTO[]>(`${this.api}/director/classrooms`).pipe(
+      map((classrooms: ClassroomDTO[]) =>
+        classrooms.map((c: ClassroomDTO) => ({
+          id: c.id,
+          nome: c.name,
+        })),
+      ),
+    );
+  }
+
   getStudentsByClassroom(classroomId: number): Observable<Student[]> {
     return this.http
       .get<StudentsByClassroomResponseDTO>(`${this.api}/classrooms/${classroomId}/students`)
@@ -38,6 +57,7 @@ export class ClassroomsService {
         ),
       );
   }
+
   private mapToStudent(dto: StudentDTO): Student {
     return {
       id: dto.id,
