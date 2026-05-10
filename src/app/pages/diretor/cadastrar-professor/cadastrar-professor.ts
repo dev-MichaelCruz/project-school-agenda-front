@@ -1,52 +1,82 @@
-import { Component, inject } from '@angular/core';
-import {
-  FormArray,
-  FormBuilder,
-  ReactiveFormsModule,
-  Validators
-} from '@angular/forms';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
+
+import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+
 import { CommonModule } from '@angular/common';
+
+import { ClassroomsService } from '../../../services/classrooms/classrooms.service';
+
+import { Classroom } from '../../../models/classrooms.dto';
+
+
+import { TeacherDTO } from '../../../models/teacher.dto';
+import { TeachersService } from '../../../services/teachers/teachers';
+
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-cadastrar-professor',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './cadastrar-professor.html',
-  styleUrl: './cadastrar-professor.scss'
+  styleUrl: './cadastrar-professor.scss',
 })
-export class CadastrarProfessor {
-
+export class CadastrarProfessor implements OnInit, AfterViewInit {
   private fb = inject(FormBuilder);
 
-  sucesso = false;
+  private classroomsService = inject(ClassroomsService);
 
-  turmasMockadas = [
-    { id: 1, nome: 'Maternal A' },
-    { id: 2, nome: 'Maternal B' },
-    { id: 3, nome: 'Jardim 1' },
-    { id: 4, nome: 'Jardim 2' },
-    { id: 5, nome: '1º Ano A' },
-    { id: 6, nome: '1º Ano B' },
-  ];
+  private teachersService = inject(TeachersService);
+
+  @ViewChild('statusModal')
+  modalElement!: ElementRef;
+
+  private modalInstance: any;
+
+  modalTitulo = '';
+
+  modalMensagem = '';
+
+  turmasDisponiveis: Classroom[] = [];
 
   form = this.fb.group({
-    nome: ['', Validators.required],
-    sobrenome: ['', Validators.required],
+    nome: ['', [Validators.required, Validators.minLength(2)]],
+
+    sobrenome: ['', [Validators.required, Validators.minLength(2)]],
+
     email: ['', [Validators.required, Validators.email]],
-    senha: ['', Validators.required],
-    turmas: this.fb.array([
-      this.fb.control('', Validators.required)
-    ])
+
+    senha: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(255)]],
+
+    turmas: this.fb.array([this.fb.control('', Validators.required)]),
   });
+
+  ngOnInit(): void {
+    this.classroomsService.getAllClassrooms().subscribe({
+      next: (res) => {
+        this.turmasDisponiveis = res;
+      },
+
+      error: (err) => {
+        console.error(err);
+
+        this.abrirModal('Erro', 'Não foi possível carregar as turmas.');
+      },
+    });
+  }
+
+  ngAfterViewInit(): void {
+    if (this.modalElement?.nativeElement) {
+      this.modalInstance = new bootstrap.Modal(this.modalElement.nativeElement);
+    }
+  }
 
   get turmas(): FormArray {
     return this.form.get('turmas') as FormArray;
   }
 
   adicionarTurma(): void {
-    this.turmas.push(
-      this.fb.control('', Validators.required)
-    );
+    this.turmas.push(this.fb.control('', Validators.required));
   }
 
   removerTurma(index: number): void {
@@ -55,28 +85,73 @@ export class CadastrarProfessor {
     }
   }
 
-  cadastrar(): void {
+  abrirModal(titulo: string, mensagem: string): void {
+    this.modalTitulo = titulo;
 
+    this.modalMensagem = mensagem;
+
+    this.modalInstance?.show();
+  }
+
+  fecharModal(): void {
+    this.modalInstance?.hide();
+  }
+
+  cadastrar(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+
       return;
     }
 
-    console.log(this.form.value);
+    const formValue = this.form.getRawValue();
 
-    this.sucesso = true;
+    const classroomIds = (formValue.turmas ?? [])
+      .map((nomeTurma) => {
+        return this.turmasDisponiveis.find((turma) => turma.nome === nomeTurma)?.id;
+      })
+      .filter((id): id is number => !!id);
 
-    setTimeout(() => {
-      this.sucesso = false;
-    }, 3000);
+    const professorDTO: TeacherDTO = {
+      firstName: formValue.nome ?? '',
 
-    this.form.reset();
+      lastName: formValue.sobrenome ?? '',
 
-    this.turmas.clear();
+      email: formValue.email ?? '',
 
-    this.turmas.push(
-      this.fb.control('', Validators.required)
-    );
+      password: formValue.senha ?? '',
+
+      classroomIds,
+    };
+
+    this.teachersService.cadastrarProfessor(professorDTO).subscribe({
+      next: (response) => {
+        this.abrirModal('Sucesso', `Professor ${response.name} cadastrado com sucesso!`);
+
+        this.form.reset();
+
+        this.turmas.clear();
+
+        this.turmas.push(this.fb.control('', Validators.required));
+      },
+
+      error: (error) => {
+        console.error(error);
+
+        let mensagem = 'Erro desconhecido ao cadastrar professor.';
+
+        if (typeof error?.error === 'string') {
+          mensagem = error.error;
+        } else if (error?.error?.message) {
+          mensagem = error.error.message;
+        } else if (error?.error?.error) {
+          mensagem = error.error.error;
+        } else if (Array.isArray(error?.error?.errors)) {
+          mensagem = error.error.errors.join(', ');
+        }
+
+        this.abrirModal('Erro', mensagem);
+      },
+    });
   }
-
 }
