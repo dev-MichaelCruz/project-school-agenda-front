@@ -1,45 +1,58 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
-import {
-  FormBuilder,
-  ReactiveFormsModule,
-  Validators
-} from '@angular/forms';
+
+import { Component, inject, OnInit, signal } from '@angular/core';
+
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+
+import { Classroom } from '../../../models/classrooms.dto';
+
+import { ClassroomsService } from '../../../services/classrooms/classrooms.service';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-gerenciar-turmas',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule
-  ],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './gerenciar-turmas.html',
-  styleUrl: './gerenciar-turmas.scss'
+  styleUrl: './gerenciar-turmas.scss',
 })
-export class GerenciarTurmas {
+export class GerenciarTurmas implements OnInit {
+  private fb = inject(FormBuilder);
 
-  private fb = new FormBuilder();
+  private classroomsService = inject(ClassroomsService);
 
-  turmas = signal<string[]>([
-    'Maternal A',
-    'Maternal B',
-    'Jardim 1',
-    'Jardim 2',
-    '1º Ano A'
-  ]);
+  turmas = signal<Classroom[]>([]);
 
   submitted = signal(false);
 
-  turmaIndexSelecionado = signal<number | null>(null);
+  turmaSelecionada = signal<Classroom | null>(null);
+
+  modalMensagem = '';
 
   form = this.fb.group({
-    turma: ['', Validators.required]
+    turma: ['', Validators.required],
   });
 
-  cadastrar(): void {
+  ngOnInit(): void {
+    this.carregarTurmas();
+  }
 
+  carregarTurmas(): void {
+    this.classroomsService.getAllClassrooms().subscribe({
+      next: (res) => {
+        this.turmas.set(res);
+      },
+
+      error: (err) => {
+        console.error(err);
+
+        this.abrirModalMensagem('Erro ao carregar turmas.');
+      },
+    });
+  }
+
+  cadastrar(): void {
     this.submitted.set(true);
 
     if (this.form.invalid) {
@@ -51,39 +64,82 @@ export class GerenciarTurmas {
 
     if (!nome) return;
 
-    this.turmas.update(lista => [...lista, nome]);
+    this.classroomsService.cadastrarTurma(nome).subscribe({
+      next: () => {
+        this.carregarTurmas();
 
-    this.form.reset();
-    this.submitted.set(false);
+        this.form.reset();
+
+        this.submitted.set(false);
+
+        this.abrirModalMensagem('Turma cadastrada com sucesso.');
+      },
+
+      error: (error) => {
+        console.error(error);
+
+        let mensagem = 'Erro ao cadastrar turma.';
+
+        if (typeof error?.error === 'string') {
+          mensagem = error.error;
+        }
+
+        this.abrirModalMensagem(mensagem);
+      },
+    });
   }
 
-  abrirModalExcluir(index: number): void {
+  abrirModalExcluir(turma: Classroom): void {
+    this.turmaSelecionada.set(turma);
 
-    this.turmaIndexSelecionado.set(index);
-
-    const modal = new bootstrap.Modal(
-      document.getElementById('modalExcluirTurma')
-    );
+    const modal = new bootstrap.Modal(document.getElementById('modalExcluirTurma'));
 
     modal.show();
   }
 
   confirmarExclusao(): void {
+    const turma = this.turmaSelecionada();
 
-    const index = this.turmaIndexSelecionado();
+    if (!turma) return;
 
-    if (index === null) return;
+    this.classroomsService.deletarTurma(turma.id).subscribe({
+      next: () => {
+        this.turmas.update((lista) => lista.filter((item) => item.id !== turma.id));
 
-    this.turmas.update(lista =>
-      lista.filter((_, i) => i !== index)
-    );
+        this.fecharModalExcluir();
 
-    this.turmaIndexSelecionado.set(null);
+        this.abrirModalMensagem('Turma deletada com sucesso.');
+      },
 
-    const modalEl = document.getElementById('modalExcluirTurma');
-    const modal = bootstrap.Modal.getInstance(modalEl);
+      error: (error) => {
+        console.error(error);
 
-    modal.hide();
+        let mensagem = 'Erro ao deletar turma.';
+
+        if (typeof error?.error === 'string') {
+          mensagem = error.error;
+        }
+
+        this.fecharModalExcluir();
+
+        this.abrirModalMensagem(mensagem);
+      },
+    });
   }
 
+  fecharModalExcluir(): void {
+    const modalEl = document.getElementById('modalExcluirTurma');
+
+    const modal = bootstrap.Modal.getInstance(modalEl);
+
+    modal?.hide();
+  }
+
+  abrirModalMensagem(mensagem: string): void {
+    this.modalMensagem = mensagem;
+
+    const modal = new bootstrap.Modal(document.getElementById('modalMensagemTurma'));
+
+    modal.show();
+  }
 }
