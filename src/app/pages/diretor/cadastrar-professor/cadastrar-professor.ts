@@ -10,7 +10,7 @@ import { Classroom } from '../../../models/classrooms.dto';
 
 
 import { TeacherDTO } from '../../../models/teacher.dto';
-import { TeachersService } from '../../../services/teachers/teachers';
+import { TeachersService } from '../../../services/teachers/teachers.service';
 
 declare var bootstrap: any;
 

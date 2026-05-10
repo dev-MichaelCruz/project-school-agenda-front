@@ -6,10 +6,15 @@ export interface TeacherDTO {
   classroomIds: number[];
 }
 
-export interface TeacherResponseDTO {
-  email: string;
+export interface TeacherClassroomDTO {
+  id: number;
   name: string;
+}
+
+export interface TeacherResponseDTO {
   teacherId: number;
-  classroomIds: number[];
   userId: number;
+  name: string;
+  email: string;
+  classrooms: TeacherClassroomDTO[];
 }

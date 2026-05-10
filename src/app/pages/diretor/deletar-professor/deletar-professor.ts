@@ -1,5 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+
 import { CommonModule } from '@angular/common';
+
+import { TeacherResponseDTO } from '../../../models/teacher.dto';
+import { TeachersService } from '../../../services/teachers/teachers.service';
 
 declare const bootstrap: any;
 
@@ -10,20 +14,42 @@ declare const bootstrap: any;
   templateUrl: './deletar-professor.html',
   styleUrl: './deletar-professor.scss',
 })
-export class DeletarProfessor {
+export class DeletarProfessor implements OnInit {
+  private professorService = inject(TeachersService);
 
-  professores = [
-    { id: 1, nome: 'Carlos Silva' },
-    { id: 2, nome: 'Fernanda Souza' },
-    { id: 3, nome: 'João Pereira' },
-  ];
+  professores: TeacherResponseDTO[] = [];
 
-  professorSelecionado: any = null;
+  professorSelecionado: TeacherResponseDTO | null = null;
 
   toastVisivel = false;
+
   toastMensagem = '';
 
-  abrirModal(professor: any): void {
+  ngOnInit(): void {
+    this.carregarProfessores();
+  }
+
+  carregarProfessores(): void {
+    this.professorService.listarProfessores().subscribe({
+      next: (res) => {
+        this.professores = res;
+      },
+
+      error: (err) => {
+        console.error(err);
+
+        this.toastMensagem = 'Erro ao carregar professores.';
+
+        this.toastVisivel = true;
+
+        setTimeout(() => {
+          this.toastVisivel = false;
+        }, 3000);
+      },
+    });
+  }
+
+  abrirModal(professor: TeacherResponseDTO): void {
     this.professorSelecionado = professor;
 
     const modalElement = document.getElementById('modalDeleteProfessor');
@@ -36,38 +62,52 @@ export class DeletarProfessor {
   }
 
   confirmarDelete(): void {
-
     if (!this.professorSelecionado) return;
 
-    const nome = this.professorSelecionado.nome;
+    const nome = this.professorSelecionado.name;
 
-    setTimeout(() => {
+    this.professorService.deletarProfessor(this.professorSelecionado.teacherId).subscribe({
+      next: () => {
+        this.professores = this.professores.filter(
+          (item) => item.teacherId !== this.professorSelecionado?.teacherId,
+        );
 
-      this.professores = this.professores.filter(
-        item => item.id !== this.professorSelecionado.id
-      );
+        const modalElement = document.getElementById('modalDeleteProfessor');
 
-      const modalElement =
-        document.getElementById('modalDeleteProfessor');
+        if (modalElement) {
+          const modal = bootstrap.Modal.getInstance(modalElement);
 
-      if (modalElement) {
-        const modal =
-          bootstrap.Modal.getInstance(modalElement);
+          modal?.hide();
+        }
 
-        modal?.hide();
-      }
+        this.toastMensagem = `O professor ${nome} foi deletado com sucesso`;
 
-      this.toastMensagem =
-        `O professor ${nome} foi deletado com sucesso`;
+        this.toastVisivel = true;
 
-      this.toastVisivel = true;
+        setTimeout(() => {
+          this.toastVisivel = false;
+        }, 3000);
+      },
 
-      setTimeout(() => {
-        this.toastVisivel = false;
-      }, 3000);
+      error: (err) => {
+        console.error(err);
 
-    }, 800);
+        let mensagem = 'Erro ao deletar professor.';
 
+        if (typeof err?.error === 'string') {
+          mensagem = err.error;
+        } else if (err?.error?.message) {
+          mensagem = err.error.message;
+        }
+
+        this.toastMensagem = mensagem;
+
+        this.toastVisivel = true;
+
+        setTimeout(() => {
+          this.toastVisivel = false;
+        }, 3000);
+      },
+    });
   }
-
 }
