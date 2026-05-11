@@ -27,7 +27,12 @@ export class FormAdicionarAnotacaoComponent {
 
   mostrarPrivado = input(true);
 
-  salvar = output<any>();
+  salvar = output<{
+    texto: string;
+    privado: boolean;
+    imagem: File | null;
+  }>();
+
   voltar = output<void>();
 
   private fb = inject(FormBuilder);
@@ -35,7 +40,7 @@ export class FormAdicionarAnotacaoComponent {
   imagemSelecionada = signal<File | null>(null);
   nomeImagem = signal('');
 
-  form = this.fb.group({
+  form = this.fb.nonNullable.group({
     texto: ['', Validators.required],
     privado: [false]
   });
@@ -64,9 +69,9 @@ export class FormAdicionarAnotacaoComponent {
     }
 
     this.salvar.emit({
-      texto: this.form.value.texto,
+      texto: this.form.getRawValue().texto,
       privado: this.mostrarPrivado()
-        ? this.form.value.privado
+        ? this.form.getRawValue().privado
         : false,
       imagem: this.imagemSelecionada()
     });
@@ -79,5 +84,4 @@ export class FormAdicionarAnotacaoComponent {
     this.imagemSelecionada.set(null);
     this.nomeImagem.set('');
   }
-
 }

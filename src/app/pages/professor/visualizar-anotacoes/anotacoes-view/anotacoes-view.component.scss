@@ -50,3 +50,15 @@
 .acoes button:hover {
   opacity: 0.92;
 }
+
+.img-anotacao {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.img-anotacao:hover {
+  transform: scale(1.03);
+}

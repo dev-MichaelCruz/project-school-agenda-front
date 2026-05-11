@@ -4,11 +4,49 @@
     {{ titulo() }}
   </h2>
 
-  <div class="data mt-4">
+  <div class="mt-2 text-muted small">
+
+    <strong>Autor:</strong>
+
+    {{ autor() }}
+
+    @if (autorRole() === 'TEACHER') {
+      <span class="badge bg-primary ms-2">
+        Professor
+      </span>
+    }
+
+    @if (autorRole() === 'RESPONSIBLE') {
+      <span class="badge bg-warning text-dark ms-2">
+        Responsável
+      </span>
+    }
+
+  </div>
+
+  <div class="data mt-3">
     {{ data() }}
   </div>
 
-  <div class="mensagem">
+  @if (imagens().length) {
+
+    <div class="mt-4 d-flex flex-wrap gap-3">
+
+      @for (img of imagens(); track img) {
+
+        <img
+          [src]="img"
+          class="img-anotacao rounded border"
+          alt="Imagem da anotação"
+        />
+
+      }
+
+    </div>
+
+  }
+
+  <div class="mensagem mt-4">
     {{ texto() }}
   </div>
 
@@ -22,12 +60,16 @@
     </button>
 
     @if (!lida() && mostrarBotaoLida()) {
-    <button
-      type="button"
-      class="btn-lida"
-      (click)="marcarComoLida.emit()">
-      Marcar como lida
-    </button>
+
+      <button
+        type="button"
+        class="btn-lida"
+        (click)="marcarComoLida.emit()">
+
+        Marcar como lida
+
+      </button>
+
     }
 
   </div>

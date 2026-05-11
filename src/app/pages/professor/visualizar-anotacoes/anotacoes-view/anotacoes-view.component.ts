@@ -16,13 +16,20 @@ import { CommonModule } from '@angular/common';
 export class AnotacoesViewComponent {
 
   mostrarBotaoLida = input(true);
-  titulo = input('Visualizar anotação enviada pelos tutores');
+
+  titulo = input('Visualizar anotação');
 
   data = input('');
 
   texto = input('');
 
   lida = input(false);
+
+  autor = input('');
+
+  autorRole = input('');
+
+  imagens = input<string[]>([]);
 
   cancelar = output<void>();
 

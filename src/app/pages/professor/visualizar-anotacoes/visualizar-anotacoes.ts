@@ -43,6 +43,7 @@ declare var bootstrap: any;
   templateUrl: './visualizar-anotacoes.component.html',
 })
 export class VisualizarAnotacoesComponent implements AfterViewInit {
+
   private auth = inject(AuthService);
   private notesService = inject(NotesService);
   private studentsService = inject(StudentsService);
@@ -65,20 +66,26 @@ export class VisualizarAnotacoesComponent implements AfterViewInit {
   selecionadaId = signal<number | null>(null);
 
   @ViewChild('statusModal') modalRef!: ElementRef;
+
   private modalInstance: any;
 
   modalTitulo = signal('');
   modalMensagem = signal('');
 
   ngAfterViewInit(): void {
+
     if (this.modalRef?.nativeElement) {
-      this.modalInstance = new bootstrap.Modal(this.modalRef.nativeElement);
+      this.modalInstance = new bootstrap.Modal(
+        this.modalRef.nativeElement
+      );
     }
   }
 
   abrirModal(titulo: string, mensagem: string): void {
+
     this.modalTitulo.set(titulo);
     this.modalMensagem.set(mensagem);
+
     this.modalInstance?.show();
   }
 
@@ -87,74 +94,148 @@ export class VisualizarAnotacoesComponent implements AfterViewInit {
   }
 
   constructor() {
+
     effect(() => {
+
       const role = this.role();
 
       if (!role) return;
 
+      // RESPONSIBLE
+
       if (role === roleEnum.RESPONSIBLE) {
+
         this.etapa.set('aluno');
 
-        this.studentsService.getMyStudentsAsResponsible().subscribe({
-          next: (res) => this.alunos.set(res),
-          error: () => this.alunos.set([]),
-        });
+        this.studentsService
+          .getMyStudentsAsResponsible()
+          .subscribe({
+
+            next: (res) => this.alunos.set(res),
+
+            error: () => this.alunos.set([]),
+
+          });
       }
 
+      // TEACHER
+
       if (role === roleEnum.TEACHER) {
-        this.classroomsService.getMyClassrooms().subscribe({
-          next: (res) => this.turmas.set(res),
-          error: (err) => {
-            console.error(err);
-            this.turmas.set([]);
-          },
-        });
+
+        this.classroomsService
+          .getMyClassrooms()
+          .subscribe({
+
+            next: (res) => this.turmas.set(res),
+
+            error: (err) => {
+
+              console.error(err);
+
+              this.turmas.set([]);
+            },
+
+          });
       }
     });
 
     effect(() => {
+
       const aluno = this.alunoSelecionado();
       const role = this.role();
 
       if (!aluno || !role) return;
 
-      this.notesService.getNotesByStudent(aluno.id).subscribe({
-        next: (notas) => {
-          if (role === roleEnum.TEACHER) {
-            this.anotacoes.set(notas.filter((n) => !n.visivelTutores));
-            this.anotacoesPais.set(notas.filter((n) => n.visivelTutores));
-          } else {
-            this.anotacoes.set([]);
-            this.anotacoesPais.set(notas.filter((n) => n.visivelTutores));
-          }
+      this.notesService
+        .getNotesByStudent(aluno.id)
+        .subscribe({
 
-          this.etapa.set('lista');
-        },
-        error: (err) => console.error(err),
-      });
+          next: (notas) => {
+
+            // PROFESSOR
+
+            if (role === roleEnum.TEACHER) {
+
+              // enviadas pelos responsáveis
+
+              this.anotacoes.set(
+                notas.filter(
+                  (n) => n.authorRole === roleEnum.RESPONSIBLE
+                )
+              );
+
+              // enviadas pelos professores
+
+              this.anotacoesPais.set(
+                notas.filter(
+                  (n) => n.authorRole === roleEnum.TEACHER
+                )
+              );
+
+            } else {
+
+              // enviadas pelos responsáveis
+
+              this.anotacoes.set(
+                notas.filter(
+                  (n) => n.authorRole === roleEnum.RESPONSIBLE
+                )
+              );
+
+              // enviadas pelos professores
+
+              this.anotacoesPais.set(
+                notas.filter(
+                  (n) => n.authorRole === roleEnum.TEACHER
+                )
+              );
+            }
+
+            this.etapa.set('lista');
+          },
+
+          error: (err) => console.error(err),
+
+        });
     });
   }
 
   anotacaoSelecionada = computed(() => {
+
     const id = this.selecionadaId();
+
     if (!id) return null;
 
-    return [...this.anotacoes(), ...this.anotacoesPais()].find((item) => item.id === id) ?? null;
+    return [
+      ...this.anotacoes(),
+      ...this.anotacoesPais(),
+    ].find((item) => item.id === id) ?? null;
+
   });
 
   selecionarTurma(turma: Classroom): void {
+
     this.turmaSelecionada.set(turma);
 
-    this.classroomsService.getStudentsByClassroom(turma.id).subscribe({
-      next: (res) => {
-        this.alunos.set(res);
-        this.etapa.set('aluno');
-      },
-      error: (err) => {
-        console.error(err);
-        this.alunos.set([]);
-      },
-    });
+    this.classroomsService
+      .getStudentsByClassroom(turma.id)
+      .subscribe({
+
+        next: (res) => {
+
+          this.alunos.set(res);
+
+          this.etapa.set('aluno');
+        },
+
+        error: (err) => {
+
+          console.error(err);
+
+          this.alunos.set([]);
+        },
+
+      });
   }
 
   selecionarAluno(aluno: Student): void {
@@ -162,7 +243,11 @@ export class VisualizarAnotacoesComponent implements AfterViewInit {
   }
 
   voltarTurma(): void {
-    if (this.role() === roleEnum.RESPONSIBLE) return;
+
+    if (this.role() === roleEnum.RESPONSIBLE) {
+      return;
+    }
+
     this.etapa.set('turma');
   }
 
@@ -175,12 +260,17 @@ export class VisualizarAnotacoesComponent implements AfterViewInit {
   }
 
   podeMarcarComoLida(): boolean {
+
     const nota = this.anotacaoSelecionada();
     const role = this.role();
 
-    if (!nota || !role) return false;
+    if (!nota || !role) {
+      return false;
+    }
 
-    if (role === roleEnum.TEACHER && nota.visivelTutores) {
+    // não pode marcar sua própria anotação
+
+    if (role === nota.authorRole) {
       return false;
     }
 
@@ -188,26 +278,49 @@ export class VisualizarAnotacoesComponent implements AfterViewInit {
   }
 
   marcarComoLida(): void {
+
     const nota = this.anotacaoSelecionada();
+
     if (!nota) return;
 
-    this.notesService.updateNoteStatus(nota.raw, 'RESOLVED').subscribe({
-      next: () => {
-        this.anotacoes.update((lista) =>
-          lista.map((item) => (item.id === nota.id ? { ...item, lida: true } : item)),
-        );
+    this.notesService
+      .updateNoteStatus(nota.raw, 'RESOLVED')
+      .subscribe({
 
-        this.anotacoesPais.update((lista) =>
-          lista.map((item) => (item.id === nota.id ? { ...item, lida: true } : item)),
-        );
+        next: () => {
 
-        this.abrirModal('Sucesso', 'Anotação marcada como lida com sucesso!');
-      },
-      error: (err) => {
-        console.error(err);
+          this.anotacoes.update((lista) =>
+            lista.map((item) =>
+              item.id === nota.id
+                ? { ...item, lida: true }
+                : item
+            )
+          );
 
-        this.abrirModal('Erro', 'Não foi possível marcar a anotação como lida.');
-      },
-    });
+          this.anotacoesPais.update((lista) =>
+            lista.map((item) =>
+              item.id === nota.id
+                ? { ...item, lida: true }
+                : item
+            )
+          );
+
+          this.abrirModal(
+            'Sucesso',
+            'Anotação marcada como lida com sucesso!'
+          );
+        },
+
+        error: (err) => {
+
+          console.error(err);
+
+          this.abrirModal(
+            'Erro',
+            'Não foi possível marcar a anotação como lida.'
+          );
+        },
+
+      });
   }
 }
