@@ -1,0 +1,25 @@
+<div
+  class="anotacao-card"
+  [class.selecionada]="selecionada()"
+  (click)="onClick()"
+>
+
+  <div class="data">
+    {{ data() }}
+  </div>
+
+  <div class="rodape">
+
+    @if (lida()) {
+      <i class="bi bi-envelope-open icone-email-lido"></i>
+    } @else {
+      <i class="bi bi-envelope icone-email-nao-lido"></i>
+    }
+
+    @if (role() === roleEnum.TEACHER && !visivelTutores()) {
+      <i class="bi bi-eye-slash icone-privado"></i>
+    }
+
+  </div>
+
+</div>

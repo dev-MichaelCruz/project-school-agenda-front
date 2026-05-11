@@ -1,0 +1,76 @@
+<div class="p-4">
+  <h2 class="mb-4">Deletar professor</h2>
+
+  <!-- TOAST -->
+
+  @if (toastVisivel) {
+    <div class="alert alert-success">
+      {{ toastMensagem }}
+    </div>
+  }
+
+  @for (professor of professores; track professor.teacherId) {
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <span class="nome-professor">
+        {{ professor.name }}
+      </span>
+
+      <button class="btn btn-delete btn-danger btn-rounded" (click)="abrirModal(professor)">
+        <i class="bi bi-dash"></i>
+      </button>
+    </div>
+  }
+</div>
+
+<!-- MODAL -->
+
+<div class="modal fade" id="modalDeleteProfessor" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmar exclusão</h5>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        Deseja deletar o professor
+
+        <strong>
+          {{ professorSelecionado?.name }} </strong
+        >?
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+
+        <button type="button" class="btn btn-danger" (click)="confirmarDelete()">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal fade" id="modalDeleteProfessor" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmar exclusão</h5>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        Deseja deletar o professor
+        <strong>{{ professorSelecionado?.name }}</strong
+        >?
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+
+        <button type="button" class="btn btn-danger" (click)="confirmarDelete()">OK</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -7,12 +7,18 @@
   --secondary-color: #95B9C8;
 
   --text-primary-color: #ffffff;
+
+  --primary-button: #204E7E;
+  --default-green: #193F29;
 }
 body {
-  background-color: var(--bg-color);
+  background-color: #fff;
 }
 
-// E8B30C
-// 95B9C8
-
-// 204E7E
+.btn-rounded{
+  border-radius: 50%;
+  padding: 9px 12px;
+}
+.btn-default-green{
+  background: var(--default-green);
+}

@@ -1,0 +1,102 @@
+<div class="p-4">
+  @if (etapa() === 'turma' && role() === roleEnum.TEACHER) {
+  <app-selecionar-turma [turmas]="turmas()"
+    (selecionar)="selecionarTurma($event)" />
+  }
+
+  @if (etapa() === 'aluno') {
+  <app-selecionar-aluno
+    [alunos]="alunos()"
+    [role]="role()"
+    (selecionar)="selecionarAluno($event)"
+    (voltar)="voltarTurma()" />
+  }
+
+  @if (etapa() === 'lista') {
+  @if (anotacaoSelecionada()) {
+  <app-anotacoes-view
+    titulo="Visualizar anotação"
+    [data]="anotacaoSelecionada()!.data"
+    [texto]="anotacaoSelecionada()!.texto"
+    [lida]="anotacaoSelecionada()!.lida"
+    [autor]="anotacaoSelecionada()!.authorName"
+    [autorRole]="anotacaoSelecionada()!.authorRole"
+    [imagens]="anotacaoSelecionada()!.imagens"
+    (cancelar)="fecharView()"
+    (marcarComoLida)="marcarComoLida()"
+    [mostrarBotaoLida]="podeMarcarComoLida()" />
+  } @else {
+  @if (anotacoes().length) {
+
+  <h2>
+    @if (role() === roleEnum.TEACHER) {
+    Anotações enviadas pelos responsáveis
+    } @else {
+    Anotações enviadas por você
+    }
+  </h2>
+
+  <div class="grid-anotacoes mt-4">
+
+    @for (item of anotacoes(); track item.id) {
+
+    <app-anotacao-card
+      [data]="item.data"
+      [lida]="item.lida"
+      [visivelTutores]="item.visivelTutores"
+      [role]="role()"
+      [selecionada]="selecionadaId() === item.id"
+      (abrir)="selecionar(item.id)"
+      (marcarComoLida)="marcarComoLida()" />
+
+    }
+
+  </div>
+
+  }
+
+  <h2 class="mt-4">
+
+    @if (role() === roleEnum.TEACHER) {
+    Anotações enviadas pelos professores
+    } @else {
+    Anotações enviadas pelos professores
+    }
+
+  </h2>
+
+  <div class="grid-anotacoes mt-4">
+    @for (item of anotacoesPais(); track item.id) {
+    <app-anotacao-card
+      [data]="item.data"
+      [lida]="item.lida"
+      [visivelTutores]="item.visivelTutores"
+      [role]="role()"
+      [selecionada]="selecionadaId() === item.id"
+      (abrir)="selecionar(item.id)" />
+    }
+  </div>
+  }
+  }
+</div>
+
+<div #statusModal class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ modalTitulo() }}</h5>
+        <button type="button" class="btn-close"
+          (click)="fecharModal()"></button>
+      </div>
+
+      <div class="modal-body">
+        <p>{{ modalMensagem() }}</p>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary"
+          (click)="fecharModal()">OK</button>
+      </div>
+    </div>
+  </div>
+</div>

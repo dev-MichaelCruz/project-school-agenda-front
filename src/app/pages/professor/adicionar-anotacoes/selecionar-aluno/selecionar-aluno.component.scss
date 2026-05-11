@@ -1,0 +1,24 @@
+.image-container-rounded {
+    border: 1px solid #222222;
+    padding: 10px;
+    background-color: #eee;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 82px;
+    height: 82px;
+}
+.container_aluno{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+// isso é necessário para ajustar a posição da imagem de menino, pois possui um boné que "empurra" o container para a direita
+.boy-image {
+    margin-left: 5px;
+    margin-right: -5px;
+}

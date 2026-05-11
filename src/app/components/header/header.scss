@@ -1,11 +1,11 @@
-.navbar {
-  height: 100px !important;
+header {
+  background: var(--bg-color);
+  color: var(--primary-color);
+  h1{
+    font-weight: 700;
+  }
 }
 
-.card {
-  background: var(--primary-color) !important;
-}
-
-.header-text {
-  color: var(--text-primary-color) !important;
+:host{
+  width: 100%;
 }

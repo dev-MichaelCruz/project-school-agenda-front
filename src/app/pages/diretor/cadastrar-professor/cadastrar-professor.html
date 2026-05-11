@@ -1,0 +1,167 @@
+<div class="p-4">
+  <h2 class="mb-4">Cadastrar Professor</h2>
+
+  <form [formGroup]="form" (ngSubmit)="cadastrar()">
+    <div class="row">
+      <div class="col-6">
+        <div class="mb-3">
+          <label class="form-label" for="name"> Nome </label>
+
+          <input type="text" class="form-control" id="name" formControlName="nome" />
+
+          @if (form.get('nome')?.touched && form.get('nome')?.invalid) {
+            <small class="text-danger">
+              @if (form.get('nome')?.errors?.['required']) {
+                Campo obrigatório.
+              }
+
+              @if (form.get('nome')?.errors?.['minlength']) {
+                Nome deve conter ao menos 2 caracteres.
+              }
+            </small>
+          }
+        </div>
+      </div>
+
+      <div class="col-6">
+        <div class="mb-3">
+          <label class="form-label" for="lastname"> Sobrenome </label>
+
+          <input type="text" class="form-control" id="lastname" formControlName="sobrenome" />
+
+          @if (form.get('sobrenome')?.touched && form.get('sobrenome')?.invalid) {
+            <small class="text-danger">
+              @if (form.get('sobrenome')?.errors?.['required']) {
+                Campo obrigatório.
+              }
+
+              @if (form.get('sobrenome')?.errors?.['minlength']) {
+                Sobrenome deve conter ao menos 2 caracteres.
+              }
+            </small>
+          }
+        </div>
+      </div>
+
+      <div class="col-8">
+        <div class="mb-3">
+          <label class="form-label" for="email"> Email </label>
+
+          <input type="email" class="form-control" id="email" formControlName="email" />
+
+          @if (form.get('email')?.touched && form.get('email')?.invalid) {
+            <small class="text-danger">
+              @if (form.get('email')?.errors?.['required']) {
+                Email obrigatório.
+              }
+
+              @if (form.get('email')?.errors?.['email']) {
+                Digite um email válido.
+              }
+            </small>
+          }
+        </div>
+      </div>
+
+      <div class="col-4">
+        <div class="mb-3">
+          <label class="form-label" for="password"> Senha para acesso </label>
+
+          <input type="password" class="form-control" id="password" formControlName="senha" />
+
+          @if (form.get('senha')?.touched && form.get('senha')?.invalid) {
+            <small class="text-danger">
+              @if (form.get('senha')?.errors?.['required']) {
+                Campo obrigatório.
+              }
+
+              @if (form.get('senha')?.errors?.['minlength']) {
+                Senha deve conter ao menos 6 caracteres.
+              }
+
+              @if (form.get('senha')?.errors?.['maxlength']) {
+                Senha excede o limite permitido.
+              }
+            </small>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <label class="form-label"> Turma(s) </label>
+
+      <div formArrayName="turmas">
+        @for (turma of turmas.controls; track $index) {
+          <div class="mb-3">
+            <div class="d-flex align-items-start gap-2">
+              <div class="w-100">
+                <select class="form-select" [formControlName]="$index">
+                  <option value>Selecione a turma</option>
+
+                  @for (item of turmasDisponiveis; track item.id) {
+                    <option [value]="item.nome">
+                      {{ item.nome }}
+                    </option>
+                  }
+                </select>
+
+                @if (turmas.at($index).touched && turmas.at($index).invalid) {
+                  <small class="text-danger"> Selecione uma turma. </small>
+                }
+              </div>
+
+              @if ($index > 0) {
+                <button
+                  type="button"
+                  class="btn btn-rounded btn-danger"
+                  (click)="removerTurma($index)"
+                >
+                  <i class="bi bi-dash"></i>
+                </button>
+              }
+
+              @if ($index === turmas.length - 1) {
+                <button
+                  type="button"
+                  class="btn btn-rounded btn-primary"
+                  (click)="adicionarTurma()"
+                >
+                  <i class="bi bi-plus"></i>
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-default-green">Cadastrar</button>
+  </form>
+</div>
+
+<!-- MODAL -->
+
+<div #statusModal class="modal fade" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          {{ modalTitulo }}
+        </h5>
+
+        <button type="button" class="btn-close" (click)="fecharModal()"></button>
+      </div>
+
+      <div class="modal-body">
+        <p>
+          {{ modalMensagem }}
+        </p>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="fecharModal()">OK</button>
+      </div>
+    </div>
+  </div>
+</div>

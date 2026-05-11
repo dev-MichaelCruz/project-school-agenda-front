@@ -1,20 +1,35 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-
+import { Component, computed, inject } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [RouterOutlet],
+  imports: [RouterLink, RouterLinkActive],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.scss',
 })
 export class Sidebar {
 
-  sidebarItems = signal<any[]>([
+  private router = inject(Router);
+  private auth = inject(AuthService);
 
-    // PROVISÓRIO = Cada tipo de usuário terá um menu diferenciado, isso é apenas um exemplo
-    { route: '/dashboard', label: 'Dashboard' },
-    { route: '/users', label: 'Usuários' },
-    { route: '/settings', label: 'Configurações' }
-  ]);
+  menuItems = computed(() => {
+
+    const role = this.auth.role();
+
+    return this.router.config
+      .filter(route => {
+
+        const show = route.data?.['showInSidebar'];
+        const routeRole = route.data?.['role'];
+
+        return show && (!routeRole || routeRole === role);
+      })
+      .map(route => ({
+        route: '/' + route.path,
+        label: route.data?.['label']
+      }));
+
+  });
+
 }

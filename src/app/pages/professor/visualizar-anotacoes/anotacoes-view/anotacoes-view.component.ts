@@ -1,0 +1,38 @@
+import {
+  Component,
+  input,
+  output
+} from '@angular/core';
+
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'app-anotacoes-view',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './anotacoes-view.component.html',
+  styleUrl: './anotacoes-view.component.scss',
+})
+export class AnotacoesViewComponent {
+
+  mostrarBotaoLida = input(true);
+
+  titulo = input('Visualizar anotação');
+
+  data = input('');
+
+  texto = input('');
+
+  lida = input(false);
+
+  autor = input('');
+
+  autorRole = input('');
+
+  imagens = input<string[]>([]);
+
+  cancelar = output<void>();
+
+  marcarComoLida = output<void>();
+
+}
