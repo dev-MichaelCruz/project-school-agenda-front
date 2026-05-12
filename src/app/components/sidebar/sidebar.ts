@@ -1,5 +1,17 @@
-import { Component, computed, inject } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import {
+  Component,
+  computed,
+  inject,
+  input,
+  output
+} from '@angular/core';
+
+import {
+  Router,
+  RouterLink,
+  RouterLinkActive
+} from '@angular/router';
+
 import { AuthService } from '../../services/auth-service';
 
 @Component({
@@ -12,6 +24,10 @@ export class Sidebar {
 
   private router = inject(Router);
   private auth = inject(AuthService);
+
+  menuOpen = input<boolean>(false);
+
+  close = output<void>();
 
   menuItems = computed(() => {
 
