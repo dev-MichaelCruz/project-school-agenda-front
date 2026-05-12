@@ -3,188 +3,195 @@
 
   <form [formGroup]="form" (ngSubmit)="cadastrar()">
     <!-- RESPONSÁVEL -->
-    <div class="row mb-3">
-      <div class="col-md-6">
+    <div class="row">
+      <div class="col-md-6 col-12 mb-3">
         <label class="form-label" for="name">Nome</label>
 
-        <input type="text" class="form-control" formControlName="nome" id="name" />
+        <input type="text" class="form-control" formControlName="nome"
+          id="name" />
 
         @if (form.get('nome')?.touched && form.get('nome')?.invalid) {
-          <small class="text-danger">
-            @if (form.get('nome')?.errors?.['required']) {
-              Nome é obrigatório.
-            }
+        <small class="text-danger">
+          @if (form.get('nome')?.errors?.['required']) {
+          Nome é obrigatório.
+          }
 
-            @if (form.get('nome')?.errors?.['minlength']) {
-              Nome deve conter ao menos 2 caracteres.
-            }
-          </small>
+          @if (form.get('nome')?.errors?.['minlength']) {
+          Nome deve conter ao menos 2 caracteres.
+          }
+        </small>
         }
       </div>
 
-      <div class="col-md-6">
+      <div class="col-md-6 col-12 mb-3">
         <label class="form-label" for="lastname"> Sobrenome </label>
 
-        <input type="text" class="form-control" id="lastname" formControlName="sobrenome" />
+        <input type="text" class="form-control" id="lastname"
+          formControlName="sobrenome" />
 
         @if (form.get('sobrenome')?.touched && form.get('sobrenome')?.invalid) {
-          <small class="text-danger">
-            @if (form.get('sobrenome')?.errors?.['required']) {
-              Sobrenome é obrigatório.
-            }
+        <small class="text-danger">
+          @if (form.get('sobrenome')?.errors?.['required']) {
+          Sobrenome é obrigatório.
+          }
 
-            @if (form.get('sobrenome')?.errors?.['minlength']) {
-              Sobrenome deve conter ao menos 2 caracteres.
-            }
-          </small>
+          @if (form.get('sobrenome')?.errors?.['minlength']) {
+          Sobrenome deve conter ao menos 2 caracteres.
+          }
+        </small>
         }
       </div>
-
-      <div class="col-md-8 mt-4">
+    </div>
+    <div class="row">
+      <div class="col-md-8  mb-3">
         <label class="form-label" for="email"> E-mail </label>
 
-        <input type="email" class="form-control" id="email" formControlName="email" />
+        <input type="email" class="form-control" id="email"
+          formControlName="email" />
 
         @if (form.get('email')?.touched && form.get('email')?.invalid) {
-          <small class="text-danger">
-            @if (form.get('email')?.errors?.['required']) {
-              E-mail é obrigatório.
-            }
+        <small class="text-danger">
+          @if (form.get('email')?.errors?.['required']) {
+          E-mail é obrigatório.
+          }
 
-            @if (form.get('email')?.errors?.['email']) {
-              Digite um e-mail válido.
-            }
-          </small>
+          @if (form.get('email')?.errors?.['email']) {
+          Digite um e-mail válido.
+          }
+        </small>
         }
       </div>
 
-      <div class="col-md-4 mt-4">
-        <label class="form-label" for="password"> Senha para acessar o sistema </label>
+      <div class="col-md-4  mb-3">
+        <label class="form-label" for="password"> Senha para acessar o sistema
+        </label>
 
-        <input type="password" id="password" class="form-control" formControlName="senha" />
+        <input type="password" id="password" class="form-control"
+          formControlName="senha" />
 
         @if (form.get('senha')?.touched && form.get('senha')?.invalid) {
-          <small class="text-danger">
-            @if (form.get('senha')?.errors?.['required']) {
-              Senha é obrigatória.
-            }
+        <small class="text-danger">
+          @if (form.get('senha')?.errors?.['required']) {
+          Senha é obrigatória.
+          }
 
-            @if (form.get('senha')?.errors?.['minlength']) {
-              Senha deve conter ao menos 6 caracteres.
-            }
+          @if (form.get('senha')?.errors?.['minlength']) {
+          Senha deve conter ao menos 6 caracteres.
+          }
 
-            @if (form.get('senha')?.errors?.['maxlength']) {
-              Senha excede o tamanho máximo permitido.
-            }
-          </small>
+          @if (form.get('senha')?.errors?.['maxlength']) {
+          Senha excede o tamanho máximo permitido.
+          }
+        </small>
         }
       </div>
     </div>
 
     <!-- VALIDAÇÃO DE CRIANÇAS -->
     @if (criancas.length === 0) {
-      <div class="alert alert-danger">É obrigatório cadastrar ao menos uma criança.</div>
+    <div class="alert alert-danger">É obrigatório cadastrar ao menos uma
+      criança.</div>
     }
 
     <div formArrayName="criancas" class="mt-4">
       @for (crianca of criancas.controls; track $index) {
-        <div class="row align-items-end mb-4" [formGroupName]="$index">
-          <div class="col-md-3">
-            <label class="form-label" [for]="'child_name_' + $index"> Nome da criança </label>
+      <div class="row mb-4" [formGroupName]="$index">
+        <div class="col-md-3 mb-3">
+          <label class="form-label" [for]="'child_name_' + $index"> Nome da
+            criança </label>
 
-            <input
-              type="text"
-              class="form-control"
-              [id]="'child_name_' + $index"
-              formControlName="nome"
-            />
+          <input
+            type="text"
+            class="form-control"
+            [id]="'child_name_' + $index"
+            formControlName="nome" />
 
-            @if (crianca.get('nome')?.touched && crianca.get('nome')?.invalid) {
-              <small class="text-danger"> Nome da criança é obrigatório. </small>
-            }
-          </div>
-
-          <div class="col-md-2">
-            <label class="form-label" [for]="'gender' + $index"> Sexo </label>
-
-            <select class="form-select" formControlName="sexo" [id]="'gender' + $index">
-              <option value>Selecione</option>
-
-              <option value="M">Masculino</option>
-
-              <option value="F">Feminino</option>
-            </select>
-
-            @if (crianca.get('sexo')?.touched && crianca.get('sexo')?.invalid) {
-              <small class="text-danger"> Sexo é obrigatório. </small>
-            }
-          </div>
-
-          <div class="col-md-2">
-            <label class="form-label" [for]="'datebirth' + $index"> Data de nascimento </label>
-
-            <input
-              type="date"
-              class="form-control"
-              [id]="'datebirth' + $index"
-              formControlName="nascimento"
-            />
-
-            @if (crianca.get('nascimento')?.touched && crianca.get('nascimento')?.invalid) {
-              <small class="text-danger"> Data de nascimento é obrigatória. </small>
-            }
-          </div>
-
-          <div class="col-md-3">
-            <label class="form-label" [for]="'class' + $index"> Turma </label>
-
-            <select class="form-select" formControlName="turma" [id]="'class' + $index">
-              <option value>Selecione a turma</option>
-
-              @for (turma of turmas; track turma.id) {
-                <option [value]="turma.nome">
-                  {{ turma.nome }}
-                </option>
-              }
-            </select>
-
-            @if (crianca.get('turma')?.touched && crianca.get('turma')?.invalid) {
-              <small class="text-danger"> Turma é obrigatória. </small>
-            }
-          </div>
-
-          @if ($index > 0) {
-            <div class="col-md-1">
-              <button
-                type="button"
-                class="btn-remove-circle btn btn-rounded btn-danger"
-                (click)="removerCrianca($index)"
-              >
-                <i class="bi bi-dash"></i>
-              </button>
-            </div>
-          }
-
-          @if ($index === criancas.length - 1) {
-            <div class="col-md-1">
-              <button
-                type="button"
-                class="btn-add-circle btn btn-rounded btn-secondary"
-                (click)="adicionarCrianca()"
-              >
-                <i class="bi bi-plus"></i>
-              </button>
-            </div>
+          @if (crianca.get('nome')?.touched && crianca.get('nome')?.invalid) {
+          <small class="text-danger"> Nome da criança é obrigatório. </small>
           }
         </div>
+
+        <div class="col-md-2  mb-3">
+          <label class="form-label" [for]="'gender' + $index"> Sexo </label>
+
+          <select class="form-select" formControlName="sexo"
+            [id]="'gender' + $index">
+            <option value>Selecione</option>
+
+            <option value="M">Masculino</option>
+
+            <option value="F">Feminino</option>
+          </select>
+
+          @if (crianca.get('sexo')?.touched && crianca.get('sexo')?.invalid) {
+          <small class="text-danger"> Sexo é obrigatório. </small>
+          }
+        </div>
+
+        <div class="col-md-2  mb-3">
+          <label class="form-label" [for]="'datebirth' + $index"> Data de
+            nascimento </label>
+
+          <input
+            type="date"
+            class="form-control"
+            [id]="'datebirth' + $index"
+            formControlName="nascimento" />
+
+          @if (crianca.get('nascimento')?.touched &&
+          crianca.get('nascimento')?.invalid) {
+          <small class="text-danger"> Data de nascimento é obrigatória. </small>
+          }
+        </div>
+
+        <div class="col-md-3 col-8">
+          <label class="form-label" [for]="'class' + $index"> Turma </label>
+
+          <select class="form-select" formControlName="turma"
+            [id]="'class' + $index">
+            <option value>Selecione a turma</option>
+
+            @for (turma of turmas; track turma.id) {
+            <option [value]="turma.nome">
+              {{ turma.nome }}
+            </option>
+            }
+          </select>
+
+          @if (crianca.get('turma')?.touched && crianca.get('turma')?.invalid) {
+          <small class="text-danger"> Turma é obrigatória. </small>
+          }
+        </div>
+
+        @if ($index > 0) {
+        <div class="col-md-1 col-2 mt-4">
+          <button
+            type="button"
+            class="btn-remove-circle btn btn-rounded btn-danger"
+            (click)="removerCrianca($index)">
+            <i class="bi bi-dash"></i>
+          </button>
+        </div>
+        }
+
+        @if ($index === criancas.length - 1) {
+        <div class="col-md-1 col-2 mt-4">
+          <button
+            type="button"
+            class="btn-add-circle btn btn-rounded btn-secondary"
+            (click)="adicionarCrianca()">
+            <i class="bi bi-plus"></i>
+          </button>
+        </div>
+        }
+      </div>
       }
     </div>
 
     <button
       type="submit"
       class="btn btn-primary btn-default-green mt-3 px-4"
-      [disabled]="criancas.length === 0"
-    >
+      [disabled]="criancas.length === 0">
       Cadastrar
     </button>
   </form>
@@ -200,7 +207,8 @@
           {{ modalTitulo }}
         </h5>
 
-        <button type="button" class="btn-close" (click)="fecharModal()"></button>
+        <button type="button" class="btn-close"
+          (click)="fecharModal()"></button>
       </div>
 
       <div class="modal-body">
@@ -210,7 +218,8 @@
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="fecharModal()">OK</button>
+        <button type="button" class="btn btn-primary"
+          (click)="fecharModal()">OK</button>
       </div>
     </div>
   </div>

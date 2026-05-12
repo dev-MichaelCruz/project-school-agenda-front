@@ -11,7 +11,18 @@ import { AuthService } from './services/auth-service';
   styleUrl: './app.scss'
 })
 export class App {
+
   auth = inject(AuthService);
 
   protected readonly title = signal('project-school-agenda-front');
+
+  menuOpen = signal(false);
+
+  toggleMenu() {
+    this.menuOpen.update(value => !value);
+  }
+
+  closeMenu() {
+    this.menuOpen.set(false);
+  }
 }
