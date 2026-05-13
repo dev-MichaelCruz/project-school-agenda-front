@@ -10,11 +10,11 @@ export class AuthService {
   
   private api = api_service;
 
-  private _isLoggedIn = signal(!!localStorage.getItem('token'));
+  private _isLoggedIn = signal(!!sessionStorage.getItem('token'));
   isLoggedIn = this._isLoggedIn.asReadonly();
 
   private _role = signal<Role | null>(
-    localStorage.getItem('role') as Role | null
+    sessionStorage.getItem('role') as Role | null
   );
   role = this._role.asReadonly();
 
@@ -37,8 +37,8 @@ export class AuthService {
           throw new Error('Resposta de login inválida');
         }
 
-        localStorage.setItem('token', token);
-        localStorage.setItem('role', role);
+        sessionStorage.setItem('token', token);
+        sessionStorage.setItem('role', role);
 
         this._isLoggedIn.set(true);
         this._role.set(role);
@@ -47,8 +47,8 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('role');
 
     this._isLoggedIn.set(false);
     this._role.set(null);
