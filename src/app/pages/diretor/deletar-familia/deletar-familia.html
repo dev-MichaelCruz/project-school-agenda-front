@@ -1,5 +1,8 @@
-<div class="p-4">
-  <h2 class="mb-4">Deletar família</h2>
+<div class="page-content management-page p-4">
+  <header class="page-header">
+    <h2>Deletar família</h2>
+    <app-list-toolbar label="Buscar família" [query]="busca" (search)="busca = $event" (refresh)="carregarFamilias()" />
+  </header>
 
   <!-- TOAST -->
   @if (toastVisivel) {
@@ -8,16 +11,18 @@
     </div>
   }
 
-  @for (familia of familias; track familia.responsibleId) {
-    <div class="d-flex align-items-center justify-content-between mb-4">
+  @for (familia of familiasFiltradas; track familia.responsibleId) {
+    <div class="item-row d-flex align-items-center justify-content-between mb-4">
       <span class="nome-familia">
         {{ familia.name }}
       </span>
 
-      <button class="btn btn-delete btn-danger btn-rounded" (click)="abrirModal(familia)">
+      <button type="button" class="btn btn-delete btn-danger btn-rounded" [attr.aria-label]="'Excluir família ' + familia.name" (click)="abrirModal(familia)">
         <i class="bi bi-dash"></i>
       </button>
     </div>
+  } @empty {
+    <p class="text-muted" role="status">Nenhuma família encontrada.</p>
   }
 </div>
 

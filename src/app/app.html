@@ -1,4 +1,4 @@
-<div class="d-flex">
+<div class="d-flex" [class.login-layout]="!auth.isLoggedIn()">
 
   @if(auth.isLoggedIn()) {
 
@@ -8,12 +8,13 @@
 
   }
 
-  <div class="w-full container-fluid px-0 d-flex flex-column">
+  <div class="app-content container-fluid px-0 d-flex flex-column">
 
     <app-header
+      [attr.showMenu]="auth.isLoggedIn()"
       (menuClick)="toggleMenu()" />
 
-    <div class="main-content p-4">
+    <div class="main-content" [class.p-4]="auth.isLoggedIn()">
       <router-outlet />
     </div>
 

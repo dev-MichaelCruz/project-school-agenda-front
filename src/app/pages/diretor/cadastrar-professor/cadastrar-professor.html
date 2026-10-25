@@ -1,5 +1,7 @@
-<div class="p-4">
-  <h2 class="mb-4">Cadastrar Professor</h2>
+<div class="page-content management-page p-4">
+  <header class="page-header">
+    <h2>Cadastrar professor</h2>
+  </header>
 
   <form [formGroup]="form" (ngSubmit)="cadastrar()">
     <div class="row">
@@ -94,9 +96,9 @@
       <div formArrayName="turmas">
         @for (turma of turmas.controls; track $index) {
           <div class="mb-3">
-            <div class="d-flex align-items-start gap-2">
+            <div class="class-selection d-flex align-items-start gap-2">
               <div class="w-100">
-                <select class="form-select" [formControlName]="$index">
+                <select class="form-select" [formControlName]="$index" [attr.aria-label]="'Turma ' + ($index + 1)">
                   <option value>Selecione a turma</option>
 
                   @for (item of turmasDisponiveis; track item.id) {
@@ -114,6 +116,7 @@
               @if ($index > 0) {
                 <button
                   type="button"
+                  [attr.aria-label]="'Remover turma ' + ($index + 1)"
                   class="btn btn-rounded btn-danger"
                   (click)="removerTurma($index)"
                 >
@@ -124,6 +127,7 @@
               @if ($index === turmas.length - 1) {
                 <button
                   type="button"
+                  aria-label="Adicionar turma"
                   class="btn btn-rounded btn-primary"
                   (click)="adicionarTurma()"
                 >

@@ -1,6 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
+import { ListToolbar } from '../../../components/list-toolbar/list-toolbar';
+import { matchesSearch } from '../../../utils/search';
 
 import { TeacherResponseDTO } from '../../../models/teacher.dto';
 import { TeachersService } from '../../../services/teachers/teachers.service';
@@ -10,7 +12,7 @@ declare const bootstrap: any;
 @Component({
   selector: 'app-deletar-professor',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ListToolbar],
   templateUrl: './deletar-professor.html',
   styleUrl: './deletar-professor.scss',
 })
@@ -18,6 +20,11 @@ export class DeletarProfessor implements OnInit {
   private professorService = inject(TeachersService);
 
   professores: TeacherResponseDTO[] = [];
+  busca = '';
+
+  get professoresFiltrados(): TeacherResponseDTO[] {
+    return this.professores.filter((professor) => matchesSearch(professor.name, this.busca));
+  }
 
   professorSelecionado: TeacherResponseDTO | null = null;
 

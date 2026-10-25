@@ -111,6 +111,25 @@ export class AdicionarAnotacoes implements AfterViewInit {
     });
   }
 
+  atualizarTurmas(): void {
+    this.classroomsService.getMyClassrooms().subscribe({
+      next: (turmas) => this.turmas.set(turmas),
+      error: () => this.abrirModal('Não foi possível atualizar as turmas.'),
+    });
+  }
+
+  atualizarAlunos(): void {
+    const turma = this.turmaSelecionada();
+    const request = this.role() === roleEnum.RESPONSIBLE
+      ? this.studentsService.getMyStudentsAsResponsible()
+      : turma ? this.classroomsService.getStudentsByClassroom(turma.id) : null;
+
+    request?.subscribe({
+      next: (alunos) => this.alunos.set(alunos),
+      error: () => this.abrirModal('Não foi possível atualizar os alunos.'),
+    });
+  }
+
   selecionarAluno(aluno: Student): void {
     this.alunoSelecionado.set(aluno);
     this.etapa.set('form');

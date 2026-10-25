@@ -1,8 +1,9 @@
-<div class="p-4">
+<div class="page-content p-4">
 
   @if (etapa() === 'turma') {
     <app-selecionar-turma
       [turmas]="turmas()"
+      (atualizar)="atualizarTurmas()"
       (selecionar)="selecionarTurma($event)"
     />
   }
@@ -11,6 +12,7 @@
     <app-selecionar-aluno
       [alunos]="alunos()"
       [role]="role()"
+      (atualizar)="atualizarAlunos()"
       (selecionar)="selecionarAluno($event)"
       (voltar)="voltarTurma()"
     />

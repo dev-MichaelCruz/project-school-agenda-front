@@ -7,13 +7,51 @@
   gap: 1rem;
 }
 
-@media (max-width: 768px) {
+.empty-notes {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 767.98px) {
 
   .grid-anotacoes {
-    grid-template-columns: repeat(auto-fill,
-        minmax(90px, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
 
     gap: 0.75rem;
   }
 
+  .notes-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .teacher-notes {
+    order: 0;
+
+    h2 {
+      margin-top: 0 !important;
+    }
+  }
+
+  .responsible-notes {
+    order: 2;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #b6c7d3;
+  }
+
+  .notes-back {
+    order: 3;
+    align-self: flex-start;
+  }
+
+}
+
+@media (min-width: 768px) {
+  .responsible-notes {
+    margin-top: 40px;
+  }
+
+  .responsible-notes.empty-section {
+    display: none;
+  }
 }

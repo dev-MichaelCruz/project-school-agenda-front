@@ -1,6 +1,7 @@
-<div class="p-4">
+<div class="page-content p-4">
   @if (etapa() === 'turma' && role() === roleEnum.TEACHER) {
   <app-selecionar-turma [turmas]="turmas()"
+    (atualizar)="atualizarTurmas()"
     (selecionar)="selecionarTurma($event)" />
   }
 
@@ -8,6 +9,8 @@
   <app-selecionar-aluno
     [alunos]="alunos()"
     [role]="role()"
+    titulo="Visualizar anotações"
+    (atualizar)="atualizarAlunos()"
     (selecionar)="selecionarAluno($event)"
     (voltar)="voltarTurma()" />
   }
@@ -26,56 +29,65 @@
     (marcarComoLida)="marcarComoLida()"
     [mostrarBotaoLida]="podeMarcarComoLida()" />
   } @else {
-  @if (anotacoes().length) {
+    <div class="notes-list">
+      <section class="notes-section teacher-notes">
+        <header class="page-header">
+          <h2>
+            @if (role() === roleEnum.TEACHER) {
+              Visualizar anotações enviadas
+            } @else {
+              Anotações enviadas pelos professores
+            }
+          </h2>
+          <app-list-toolbar
+            label="Buscar anotação por data, autor ou texto"
+            [query]="busca()"
+            (search)="busca.set($event)"
+            (refresh)="atualizarAnotacoes()" />
+        </header>
 
-  <h2>
-    @if (role() === roleEnum.TEACHER) {
-    Anotações enviadas pelos responsáveis
-    } @else {
-    Anotações enviadas por você
-    }
-  </h2>
+        <div class="grid-anotacoes mt-4">
+          @for (item of anotacoesProfessoresFiltradas(); track item.id) {
+            <app-anotacao-card
+              [data]="item.data"
+              [lida]="item.lida"
+              [visivelTutores]="item.visivelTutores"
+              [role]="role()"
+              [selecionada]="selecionadaId() === item.id"
+              (abrir)="selecionar(item.id)" />
+          } @empty {
+            <p class="empty-notes text-muted" role="status">Nenhuma anotação encontrada.</p>
+          }
+        </div>
+      </section>
 
-  <div class="grid-anotacoes mt-4">
+      <section class="notes-section responsible-notes" [class.empty-section]="!anotacoes().length">
+        <header class="page-header">
+          <h2>
+            @if (role() === roleEnum.TEACHER) {
+              Anotações enviadas pelos responsáveis
+            } @else {
+              Anotações enviadas por você
+            }
+          </h2>
+        </header>
 
-    @for (item of anotacoes(); track item.id) {
-
-    <app-anotacao-card
-      [data]="item.data"
-      [lida]="item.lida"
-      [visivelTutores]="item.visivelTutores"
-      [role]="role()"
-      [selecionada]="selecionadaId() === item.id"
-      (abrir)="selecionar(item.id)"
-      (marcarComoLida)="marcarComoLida()" />
-
-    }
-
-  </div>
-
-  }
-
-  <h2 class="mt-4">
-
-    @if (role() === roleEnum.TEACHER) {
-    Anotações enviadas pelos professores
-    } @else {
-    Anotações enviadas pelos professores
-    }
-
-  </h2>
-
-  <div class="grid-anotacoes mt-4">
-    @for (item of anotacoesPais(); track item.id) {
-    <app-anotacao-card
-      [data]="item.data"
-      [lida]="item.lida"
-      [visivelTutores]="item.visivelTutores"
-      [role]="role()"
-      [selecionada]="selecionadaId() === item.id"
-      (abrir)="selecionar(item.id)" />
-    }
-  </div>
+        <div class="grid-anotacoes mt-4">
+          @for (item of anotacoesFiltradas(); track item.id) {
+            <app-anotacao-card
+              [data]="item.data"
+              [lida]="item.lida"
+              [visivelTutores]="item.visivelTutores"
+              [role]="role()"
+              [selecionada]="selecionadaId() === item.id"
+              (abrir)="selecionar(item.id)" />
+          } @empty {
+            <p class="empty-notes text-muted" role="status">Nenhuma anotação encontrada.</p>
+          }
+        </div>
+      </section>
+      <button type="button" class="notes-back btn btn-secondary d-md-none mt-4" (click)="voltarAluno()">Voltar aos alunos</button>
+    </div>
   }
   }
 </div>

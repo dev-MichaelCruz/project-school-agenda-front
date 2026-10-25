@@ -21,6 +21,7 @@ export class Login {
   private auth = inject(AuthService);
 
   error = signal('');
+  passwordVisible = signal(false);
 
   form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],

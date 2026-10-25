@@ -1,4 +1,6 @@
-<h2>{{ titulo() }}</h2>
+<header class="page-header">
+  <h2>{{ titulo() }}</h2>
+</header>
 
 <div class="mt-4" [formGroup]="form">
 
@@ -10,6 +12,7 @@
     (change)="onFileSelected($event)" />
 
   <textarea
+    aria-label="Texto da anotação"
     formControlName="texto"
     class="form-control"
     rows="5"
@@ -21,7 +24,7 @@
   </div>
   }
 
-  <div class="d-flex justify-content-between mt-3">
+  <div class="attachment-options d-flex justify-content-between mt-3">
 
     <div>
 
@@ -30,11 +33,12 @@
         class="btn btn-secondary"
         (click)="abrirSeletor(fileInput)">
         <i class="bi bi-card-image"></i>
-        Adicionar imagem
+        <span class="d-none d-md-inline">Adicionar imagem</span>
+        <span class="d-md-none">Anexar imagem</span>
       </button>
 
       @if (imagemSelecionada()) {
-      <small class="ms-2 text-muted">
+      <small class="attachment-name ms-2 text-muted">
         {{ nomeImagem() }}
       </small>
       }
@@ -61,7 +65,7 @@
 
   </div>
 
-  <div class="d-flex gap-2 justify-content-end mt-3">
+  <div class="form-actions d-flex gap-2 justify-content-end mt-3">
 
     <button
       type="button"

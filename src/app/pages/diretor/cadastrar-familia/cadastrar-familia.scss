@@ -1,8 +1,36 @@
-.child-row {
-  padding: 1rem;
+@media (max-width: 767.98px) {
+  .child-row {
+    position: relative;
+    margin-inline: 0;
+    padding: 16px;
+    border: 1px solid #d4dce6;
+    border-radius: 10px;
+    background: #f0f3f8;
 
-  border-radius: 1rem;
+    > div {
+      padding-inline: 0;
+    }
+  }
 
-  background: #f8f9fa;
+  .child-title {
+    min-height: 44px;
+    margin: 0 48px 12px 0;
+    padding: 10px 0;
+    color: var(--primary-color);
+    font-size: 1.125rem;
+    font-weight: 700;
+  }
+
+  .child-class {
+    width: 100%;
+  }
+
+  .child-row > .child-remove {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: auto;
+    margin-top: 0 !important;
+  }
 }
 

@@ -1,6 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
+import { ListToolbar } from '../../../components/list-toolbar/list-toolbar';
+import { matchesSearch } from '../../../utils/search';
 
 import { FamilyService } from '../../../services/family/family.service';
 
@@ -11,7 +13,7 @@ declare const bootstrap: any;
 @Component({
   selector: 'app-deletar-familia',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ListToolbar],
   templateUrl: './deletar-familia.html',
   styleUrl: './deletar-familia.scss',
 })
@@ -19,6 +21,11 @@ export class DeletarFamilia implements OnInit {
   private familyService = inject(FamilyService);
 
   familias: FamilyResponseDTO[] = [];
+  busca = '';
+
+  get familiasFiltradas(): FamilyResponseDTO[] {
+    return this.familias.filter((familia) => matchesSearch(familia.name, this.busca));
+  }
 
   familiaSelecionada: FamilyResponseDTO | null = null;
 

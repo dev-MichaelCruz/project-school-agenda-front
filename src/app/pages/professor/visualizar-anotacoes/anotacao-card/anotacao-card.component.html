@@ -1,5 +1,7 @@
-<div
+<button
+  type="button"
   class="anotacao-card"
+  [attr.aria-label]="'Abrir anotação de ' + data() + (lida() ? ', lida' : ', não lida')"
   [class.selecionada]="selecionada()"
   (click)="onClick()"
 >
@@ -22,4 +24,4 @@
 
   </div>
 
-</div>
+</button>

@@ -1,36 +1,42 @@
+<header class="page-header">
 <h2>
-  Anotações /
+  {{ titulo() }}
   <small class="text-muted">
     @if (role() === roleEnum.RESPONSIBLE) {
-      Selecione criança
+      / Selecione criança
     } @else {
-      Selecione aluno
+      / Selecione aluno
     }
   </small>
 </h2>
 
-<div class="mt-4 d-flex gap-4 flex-wrap">
-  @for (aluno of alunos(); track aluno.id) {
-    <div class="text-center container_aluno" style="cursor: pointer" (click)="selecionar.emit(aluno)">
-      <div>{{ aluno.nome }}</div>
+<app-list-toolbar label="Buscar aluno" [query]="busca()" (search)="busca.set($event)" (refresh)="atualizar.emit()" />
+</header>
+
+<div class="student-grid mt-4 d-flex gap-4 flex-wrap">
+  @for (aluno of alunosFiltrados(); track aluno.id) {
+    <button type="button" class="text-center container_aluno" (click)="selecionar.emit(aluno)">
+      <span class="student-name">{{ aluno.nome }}</span>
 
       <div class="image-container-rounded">
         @if (aluno.sexo === 'M') {
           <img
-            src="https://cdn-icons-png.flaticon.com/512/3884/3884864.png"
+            src="images/student-boy.png"
             width="60"
-            [alt]="aluno.nome"
+            alt=""
             class="boy-image"
           />
         } @else {
           <img
-            src="https://cdn-icons-png.flaticon.com/512/4329/4329449.png"
+            src="images/student-girl.png"
             width="60"
-            [alt]="aluno.nome"
+            alt=""
           />
         }
       </div>
-    </div>
+    </button>
+  } @empty {
+    <p class="text-muted" role="status">Nenhum aluno encontrado.</p>
   }
 </div>
 

@@ -48,9 +48,11 @@
   display: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
 
   .sidebar {
+    width: min(280px, 85vw);
+    visibility: hidden;
     position: fixed;
 
     left: 0;
@@ -63,6 +65,7 @@
 
   .sidebar-open {
     transform: translateX(0);
+    visibility: visible;
   }
 
   .sidebar-overlay {
@@ -87,4 +90,13 @@
     opacity: 1;
     pointer-events: auto;
   }
+}
+
+.close-menu {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
 }

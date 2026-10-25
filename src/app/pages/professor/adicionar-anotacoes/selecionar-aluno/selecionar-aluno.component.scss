@@ -11,6 +11,10 @@
     height: 82px;
 }
 .container_aluno{
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -21,4 +25,42 @@
 .boy-image {
     margin-left: 5px;
     margin-right: -5px;
+}
+
+@media (max-width: 767.98px) {
+  .student-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px !important;
+    padding-top: 20px;
+    border-top: 1px solid #b6c7d3;
+
+    > p {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .container_aluno {
+    min-width: 0;
+    gap: 12px;
+    padding: 16px 8px;
+    border: 1px solid #e8e8e8;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .student-name {
+    order: 1;
+    font-size: 1rem;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+
+  .image-container-rounded {
+    flex-shrink: 0;
+    width: 88px;
+    height: 88px;
+    border: 0;
+  }
 }

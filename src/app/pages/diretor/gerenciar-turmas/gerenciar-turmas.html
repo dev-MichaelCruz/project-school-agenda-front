@@ -1,5 +1,7 @@
-<div class="p-4">
-  <h2 class="mb-4">Gerenciar Turmas</h2>
+<div class="page-content management-page p-4">
+  <header class="page-header">
+    <h2>Gerenciar turmas</h2>
+  </header>
 
   <div class="card shadow-sm border-0 mb-4">
     <div class="card-body">
@@ -47,6 +49,8 @@
                 </span>
 
                 <button
+                  type="button"
+                  [attr.aria-label]="'Excluir turma ' + turma.nome"
                   class="btn btn-delete btn-danger btn-rounded"
                   (click)="abrirModalExcluir(turma)"
                 >

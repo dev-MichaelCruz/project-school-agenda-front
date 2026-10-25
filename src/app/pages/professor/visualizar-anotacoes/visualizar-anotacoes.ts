@@ -10,6 +10,8 @@ import {
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
+import { ListToolbar } from '../../../components/list-toolbar/list-toolbar';
+import { matchesSearch } from '../../../utils/search';
 
 import { AnotacaoCardComponent } from './anotacao-card/anotacao-card.component';
 import { AnotacoesViewComponent } from './anotacoes-view/anotacoes-view.component';
@@ -38,6 +40,7 @@ declare var bootstrap: any;
     AnotacoesViewComponent,
     SelecionarAlunoComponent,
     SelecionarTurmaComponent,
+    ListToolbar,
   ],
   styleUrls: ['./visualizar-anotacoes.component.scss'],
   templateUrl: './visualizar-anotacoes.component.html',
@@ -62,6 +65,17 @@ export class VisualizarAnotacoesComponent implements AfterViewInit {
 
   anotacoes = signal<Note[]>([]);
   anotacoesPais = signal<Note[]>([]);
+  busca = signal('');
+  private atualizacao = signal(0);
+
+  anotacoesFiltradas = computed(() => this.filtrarAnotacoes(this.anotacoes()));
+  anotacoesProfessoresFiltradas = computed(() => this.filtrarAnotacoes(this.anotacoesPais()));
+
+  private filtrarAnotacoes(anotacoes: Note[]): Note[] {
+    return anotacoes.filter((nota) =>
+      matchesSearch(`${nota.data} ${nota.texto} ${nota.authorName}`, this.busca())
+    );
+  }
 
   selecionadaId = signal<number | null>(null);
 
@@ -146,6 +160,8 @@ export class VisualizarAnotacoesComponent implements AfterViewInit {
 
       if (!aluno || !role) return;
 
+      this.atualizacao();
+
       this.notesService
         .getNotesByStudent(aluno.id)
         .subscribe({
@@ -194,7 +210,7 @@ export class VisualizarAnotacoesComponent implements AfterViewInit {
             this.etapa.set('lista');
           },
 
-          error: (err) => console.error(err),
+          error: () => this.abrirModal('Erro', 'Não foi possível carregar as anotações.'),
 
         });
     });
@@ -239,7 +255,38 @@ export class VisualizarAnotacoesComponent implements AfterViewInit {
   }
 
   selecionarAluno(aluno: Student): void {
+    this.busca.set('');
+    this.selecionadaId.set(null);
     this.alunoSelecionado.set(aluno);
+  }
+
+  atualizarTurmas(): void {
+    this.classroomsService.getMyClassrooms().subscribe({
+      next: (turmas) => this.turmas.set(turmas),
+      error: () => this.abrirModal('Erro', 'Não foi possível atualizar as turmas.'),
+    });
+  }
+
+  atualizarAlunos(): void {
+    const turma = this.turmaSelecionada();
+    const request = this.role() === roleEnum.RESPONSIBLE
+      ? this.studentsService.getMyStudentsAsResponsible()
+      : turma ? this.classroomsService.getStudentsByClassroom(turma.id) : null;
+
+    request?.subscribe({
+      next: (alunos) => this.alunos.set(alunos),
+      error: () => this.abrirModal('Erro', 'Não foi possível atualizar os alunos.'),
+    });
+  }
+
+  atualizarAnotacoes(): void {
+    this.atualizacao.update((value) => value + 1);
+  }
+
+  voltarAluno(): void {
+    this.alunoSelecionado.set(null);
+    this.selecionadaId.set(null);
+    this.etapa.set('aluno');
   }
 
   voltarTurma(): void {

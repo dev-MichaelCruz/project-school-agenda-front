@@ -1,5 +1,7 @@
-<div class="p-4">
-  <h2 class="mb-4">Cadastrar família</h2>
+<div class="page-content management-page p-4">
+  <header class="page-header">
+    <h2>Cadastrar família</h2>
+  </header>
 
   <form [formGroup]="form" (ngSubmit)="cadastrar()">
     <!-- RESPONSÁVEL -->
@@ -95,7 +97,8 @@
 
     <div formArrayName="criancas" class="mt-4">
       @for (crianca of criancas.controls; track $index) {
-      <div class="row mb-4" [formGroupName]="$index">
+      <div class="child-row row mb-4" [formGroupName]="$index">
+        <h3 class="child-title d-md-none">Criança {{ $index + 1 }}</h3>
         <div class="col-md-3 mb-3">
           <label class="form-label" [for]="'child_name_' + $index"> Nome da
             criança </label>
@@ -144,7 +147,7 @@
           }
         </div>
 
-        <div class="col-md-3 col-8">
+        <div class="child-class col-md-3 col-8">
           <label class="form-label" [for]="'class' + $index"> Turma </label>
 
           <select class="form-select" formControlName="turma"
@@ -164,9 +167,10 @@
         </div>
 
         @if ($index > 0) {
-        <div class="col-md-1 col-2 mt-4">
+        <div class="child-remove col-md-1 col-2 mt-4">
           <button
             type="button"
+            [attr.aria-label]="'Remover criança ' + ($index + 1)"
             class="btn-remove-circle btn btn-rounded btn-danger"
             (click)="removerCrianca($index)">
             <i class="bi bi-dash"></i>
@@ -175,9 +179,10 @@
         }
 
         @if ($index === criancas.length - 1) {
-        <div class="col-md-1 col-2 mt-4">
+        <div class="col-md-1 col-2 mt-4 d-none d-md-block">
           <button
             type="button"
+            aria-label="Adicionar criança"
             class="btn-add-circle btn btn-rounded btn-secondary"
             (click)="adicionarCrianca()">
             <i class="bi bi-plus"></i>
@@ -186,6 +191,12 @@
         }
       </div>
       }
+    </div>
+
+    <div class="d-flex d-md-none justify-content-center">
+      <button type="button" class="btn btn-primary btn-rounded" aria-label="Adicionar criança" (click)="adicionarCrianca()">
+        <i class="bi bi-plus" aria-hidden="true"></i>
+      </button>
     </div>
 
     <button
