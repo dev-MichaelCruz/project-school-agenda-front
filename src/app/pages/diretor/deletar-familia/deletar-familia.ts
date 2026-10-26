@@ -1,7 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { timeout, TimeoutError } from 'rxjs';
 
 import { CommonModule } from '@angular/common';
 import { ListToolbar } from '../../../components/list-toolbar/list-toolbar';
+import { DataFeedback } from '../../../components/data-feedback/data-feedback';
+import { DATA_LOAD_TIMEOUT_MS, DataLoadState } from '../../../utils/data-load-state';
 import { matchesSearch } from '../../../utils/search';
 
 import { FamilyService } from '../../../services/family/family.service';
@@ -13,12 +17,15 @@ declare const bootstrap: any;
 @Component({
   selector: 'app-deletar-familia',
   standalone: true,
-  imports: [CommonModule, ListToolbar],
+  imports: [CommonModule, ListToolbar, DataFeedback],
   templateUrl: './deletar-familia.html',
   styleUrl: './deletar-familia.scss',
 })
 export class DeletarFamilia implements OnInit {
   private familyService = inject(FamilyService);
+  private destroyRef = inject(DestroyRef);
+
+  estadoDados = signal<DataLoadState>('idle');
 
   familias: FamilyResponseDTO[] = [];
   busca = '';
@@ -38,21 +45,21 @@ export class DeletarFamilia implements OnInit {
   }
 
   carregarFamilias(): void {
-    this.familyService.listarFamilias().subscribe({
+    if (this.estadoDados() === 'loading') return;
+
+    this.estadoDados.set('loading');
+
+    this.familyService.listarFamilias().pipe(
+      timeout(DATA_LOAD_TIMEOUT_MS),
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe({
       next: (res) => {
-        this.familias = res;
+        this.familias = res ?? [];
+        this.estadoDados.set('loaded');
       },
 
       error: (err) => {
-        console.error(err);
-
-        this.toastMensagem = 'Erro ao carregar famílias.';
-
-        this.toastVisivel = true;
-
-        setTimeout(() => {
-          this.toastVisivel = false;
-        }, 3000);
+        this.estadoDados.set(err instanceof TimeoutError ? 'timeout' : 'error');
       },
     });
   }

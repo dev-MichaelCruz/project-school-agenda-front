@@ -1,7 +1,12 @@
 <div class="page-content management-page p-4">
   <header class="page-header">
     <h2>Deletar professor</h2>
-    <app-list-toolbar label="Buscar professor" [query]="busca" (search)="busca = $event" (refresh)="carregarProfessores()" />
+    <app-list-toolbar
+      label="Buscar professor"
+      [query]="busca"
+      [loading]="estadoDados() === 'loading'"
+      (search)="busca = $event"
+      (refresh)="carregarProfessores()" />
   </header>
 
   <!-- TOAST -->
@@ -12,19 +17,28 @@
     </div>
   }
 
-  @for (professor of professoresFiltrados; track professor.teacherId) {
-    <div class="item-row d-flex align-items-center justify-content-between mb-4">
-      <span class="nome-professor">
-        {{ professor.name }}
-      </span>
-
-      <button type="button" class="btn btn-delete btn-danger btn-rounded" [attr.aria-label]="'Excluir professor ' + professor.name" (click)="abrirModal(professor)">
-        <i class="bi bi-dash"></i>
-      </button>
-    </div>
-  } @empty {
-    <p class="text-muted" role="status">Nenhum professor encontrado.</p>
-  }
+  <div [attr.aria-busy]="estadoDados() === 'loading'">
+    @if (estadoDados() !== 'loaded') {
+      <app-data-feedback [state]="estadoDados()" (retry)="carregarProfessores()" />
+    } @else {
+      @for (professor of professoresFiltrados; track professor.teacherId) {
+        <div class="item-row d-flex align-items-center justify-content-between mb-4">
+          <span class="nome-professor">{{ professor.name }}</span>
+          <button
+            type="button"
+            class="btn btn-delete btn-danger btn-rounded"
+            [attr.aria-label]="'Excluir professor ' + professor.name"
+            (click)="abrirModal(professor)">
+            <i class="bi bi-dash"></i>
+          </button>
+        </div>
+      } @empty {
+        <app-data-feedback
+          state="empty"
+          [emptyMessage]="busca.trim() ? 'Nenhum resultado para a busca.' : 'Sem dados encontrados.'" />
+      }
+    }
+  </div>
 </div>
 <!-- MODAL -->
 

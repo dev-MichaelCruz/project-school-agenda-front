@@ -1,7 +1,12 @@
 <div class="page-content management-page p-4">
   <header class="page-header">
     <h2>Deletar família</h2>
-    <app-list-toolbar label="Buscar família" [query]="busca" (search)="busca = $event" (refresh)="carregarFamilias()" />
+    <app-list-toolbar
+      label="Buscar família"
+      [query]="busca"
+      [loading]="estadoDados() === 'loading'"
+      (search)="busca = $event"
+      (refresh)="carregarFamilias()" />
   </header>
 
   <!-- TOAST -->
@@ -11,19 +16,28 @@
     </div>
   }
 
-  @for (familia of familiasFiltradas; track familia.responsibleId) {
-    <div class="item-row d-flex align-items-center justify-content-between mb-4">
-      <span class="nome-familia">
-        {{ familia.name }}
-      </span>
-
-      <button type="button" class="btn btn-delete btn-danger btn-rounded" [attr.aria-label]="'Excluir família ' + familia.name" (click)="abrirModal(familia)">
-        <i class="bi bi-dash"></i>
-      </button>
-    </div>
-  } @empty {
-    <p class="text-muted" role="status">Nenhuma família encontrada.</p>
-  }
+  <div [attr.aria-busy]="estadoDados() === 'loading'">
+    @if (estadoDados() !== 'loaded') {
+      <app-data-feedback [state]="estadoDados()" (retry)="carregarFamilias()" />
+    } @else {
+      @for (familia of familiasFiltradas; track familia.responsibleId) {
+        <div class="item-row d-flex align-items-center justify-content-between mb-4">
+          <span class="nome-familia">{{ familia.name }}</span>
+          <button
+            type="button"
+            class="btn btn-delete btn-danger btn-rounded"
+            [attr.aria-label]="'Excluir família ' + familia.name"
+            (click)="abrirModal(familia)">
+            <i class="bi bi-dash"></i>
+          </button>
+        </div>
+      } @empty {
+        <app-data-feedback
+          state="empty"
+          [emptyMessage]="busca.trim() ? 'Nenhum resultado para a busca.' : 'Sem dados encontrados.'" />
+      }
+    }
+  </div>
 </div>
 
 <div class="modal fade" id="modalDeleteFamilia" tabindex="-1" aria-hidden="true">

@@ -28,7 +28,7 @@
           </div>
 
           <div class="col-md-1 d-grid px-3">
-            <button type="submit" class="btn btn-primary">Cadastrar</button>
+            <button type="submit" class="btn btn-primary" [disabled]="estadoDados() === 'loading'">Cadastrar</button>
           </div>
         </div>
       </form>
@@ -36,10 +36,12 @@
   </div>
 
   <div class="card shadow-sm border-0">
-    <div class="card-body">
+    <div class="card-body" [attr.aria-busy]="estadoDados() === 'loading'">
       <h5 class="mb-3">Turmas cadastradas</h5>
 
-      @if (turmas().length > 0) {
+      @if (estadoDados() !== 'loaded') {
+        <app-data-feedback [state]="estadoDados()" (retry)="carregarTurmas()" />
+      } @else if (turmas().length > 0) {
         <div class="list-group">
           @for (turma of turmas(); track turma.id) {
             <div class="list-group-item">
@@ -61,7 +63,7 @@
           }
         </div>
       } @else {
-        <p class="text-muted mb-0">Nenhuma turma cadastrada.</p>
+        <app-data-feedback state="empty" />
       }
     </div>
   </div>
