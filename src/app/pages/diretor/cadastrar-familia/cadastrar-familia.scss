@@ -1,3 +1,15 @@
+@media (min-width: 768px) {
+  .child-title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
 @media (max-width: 767.98px) {
   .child-row {
     position: relative;

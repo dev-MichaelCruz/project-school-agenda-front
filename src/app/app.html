@@ -1,22 +1,25 @@
+<a class="skip-link" href="#main-content" [attr.inert]="menuOpen() && mobile() ? '' : null" (click)="skipToContent($event)">Pular para o conteúdo principal</a>
 <div class="d-flex" [class.login-layout]="!auth.isLoggedIn()">
 
   @if(auth.isLoggedIn()) {
 
   <app-sidebar
     [menuOpen]="menuOpen()"
+    [modal]="menuOpen() && mobile()"
     (close)="closeMenu()" />
 
   }
 
-  <div class="app-content container-fluid px-0 d-flex flex-column">
+  <div class="app-content container-fluid px-0 d-flex flex-column" [attr.inert]="menuOpen() && mobile() ? '' : null">
 
     <app-header
-      [attr.showMenu]="auth.isLoggedIn()"
+      [showMenu]="auth.isLoggedIn()"
+      [menuOpen]="menuOpen()"
       (menuClick)="toggleMenu()" />
 
-    <div class="main-content" [class.p-4]="auth.isLoggedIn()">
+    <main id="main-content" tabindex="-1" class="main-content" [class.p-4]="auth.isLoggedIn()">
       <router-outlet />
-    </div>
+    </main>
 
   </div>
 

@@ -28,6 +28,8 @@ import { ClassroomsService } from '../../../services/classrooms/classrooms.servi
 import { Note } from '../../../models/notes.dto';
 import { Student } from '../../../models/students.dto';
 import { Classroom } from '../../../models/classrooms.dto';
+import { AccessibleModal } from '../../../directives/accessible-modal';
+import { focusMainHeading } from '../../../utils/focus-management';
 
 declare var bootstrap: any;
 
@@ -41,6 +43,7 @@ declare var bootstrap: any;
     SelecionarAlunoComponent,
     SelecionarTurmaComponent,
     ListToolbar,
+    AccessibleModal,
   ],
   styleUrls: ['./visualizar-anotacoes.component.scss'],
   templateUrl: './visualizar-anotacoes.component.html',
@@ -208,6 +211,7 @@ export class VisualizarAnotacoesComponent implements AfterViewInit {
             }
 
             this.etapa.set('lista');
+            focusMainHeading();
           },
 
           error: () => this.abrirModal('Erro', 'Não foi possível carregar as anotações.'),
@@ -242,6 +246,7 @@ export class VisualizarAnotacoesComponent implements AfterViewInit {
           this.alunos.set(res);
 
           this.etapa.set('aluno');
+          focusMainHeading();
         },
 
         error: (err) => {
@@ -287,6 +292,7 @@ export class VisualizarAnotacoesComponent implements AfterViewInit {
     this.alunoSelecionado.set(null);
     this.selecionadaId.set(null);
     this.etapa.set('aluno');
+    focusMainHeading();
   }
 
   voltarTurma(): void {
@@ -296,14 +302,17 @@ export class VisualizarAnotacoesComponent implements AfterViewInit {
     }
 
     this.etapa.set('turma');
+    focusMainHeading();
   }
 
   selecionar(id: number): void {
     this.selecionadaId.set(id);
+    focusMainHeading();
   }
 
   fecharView(): void {
     this.selecionadaId.set(null);
+    focusMainHeading();
   }
 
   podeMarcarComoLida(): boolean {

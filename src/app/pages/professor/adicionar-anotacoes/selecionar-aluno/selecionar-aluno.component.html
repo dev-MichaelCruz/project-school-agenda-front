@@ -13,6 +13,8 @@
 <app-list-toolbar label="Buscar aluno" [query]="busca()" (search)="busca.set($event)" (refresh)="atualizar.emit()" />
 </header>
 
+<p class="visually-hidden" role="status" aria-live="polite" aria-atomic="true">{{ alunosFiltrados().length }} alunos encontrados.</p>
+
 <div class="student-grid mt-4 d-flex gap-4 flex-wrap">
   @for (aluno of alunosFiltrados(); track aluno.id) {
     <button type="button" class="text-center container_aluno" (click)="selecionar.emit(aluno)">

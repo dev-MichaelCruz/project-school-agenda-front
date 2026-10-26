@@ -11,13 +11,16 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Classroom } from '../../../models/classrooms.dto';
 
 import { ClassroomsService } from '../../../services/classrooms/classrooms.service';
+import { AccessibleControl } from '../../../directives/accessible-control';
+import { AccessibleForm } from '../../../directives/accessible-form';
+import { AccessibleModal } from '../../../directives/accessible-modal';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-gerenciar-turmas',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DataFeedback],
+  imports: [CommonModule, ReactiveFormsModule, DataFeedback, AccessibleControl, AccessibleForm, AccessibleModal],
   templateUrl: './gerenciar-turmas.html',
   styleUrl: './gerenciar-turmas.scss',
 })

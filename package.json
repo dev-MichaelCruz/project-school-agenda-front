@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "test:a11y": "ng test --watch=false --browsers=ChromeHeadless --include=src/app/directives/accessibility.spec.ts --include=src/app/pages/diretor/data-loading.spec.ts --ts-config=tsconfig.accessibility.spec.json"
   },
   "prettier": {
     "printWidth": 100,

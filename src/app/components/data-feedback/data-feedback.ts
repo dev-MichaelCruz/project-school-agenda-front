@@ -8,7 +8,8 @@ import { DataLoadState } from '../../utils/data-load-state';
     <div
       class="data-feedback"
       [attr.role]="state() === 'error' ? 'alert' : 'status'"
-      [attr.aria-busy]="state() === 'idle' || state() === 'loading'"
+      aria-live="polite"
+      aria-atomic="true"
     >
       @if (state() === 'idle' || state() === 'loading') {
         <span class="spinner-border text-primary" aria-hidden="true"></span>

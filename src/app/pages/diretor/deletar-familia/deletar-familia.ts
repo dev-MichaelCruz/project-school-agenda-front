@@ -11,13 +11,15 @@ import { matchesSearch } from '../../../utils/search';
 import { FamilyService } from '../../../services/family/family.service';
 
 import { FamilyResponseDTO } from '../../../models/family.dto';
+import { AccessibleModal } from '../../../directives/accessible-modal';
+import { focusMainHeading } from '../../../utils/focus-management';
 
 declare const bootstrap: any;
 
 @Component({
   selector: 'app-deletar-familia',
   standalone: true,
-  imports: [CommonModule, ListToolbar, DataFeedback],
+  imports: [CommonModule, ListToolbar, DataFeedback, AccessibleModal],
   templateUrl: './deletar-familia.html',
   styleUrl: './deletar-familia.scss',
 })
@@ -39,6 +41,12 @@ export class DeletarFamilia implements OnInit {
   toastVisivel = false;
 
   toastMensagem = '';
+  erroExclusao = signal('');
+
+  fecharMensagem(): void {
+    this.toastVisivel = false;
+    focusMainHeading();
+  }
 
   ngOnInit(): void {
     this.carregarFamilias();
@@ -65,6 +73,7 @@ export class DeletarFamilia implements OnInit {
   }
 
   abrirModal(familia: FamilyResponseDTO): void {
+    this.erroExclusao.set('');
     this.familiaSelecionada = familia;
 
     const modalElement = document.getElementById('modalDeleteFamilia');
@@ -99,21 +108,12 @@ export class DeletarFamilia implements OnInit {
 
         this.toastVisivel = true;
 
-        setTimeout(() => {
-          this.toastVisivel = false;
-        }, 3000);
       },
 
       error: (err) => {
         console.error(err);
 
-        this.toastMensagem = 'Erro ao deletar família.';
-
-        this.toastVisivel = true;
-
-        setTimeout(() => {
-          this.toastVisivel = false;
-        }, 3000);
+        this.erroExclusao.set('Não foi possível excluir a família. Tente novamente.');
       },
     });
   }

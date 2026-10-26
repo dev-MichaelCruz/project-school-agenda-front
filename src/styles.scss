@@ -3,16 +3,62 @@
 :root {
   --bg-color: #E8B30C;
   --bg-white: #FCFEFE;
-  --primary-color: #204E7E;
+  --primary-color: #1B436D;
   --secondary-color: #95B9C8;
 
   --text-primary-color: #ffffff;
 
   --primary-button: #204E7E;
   --default-green: #193F29;
+  --bs-danger-rgb: 176, 42, 55;
 }
 body {
   background-color: #fff;
+}
+
+.skip-link {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 1100;
+  padding: 12px 16px;
+  border-radius: 6px;
+  background: #fff;
+  color: var(--primary-color);
+  transform: translateY(-160%);
+
+  &:focus {
+    transform: translateY(0);
+  }
+}
+
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid var(--primary-color);
+  outline-offset: 3px;
+}
+
+button,
+.btn,
+.form-control,
+.form-select {
+  min-height: 44px;
+}
+
+.btn-rounded {
+  min-width: 44px;
+}
+
+.form-hint {
+  font-size: 0.875rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 .btn-rounded{
@@ -63,7 +109,7 @@ body {
     }
 
     small {
-      color: #999;
+      color: #656565;
       font-size: 1.125rem;
       font-weight: 400;
     }
@@ -87,6 +133,14 @@ body {
 
   .page-content {
     color: #343434;
+
+    .row {
+      --bs-gutter-x: 24px;
+    }
+
+    .row.g-2 {
+      --bs-gutter-x: 8px;
+    }
 
     h2 {
       margin-bottom: 20px;

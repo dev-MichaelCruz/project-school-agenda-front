@@ -10,13 +10,15 @@ import { matchesSearch } from '../../../utils/search';
 
 import { TeacherResponseDTO } from '../../../models/teacher.dto';
 import { TeachersService } from '../../../services/teachers/teachers.service';
+import { AccessibleModal } from '../../../directives/accessible-modal';
+import { focusMainHeading } from '../../../utils/focus-management';
 
 declare const bootstrap: any;
 
 @Component({
   selector: 'app-deletar-professor',
   standalone: true,
-  imports: [CommonModule, ListToolbar, DataFeedback],
+  imports: [CommonModule, ListToolbar, DataFeedback, AccessibleModal],
   templateUrl: './deletar-professor.html',
   styleUrl: './deletar-professor.scss',
 })
@@ -38,6 +40,12 @@ export class DeletarProfessor implements OnInit {
   toastVisivel = false;
 
   toastMensagem = '';
+  erroExclusao = signal('');
+
+  fecharMensagem(): void {
+    this.toastVisivel = false;
+    focusMainHeading();
+  }
 
   ngOnInit(): void {
     this.carregarProfessores();
@@ -64,6 +72,7 @@ export class DeletarProfessor implements OnInit {
   }
 
   abrirModal(professor: TeacherResponseDTO): void {
+    this.erroExclusao.set('');
     this.professorSelecionado = professor;
 
     const modalElement = document.getElementById('modalDeleteProfessor');
@@ -98,9 +107,6 @@ export class DeletarProfessor implements OnInit {
 
         this.toastVisivel = true;
 
-        setTimeout(() => {
-          this.toastVisivel = false;
-        }, 3000);
       },
 
       error: (err) => {
@@ -114,13 +120,7 @@ export class DeletarProfessor implements OnInit {
           mensagem = err.error.message;
         }
 
-        this.toastMensagem = mensagem;
-
-        this.toastVisivel = true;
-
-        setTimeout(() => {
-          this.toastVisivel = false;
-        }, 3000);
+        this.erroExclusao.set(mensagem);
       },
     });
   }

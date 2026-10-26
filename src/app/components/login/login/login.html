@@ -2,7 +2,7 @@
   <div class="login-panel">
     <h2 id="login-title">Faça seu login</h2>
 
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" aria-labelledby="login-title">
       <div class="login-field">
         <label for="login-email">Email</label>
         <div

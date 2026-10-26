@@ -1,11 +1,11 @@
 <div class="page-content management-page p-4">
   <header class="page-header">
-    <h2>Gerenciar turmas</h2>
+    <h2 id="classrooms-title">Gerenciar turmas</h2>
   </header>
 
   <div class="card shadow-sm border-0 mb-4">
     <div class="card-body">
-      <form [formGroup]="form" (ngSubmit)="cadastrar()">
+      <form [formGroup]="form" (ngSubmit)="cadastrar()" aria-labelledby="classrooms-title">
         <div class="row">
           <div class="col-12">
             <label for="addnewclass" class="mb-3"> Adicionar nova turma </label>
@@ -23,7 +23,7 @@
             />
 
             @if ((form.controls.turma.touched || submitted()) && form.controls.turma.invalid) {
-              <small class="text-danger"> Informe o nome da turma. </small>
+              <small id="addnewclass-error" class="text-danger" aria-live="polite"> Informe o nome da turma. </small>
             }
           </div>
 
@@ -36,8 +36,8 @@
   </div>
 
   <div class="card shadow-sm border-0">
-    <div class="card-body" [attr.aria-busy]="estadoDados() === 'loading'">
-      <h5 class="mb-3">Turmas cadastradas</h5>
+    <div class="card-body" role="region" aria-labelledby="classrooms-list-title">
+      <h3 id="classrooms-list-title" class="h5 mb-3">Turmas cadastradas</h3>
 
       @if (estadoDados() !== 'loaded') {
         <app-data-feedback [state]="estadoDados()" (retry)="carregarTurmas()" />
@@ -56,7 +56,7 @@
                   class="btn btn-delete btn-danger btn-rounded"
                   (click)="abrirModalExcluir(turma)"
                 >
-                  <i class="bi bi-trash"></i>
+                  <i class="bi bi-trash" aria-hidden="true"></i>
                 </button>
               </div>
             </div>
@@ -71,16 +71,16 @@
 
 <!-- MODAL EXCLUIR -->
 
-<div class="modal fade" id="modalExcluirTurma" tabindex="-1" aria-hidden="true">
+<div appAccessibleModal class="modal fade" id="modalExcluirTurma" tabindex="-1" aria-hidden="true" aria-labelledby="delete-class-title" aria-describedby="delete-class-description">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Confirmar exclusão</h5>
+        <h2 class="modal-title fs-5" id="delete-class-title">Confirmar exclusão</h2>
 
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar confirmação"></button>
       </div>
 
-      <div class="modal-body">
+      <div class="modal-body" id="delete-class-description">
         Deseja realmente excluir a turma
         <strong>{{ turmaSelecionada()?.nome }}</strong
         >?
@@ -97,16 +97,16 @@
 
 <!-- MODAL MENSAGEM -->
 
-<div class="modal fade" id="modalMensagemTurma" tabindex="-1" aria-hidden="true">
+<div appAccessibleModal class="modal fade" id="modalMensagemTurma" tabindex="-1" aria-hidden="true" aria-labelledby="class-message-title" aria-describedby="class-message-description">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Aviso</h5>
+        <h2 class="modal-title fs-5" id="class-message-title">Aviso</h2>
 
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar aviso"></button>
       </div>
 
-      <div class="modal-body">
+      <div class="modal-body" id="class-message-description">
         {{ modalMensagem }}
       </div>
 

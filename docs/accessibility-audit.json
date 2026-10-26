@@ -1,0 +1,525 @@
+﻿{
+    "tool":  "axe-core",
+    "api":  "simulada",
+    "results":  [
+                    {
+                        "label":  "login@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "login invalid@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "cadastrar-familia@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "cadastrar-familia invalid@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "cadastrar-professor@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "cadastrar-professor invalid@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-familia@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-familia modal@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "mobile menu",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-professor@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-professor modal@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "gerenciar-turmas@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "gerenciar-turmas invalid@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "class selection@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "student selection TEACHER@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "note form TEACHER@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "note form invalid TEACHER@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "note message TEACHER@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "note list TEACHER@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "note view TEACHER@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "student selection RESPONSIBLE@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "note form RESPONSIBLE@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "note form invalid RESPONSIBLE@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "note message RESPONSIBLE@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "note list RESPONSIBLE@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "note view RESPONSIBLE@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "login@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "login invalid@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "cadastrar-familia@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "cadastrar-familia invalid@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "cadastrar-professor@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "cadastrar-professor invalid@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-familia@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-familia modal@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-professor@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-professor modal@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "gerenciar-turmas@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "gerenciar-turmas invalid@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "class selection@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "student selection TEACHER@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "note form TEACHER@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "note form invalid TEACHER@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "note message TEACHER@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "note list TEACHER@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "note view TEACHER@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "student selection RESPONSIBLE@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "note form RESPONSIBLE@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "note form invalid RESPONSIBLE@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "note message RESPONSIBLE@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "note list RESPONSIBLE@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "note view RESPONSIBLE@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-familia loading@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-familia error@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-familia timeout@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-familia empty@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-professor loading@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-professor error@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-professor timeout@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-professor empty@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "gerenciar-turmas loading@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "gerenciar-turmas error@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "gerenciar-turmas timeout@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "gerenciar-turmas empty@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-familia loading@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-familia error@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-familia timeout@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-familia empty@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-professor loading@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-professor error@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-professor timeout@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-professor empty@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "gerenciar-turmas loading@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "gerenciar-turmas error@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "gerenciar-turmas timeout@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "gerenciar-turmas empty@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "note attachment",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-familia delete error@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-familia persistent notification@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-professor delete error@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-professor persistent notification@320",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-familia delete error@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-familia persistent notification@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-professor delete error@1440",
+                        "violations":  [
+
+                                       ]
+                    },
+                    {
+                        "label":  "deletar-professor persistent notification@1440",
+                        "violations":  [
+
+                                       ]
+                    }
+                ],
+    "timezone":  "America/Sao_Paulo",
+    "tags":  [
+                 "wcag2a",
+                 "wcag2aa",
+                 "wcag21aa",
+                 "wcag22aa",
+                 "best-practice"
+             ],
+    "scenarios":  84,
+    "violations":  0,
+    "date":  "2026-10-25",
+    "viewports":  [
+                      320,
+                      1440
+                  ]
+}

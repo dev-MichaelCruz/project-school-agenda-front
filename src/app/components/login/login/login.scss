@@ -43,7 +43,7 @@ label {
 
   > i {
     flex-shrink: 0;
-    color: #757575;
+    color: #666;
     font-size: 1.4rem;
   }
 
@@ -70,7 +70,7 @@ input {
   outline: none;
 
   &::placeholder {
-    color: #757575;
+    color: #666;
     opacity: 1;
   }
 }
@@ -86,7 +86,7 @@ input {
   border: 0;
   border-radius: 6px;
   background: transparent;
-  color: #757575;
+  color: #666;
   font-size: 1.5rem;
 }
 

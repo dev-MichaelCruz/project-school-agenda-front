@@ -9,6 +9,8 @@
 <app-list-toolbar label="Buscar turma" [query]="busca()" (search)="busca.set($event)" (refresh)="atualizar.emit()" />
 </header>
 
+<p class="visually-hidden" role="status" aria-live="polite" aria-atomic="true">{{ turmasFiltradas().length }} turmas encontradas.</p>
+
 <div class="class-grid mt-4 d-flex gap-2 flex-wrap">
 
   @for (turma of turmasFiltradas(); track turma.id) {

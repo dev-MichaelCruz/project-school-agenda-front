@@ -1,3 +1,19 @@
+.sidebar-container {
+  display: contents;
+}
+
+.mobile-dialog {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  pointer-events: none;
+
+  .sidebar {
+    pointer-events: auto;
+  }
+}
+
 .sidebar {
   width: 250px;
   height: 100dvh;
@@ -42,6 +58,18 @@
 
 .active-link {
   background: rgba(255,255,255,0.15);
+  box-shadow: inset 4px 0 0 var(--primary-color);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.sidebar-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.nav-link {
+  min-height: 44px;
 }
 
 .sidebar-overlay {

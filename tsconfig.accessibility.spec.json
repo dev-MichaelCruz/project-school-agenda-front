@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.spec.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/accessibility"
+  },
+  "include": [
+    "src/app/directives/accessibility.spec.ts",
+    "src/app/pages/diretor/data-loading.spec.ts"
+  ]
+}
