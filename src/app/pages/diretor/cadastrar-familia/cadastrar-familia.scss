@@ -1,8 +1,48 @@
-.child-row {
-  padding: 1rem;
+@media (min-width: 768px) {
+  .child-title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
 
-  border-radius: 1rem;
+@media (max-width: 767.98px) {
+  .child-row {
+    position: relative;
+    margin-inline: 0;
+    padding: 16px;
+    border: 1px solid #d4dce6;
+    border-radius: 10px;
+    background: #f0f3f8;
 
-  background: #f8f9fa;
+    > div {
+      padding-inline: 0;
+    }
+  }
+
+  .child-title {
+    min-height: 44px;
+    margin: 0 48px 12px 0;
+    padding: 10px 0;
+    color: var(--primary-color);
+    font-size: 1.125rem;
+    font-weight: 700;
+  }
+
+  .child-class {
+    width: 100%;
+  }
+
+  .child-row > .child-remove {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: auto;
+    margin-top: 0 !important;
+  }
 }
 

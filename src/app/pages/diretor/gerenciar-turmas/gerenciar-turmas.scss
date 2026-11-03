@@ -1,0 +1,14 @@
+@media (max-width: 767.98px) {
+  .list-group-item .d-flex {
+    gap: 12px;
+
+    span {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  .col-md-1 {
+    padding-inline: 4px !important;
+  }
+}

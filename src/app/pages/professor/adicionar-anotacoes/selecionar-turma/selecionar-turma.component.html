@@ -1,3 +1,4 @@
+<header class="page-header">
 <h2>
   Gerenciar anotações
   <small class="text-muted">
@@ -5,9 +6,14 @@
   </small>
 </h2>
 
-<div class="mt-4 d-flex gap-2 flex-wrap">
+<app-list-toolbar label="Buscar turma" [query]="busca()" (search)="busca.set($event)" (refresh)="atualizar.emit()" />
+</header>
 
-  @for (turma of turmas(); track turma.id) {
+<p class="visually-hidden" role="status" aria-live="polite" aria-atomic="true">{{ turmasFiltradas().length }} turmas encontradas.</p>
+
+<div class="class-grid mt-4 d-flex gap-2 flex-wrap">
+
+  @for (turma of turmasFiltradas(); track turma.id) {
 
   <button
     type="button"
@@ -16,6 +22,8 @@
     {{ turma.nome }}
   </button>
 
+  } @empty {
+    <p class="text-muted" role="status">Nenhuma turma encontrada.</p>
   }
 
 </div>

@@ -43,7 +43,7 @@
 }
 
 .btn-lida {
-  background: #6d8e57;
+  background: #587b3e;
   color: #fff;
 }
 
@@ -61,4 +61,29 @@
 
 .img-anotacao:hover {
   transform: scale(1.03);
+}
+
+@media (max-width: 767.98px) {
+  .mensagem {
+    min-height: 100px;
+    margin-bottom: 24px;
+    font-size: 1.125rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  .data {
+    font-size: 0.875rem;
+  }
+
+  .img-anotacao {
+    width: min(180px, 100%);
+    height: auto;
+    aspect-ratio: 1;
+  }
+
+  .acoes button {
+    min-height: 48px;
+  }
 }

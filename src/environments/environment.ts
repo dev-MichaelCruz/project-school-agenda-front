@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
 
-  apiUrl: 'https://schoolagenda.duckdns.org/api',
+  apiUrl: 'https://projectschoolagenda.onrender.com/api',
 };

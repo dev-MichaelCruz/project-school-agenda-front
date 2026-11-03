@@ -1,75 +1,73 @@
-<div class="p-4">
-  <h2 class="mb-4">Deletar professor</h2>
+<div class="page-content management-page p-4">
+  <header class="page-header">
+    <h2>Deletar professor</h2>
+    <app-list-toolbar
+      label="Buscar professor"
+      [query]="busca"
+      [loading]="estadoDados() === 'loading'"
+      (search)="busca = $event"
+      (refresh)="carregarProfessores()" />
+  </header>
 
   <!-- TOAST -->
 
   @if (toastVisivel) {
-    <div class="alert alert-success">
-      {{ toastMensagem }}
+    <div class="alert alert-success d-flex align-items-center justify-content-between gap-3" role="status" aria-live="polite" aria-atomic="true">
+      <p class="mb-0">{{ toastMensagem }}</p>
+      <button type="button" class="btn-close flex-shrink-0" aria-label="Fechar mensagem" (click)="fecharMensagem()"></button>
     </div>
   }
 
-  @for (professor of professores; track professor.teacherId) {
-    <div class="d-flex align-items-center justify-content-between mb-4">
-      <span class="nome-professor">
-        {{ professor.name }}
-      </span>
-
-      <button class="btn btn-delete btn-danger btn-rounded" (click)="abrirModal(professor)">
-        <i class="bi bi-dash"></i>
-      </button>
-    </div>
-  }
+  <section aria-label="Professores cadastrados">
+    @if (estadoDados() !== 'loaded') {
+      <app-data-feedback [state]="estadoDados()" (retry)="carregarProfessores()" />
+    } @else {
+      <p class="visually-hidden" role="status" aria-live="polite" aria-atomic="true">{{ professoresFiltrados.length }} professores encontrados.</p>
+      @for (professor of professoresFiltrados; track professor.teacherId) {
+        <div class="item-row d-flex align-items-center justify-content-between mb-4">
+          <span class="nome-professor">{{ professor.name }}</span>
+          <button
+            type="button"
+            class="btn btn-delete btn-danger btn-rounded"
+            [attr.aria-label]="'Excluir professor ' + professor.name"
+            (click)="abrirModal(professor)">
+            <i class="bi bi-dash" aria-hidden="true"></i>
+          </button>
+        </div>
+      } @empty {
+        <app-data-feedback
+          state="empty"
+          [emptyMessage]="busca.trim() ? 'Nenhum resultado para a busca.' : 'Sem dados encontrados.'" />
+      }
+    }
+  </section>
 </div>
-
 <!-- MODAL -->
 
-<div class="modal fade" id="modalDeleteProfessor" tabindex="-1" aria-hidden="true">
+<div appAccessibleModal class="modal fade" id="modalDeleteProfessor" tabindex="-1" aria-hidden="true" aria-labelledby="delete-teacher-title" aria-describedby="delete-teacher-description">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Confirmar exclusão</h5>
+        <h2 class="modal-title fs-5" id="delete-teacher-title">Confirmar exclusão</h2>
 
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar confirmação"></button>
       </div>
 
-      <div class="modal-body">
+      <div class="modal-body" id="delete-teacher-description">
         Deseja deletar o professor
 
         <strong>
           {{ professorSelecionado?.name }} </strong
         >?
+        @if (erroExclusao()) {
+          <p class="alert alert-danger mt-3 mb-0" role="alert" aria-atomic="true">{{ erroExclusao() }}</p>
+        }
       </div>
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
 
-        <button type="button" class="btn btn-danger" (click)="confirmarDelete()">OK</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL -->
-<div class="modal fade" id="modalDeleteProfessor" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Confirmar exclusão</h5>
-
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-
-      <div class="modal-body">
-        Deseja deletar o professor
-        <strong>{{ professorSelecionado?.name }}</strong
-        >?
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-
-        <button type="button" class="btn btn-danger" (click)="confirmarDelete()">OK</button>
+        <button type="button" class="btn btn-danger" (click)="confirmarDelete()">Excluir</button>
       </div>
     </div>
   </div>

@@ -1,21 +1,28 @@
-<header class="app-header">
+<header class="app-header" [class.login-header]="!showMenu()">
   <div class="container-fluid px-3 px-md-4">
 
     <div
       class="d-flex align-items-center justify-content-between header-wrapper">
 
-      <div class="d-flex align-items-center gap-3">
+      <div class="header-content d-flex align-items-center gap-3">
 
         <!-- MOBILE MENU -->
+        @if (showMenu()) {
         <button
+          type="button"
+          id="open-menu-button"
+          aria-label="Abrir menu"
+          [attr.aria-expanded]="menuOpen()"
+          aria-controls="main-menu"
           class="menu-button d-md-none"
           (click)="menuClick.emit()">
-          <i class="bi bi-list"></i>
+          <i class="bi bi-list" aria-hidden="true"></i>
         </button>
+        }
 
         <a class="navbar-brand m-0 text-decoration-none" href="/">
           <h1 class="header-text m-0">
-            Agenda Virtual Escola Monte Santo
+            Agenda Virtual <span class="school-name">Escola Municipal Juruti</span>
           </h1>
         </a>
 

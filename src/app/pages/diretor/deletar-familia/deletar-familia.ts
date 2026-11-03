@@ -1,56 +1,79 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { timeout, TimeoutError } from 'rxjs';
 
 import { CommonModule } from '@angular/common';
+import { ListToolbar } from '../../../components/list-toolbar/list-toolbar';
+import { DataFeedback } from '../../../components/data-feedback/data-feedback';
+import { DATA_LOAD_TIMEOUT_MS, DataLoadState } from '../../../utils/data-load-state';
+import { matchesSearch } from '../../../utils/search';
 
 import { FamilyService } from '../../../services/family/family.service';
 
 import { FamilyResponseDTO } from '../../../models/family.dto';
+import { AccessibleModal } from '../../../directives/accessible-modal';
+import { focusMainHeading } from '../../../utils/focus-management';
 
 declare const bootstrap: any;
 
 @Component({
   selector: 'app-deletar-familia',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ListToolbar, DataFeedback, AccessibleModal],
   templateUrl: './deletar-familia.html',
   styleUrl: './deletar-familia.scss',
 })
 export class DeletarFamilia implements OnInit {
   private familyService = inject(FamilyService);
+  private destroyRef = inject(DestroyRef);
+
+  estadoDados = signal<DataLoadState>('idle');
 
   familias: FamilyResponseDTO[] = [];
+  busca = '';
+
+  get familiasFiltradas(): FamilyResponseDTO[] {
+    return this.familias.filter((familia) => matchesSearch(familia.name, this.busca));
+  }
 
   familiaSelecionada: FamilyResponseDTO | null = null;
 
   toastVisivel = false;
 
   toastMensagem = '';
+  erroExclusao = signal('');
+
+  fecharMensagem(): void {
+    this.toastVisivel = false;
+    focusMainHeading();
+  }
 
   ngOnInit(): void {
     this.carregarFamilias();
   }
 
   carregarFamilias(): void {
-    this.familyService.listarFamilias().subscribe({
+    if (this.estadoDados() === 'loading') return;
+
+    this.estadoDados.set('loading');
+
+    this.familyService.listarFamilias().pipe(
+      timeout(DATA_LOAD_TIMEOUT_MS),
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe({
       next: (res) => {
-        this.familias = res;
+        this.familias = res ?? [];
+        this.estadoDados.set('loaded');
       },
 
       error: (err) => {
-        console.error(err);
-
-        this.toastMensagem = 'Erro ao carregar famílias.';
-
-        this.toastVisivel = true;
-
-        setTimeout(() => {
-          this.toastVisivel = false;
-        }, 3000);
+        this.estadoDados.set(err instanceof TimeoutError ? 'timeout' : 'error');
       },
     });
   }
 
   abrirModal(familia: FamilyResponseDTO): void {
+    this.erroExclusao.set('');
     this.familiaSelecionada = familia;
 
     const modalElement = document.getElementById('modalDeleteFamilia');
@@ -85,21 +108,12 @@ export class DeletarFamilia implements OnInit {
 
         this.toastVisivel = true;
 
-        setTimeout(() => {
-          this.toastVisivel = false;
-        }, 3000);
       },
 
       error: (err) => {
         console.error(err);
 
-        this.toastMensagem = 'Erro ao deletar família.';
-
-        this.toastVisivel = true;
-
-        setTimeout(() => {
-          this.toastVisivel = false;
-        }, 3000);
+        this.erroExclusao.set('Não foi possível excluir a família. Tente novamente.');
       },
     });
   }

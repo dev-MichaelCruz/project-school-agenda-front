@@ -11,13 +11,17 @@ import { Classroom } from '../../../models/classrooms.dto';
 
 import { TeacherDTO } from '../../../models/teacher.dto';
 import { TeachersService } from '../../../services/teachers/teachers.service';
+import { AccessibleControl } from '../../../directives/accessible-control';
+import { AccessibleForm } from '../../../directives/accessible-form';
+import { AccessibleModal } from '../../../directives/accessible-modal';
+import { focusElement } from '../../../utils/focus-management';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-cadastrar-professor',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AccessibleControl, AccessibleForm, AccessibleModal],
   templateUrl: './cadastrar-professor.html',
   styleUrl: './cadastrar-professor.scss',
 })
@@ -77,11 +81,13 @@ export class CadastrarProfessor implements OnInit, AfterViewInit {
 
   adicionarTurma(): void {
     this.turmas.push(this.fb.control('', Validators.required));
+    focusElement(`#teacher-class-${this.turmas.length - 1}`);
   }
 
   removerTurma(index: number): void {
     if (this.turmas.length > 1) {
       this.turmas.removeAt(index);
+      focusElement(`#teacher-class-${Math.min(index, this.turmas.length - 1)}`);
     }
   }
 

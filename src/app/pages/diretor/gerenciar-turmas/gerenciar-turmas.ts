@@ -1,19 +1,26 @@
 import { CommonModule } from '@angular/common';
 
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { timeout, TimeoutError } from 'rxjs';
+import { DataFeedback } from '../../../components/data-feedback/data-feedback';
+import { DATA_LOAD_TIMEOUT_MS, DataLoadState } from '../../../utils/data-load-state';
 
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { Classroom } from '../../../models/classrooms.dto';
 
 import { ClassroomsService } from '../../../services/classrooms/classrooms.service';
+import { AccessibleControl } from '../../../directives/accessible-control';
+import { AccessibleForm } from '../../../directives/accessible-form';
+import { AccessibleModal } from '../../../directives/accessible-modal';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-gerenciar-turmas',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, DataFeedback, AccessibleControl, AccessibleForm, AccessibleModal],
   templateUrl: './gerenciar-turmas.html',
   styleUrl: './gerenciar-turmas.scss',
 })
@@ -21,6 +28,9 @@ export class GerenciarTurmas implements OnInit {
   private fb = inject(FormBuilder);
 
   private classroomsService = inject(ClassroomsService);
+  private destroyRef = inject(DestroyRef);
+
+  estadoDados = signal<DataLoadState>('idle');
 
   turmas = signal<Classroom[]>([]);
 
@@ -39,15 +49,21 @@ export class GerenciarTurmas implements OnInit {
   }
 
   carregarTurmas(): void {
-    this.classroomsService.getAllClassrooms().subscribe({
+    if (this.estadoDados() === 'loading') return;
+
+    this.estadoDados.set('loading');
+
+    this.classroomsService.getAllClassrooms().pipe(
+      timeout(DATA_LOAD_TIMEOUT_MS),
+      takeUntilDestroyed(this.destroyRef),
+    ).subscribe({
       next: (res) => {
         this.turmas.set(res);
+        this.estadoDados.set('loaded');
       },
 
       error: (err) => {
-        console.error(err);
-
-        this.abrirModalMensagem('Erro ao carregar turmas.');
+        this.estadoDados.set(err instanceof TimeoutError ? 'timeout' : 'error');
       },
     });
   }

@@ -1,5 +1,7 @@
-<div
+<button
+  type="button"
   class="anotacao-card"
+  [attr.aria-label]="'Abrir anotação de ' + data() + (lida() ? ', lida' : ', não lida') + (role() === roleEnum.TEACHER && !visivelTutores() ? ', não visível para os tutores' : '')"
   [class.selecionada]="selecionada()"
   (click)="onClick()"
 >
@@ -11,15 +13,15 @@
   <div class="rodape">
 
     @if (lida()) {
-      <i class="bi bi-envelope-open icone-email-lido"></i>
+      <i class="bi bi-envelope-open icone-email-lido" aria-hidden="true"></i>
     } @else {
-      <i class="bi bi-envelope icone-email-nao-lido"></i>
+      <i class="bi bi-envelope icone-email-nao-lido" aria-hidden="true"></i>
     }
 
     @if (role() === roleEnum.TEACHER && !visivelTutores()) {
-      <i class="bi bi-eye-slash icone-privado"></i>
+      <i class="bi bi-eye-slash icone-privado" aria-hidden="true"></i>
     }
 
   </div>
 
-</div>
+</button>

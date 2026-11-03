@@ -1,16 +1,19 @@
-<div class="p-4">
-  <h2 class="mb-4">Cadastrar Professor</h2>
+<div class="page-content management-page p-4">
+  <header class="page-header">
+    <h2 id="teacher-title">Cadastrar professor</h2>
+  </header>
 
-  <form [formGroup]="form" (ngSubmit)="cadastrar()">
+  <form [formGroup]="form" (ngSubmit)="cadastrar()" aria-labelledby="teacher-title">
+    <p class="form-hint text-muted">Todos os campos são obrigatórios.</p>
     <div class="row">
       <div class="col-12 col-md-6">
         <div class="mb-3">
           <label class="form-label" for="name"> Nome </label>
 
-          <input type="text" class="form-control" id="name" formControlName="nome" />
+          <input type="text" class="form-control" id="name" formControlName="nome" autocomplete="given-name" />
 
           @if (form.get('nome')?.touched && form.get('nome')?.invalid) {
-            <small class="text-danger">
+            <small id="name-error" class="text-danger" aria-live="polite">
               @if (form.get('nome')?.errors?.['required']) {
                 Campo obrigatório.
               }
@@ -27,10 +30,10 @@
         <div class="mb-3">
           <label class="form-label" for="lastname"> Sobrenome </label>
 
-          <input type="text" class="form-control" id="lastname" formControlName="sobrenome" />
+          <input type="text" class="form-control" id="lastname" formControlName="sobrenome" autocomplete="family-name" />
 
           @if (form.get('sobrenome')?.touched && form.get('sobrenome')?.invalid) {
-            <small class="text-danger">
+            <small id="lastname-error" class="text-danger" aria-live="polite">
               @if (form.get('sobrenome')?.errors?.['required']) {
                 Campo obrigatório.
               }
@@ -47,10 +50,10 @@
         <div class="mb-3">
           <label class="form-label" for="email"> Email </label>
 
-          <input type="email" class="form-control" id="email" formControlName="email" />
+          <input type="email" class="form-control" id="email" formControlName="email" autocomplete="email" inputmode="email" autocapitalize="none" />
 
           @if (form.get('email')?.touched && form.get('email')?.invalid) {
-            <small class="text-danger">
+            <small id="email-error" class="text-danger" aria-live="polite">
               @if (form.get('email')?.errors?.['required']) {
                 Email obrigatório.
               }
@@ -67,10 +70,10 @@
         <div class="mb-3">
           <label class="form-label" for="password"> Senha para acesso </label>
 
-          <input type="password" class="form-control" id="password" formControlName="senha" />
+          <input type="password" class="form-control" id="password" formControlName="senha" autocomplete="new-password" />
 
           @if (form.get('senha')?.touched && form.get('senha')?.invalid) {
-            <small class="text-danger">
+            <small id="password-error" class="text-danger" aria-live="polite">
               @if (form.get('senha')?.errors?.['required']) {
                 Campo obrigatório.
               }
@@ -88,15 +91,16 @@
       </div>
     </div>
 
-    <div class="mb-4">
-      <label class="form-label"> Turma(s) </label>
+    <fieldset class="mb-4">
+      <legend class="form-label fs-6">Turmas</legend>
 
       <div formArrayName="turmas">
         @for (turma of turmas.controls; track $index) {
           <div class="mb-3">
-            <div class="d-flex align-items-start gap-2">
+            <div class="class-selection d-flex align-items-start gap-2">
               <div class="w-100">
-                <select class="form-select" [formControlName]="$index">
+                <label class="visually-hidden" [for]="'teacher-class-' + $index">Turma {{ $index + 1 }}</label>
+                <select class="form-select" [id]="'teacher-class-' + $index" [formControlName]="$index">
                   <option value>Selecione a turma</option>
 
                   @for (item of turmasDisponiveis; track item.id) {
@@ -107,34 +111,36 @@
                 </select>
 
                 @if (turmas.at($index).touched && turmas.at($index).invalid) {
-                  <small class="text-danger"> Selecione uma turma. </small>
+                  <small [id]="'teacher-class-' + $index + '-error'" class="text-danger" aria-live="polite"> Selecione uma turma. </small>
                 }
               </div>
 
               @if ($index > 0) {
                 <button
                   type="button"
+                  [attr.aria-label]="'Remover turma ' + ($index + 1)"
                   class="btn btn-rounded btn-danger"
                   (click)="removerTurma($index)"
                 >
-                  <i class="bi bi-dash"></i>
+                  <i class="bi bi-dash" aria-hidden="true"></i>
                 </button>
               }
 
               @if ($index === turmas.length - 1) {
                 <button
                   type="button"
+                  aria-label="Adicionar turma"
                   class="btn btn-rounded btn-primary"
                   (click)="adicionarTurma()"
                 >
-                  <i class="bi bi-plus"></i>
+                  <i class="bi bi-plus" aria-hidden="true"></i>
                 </button>
               }
             </div>
           </div>
         }
       </div>
-    </div>
+    </fieldset>
 
     <button type="submit" class="btn btn-primary btn-default-green">Cadastrar</button>
   </form>
@@ -142,18 +148,18 @@
 
 <!-- MODAL -->
 
-<div #statusModal class="modal fade" tabindex="-1">
+<div #statusModal appAccessibleModal class="modal fade" tabindex="-1" aria-hidden="true" aria-labelledby="teacher-modal-title" aria-describedby="teacher-modal-description">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">
+        <h2 id="teacher-modal-title" class="modal-title fs-5">
           {{ modalTitulo }}
-        </h5>
+        </h2>
 
-        <button type="button" class="btn-close" (click)="fecharModal()"></button>
+        <button type="button" class="btn-close" aria-label="Fechar aviso" (click)="fecharModal()"></button>
       </div>
 
-      <div class="modal-body">
+      <div class="modal-body" id="teacher-modal-description">
         <p>
           {{ modalMensagem }}
         </p>

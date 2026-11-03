@@ -7,11 +7,13 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth-service';
 import { roleEnum } from '../../../types/role';
+import { AccessibleControl } from '../../../directives/accessible-control';
+import { AccessibleForm } from '../../../directives/accessible-form';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AccessibleControl, AccessibleForm],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
@@ -21,6 +23,7 @@ export class Login {
   private auth = inject(AuthService);
 
   error = signal('');
+  passwordVisible = signal(false);
 
   form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],

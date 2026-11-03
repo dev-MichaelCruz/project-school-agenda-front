@@ -1,0 +1,141 @@
+:host {
+  display: block;
+}
+
+.login-page {
+  padding: clamp(40px, 9vh, 88px) 20px 40px;
+}
+
+.login-panel {
+  width: 100%;
+  max-width: 420px;
+  margin-inline: auto;
+  color: #363636;
+}
+
+h2 {
+  margin: 0 0 32px;
+  font-size: clamp(1.75rem, 6vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
+}
+
+.login-field {
+  margin-bottom: 22px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+
+.login-input {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding-inline: 16px;
+  background: #f7f7f7;
+  border: 1px solid #bdbdbd;
+  border-radius: 10px;
+
+  > i {
+    flex-shrink: 0;
+    color: #666;
+    font-size: 1.4rem;
+  }
+
+  &:focus-within {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(32, 78, 126, 0.15);
+  }
+
+  &.invalid {
+    border-color: #b02a37;
+  }
+}
+
+input {
+  width: 100%;
+  min-width: 0;
+  min-height: 54px;
+  padding: 10px 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 1rem;
+  outline: none;
+
+  &::placeholder {
+    color: #666;
+    opacity: 1;
+  }
+}
+
+.password-toggle {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 44px;
+  min-height: 44px;
+  margin-right: -10px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #666;
+  font-size: 1.5rem;
+}
+
+.login-submit {
+  width: 100%;
+  min-height: 54px;
+  margin-top: 10px;
+  padding: 12px 20px;
+  border: 0;
+  border-radius: 10px;
+  background: #587b3e;
+  color: #fff;
+  font-size: 1.125rem;
+  font-weight: 700;
+
+  &:hover {
+    background: #476532;
+  }
+}
+
+button {
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 3px;
+  }
+}
+
+.field-error,
+.login-error {
+  margin: 8px 0 0;
+  color: #b02a37;
+  font-size: 0.875rem;
+  overflow-wrap: anywhere;
+}
+
+.login-error {
+  margin-top: 16px;
+  text-align: center;
+}
+
+@media (max-height: 600px) {
+  .login-page {
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+
+  h2 {
+    margin-bottom: 24px;
+  }
+}

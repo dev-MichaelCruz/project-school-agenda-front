@@ -13,6 +13,7 @@ import {
 } from '@angular/router';
 
 import { AuthService } from '../../services/auth-service';
+import { trapTabKey } from '../../utils/focus-management';
 
 @Component({
   selector: 'app-sidebar',
@@ -26,8 +27,19 @@ export class Sidebar {
   private auth = inject(AuthService);
 
   menuOpen = input<boolean>(false);
+  modal = input(false);
 
   close = output<void>();
+
+  onKeydown(event: KeyboardEvent): void {
+    if (!this.modal()) return;
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      this.close.emit();
+    } else {
+      trapTabKey(event, event.currentTarget as HTMLElement);
+    }
+  }
 
   menuItems = computed(() => {
 

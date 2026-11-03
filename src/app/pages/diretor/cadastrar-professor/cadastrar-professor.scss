@@ -1,3 +1,14 @@
 .btn-default-green{
   background: var(--default-green);
 }
+
+@media (max-width: 767.98px) {
+  .btn-default-green {
+    background: #587b3e;
+  }
+
+  .class-selection > .w-100 {
+    min-width: 0;
+    flex: 1;
+  }
+}

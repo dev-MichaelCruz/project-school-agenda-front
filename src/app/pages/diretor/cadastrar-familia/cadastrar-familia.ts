@@ -11,13 +11,17 @@ import { FamilyDTO } from '../../../models/family.dto';
 import { ClassroomsService } from '../../../services/classrooms/classrooms.service';
 
 import { Classroom } from '../../../models/classrooms.dto';
+import { AccessibleControl } from '../../../directives/accessible-control';
+import { AccessibleForm } from '../../../directives/accessible-form';
+import { AccessibleModal } from '../../../directives/accessible-modal';
+import { focusElement } from '../../../utils/focus-management';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-cadastrar-familia',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AccessibleControl, AccessibleForm, AccessibleModal],
   templateUrl: './cadastrar-familia.html',
   styleUrl: './cadastrar-familia.scss',
 })
@@ -89,11 +93,13 @@ export class CadastrarFamilia implements AfterViewInit, OnInit {
 
   adicionarCrianca(): void {
     this.criancas.push(this.criarCrianca());
+    focusElement(`#child_name_${this.criancas.length - 1}`);
   }
 
   removerCrianca(index: number): void {
     if (this.criancas.length > 1) {
       this.criancas.removeAt(index);
+      focusElement(`#child_name_${Math.min(index, this.criancas.length - 1)}`);
     }
   }
 

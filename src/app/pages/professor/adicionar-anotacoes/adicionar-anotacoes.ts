@@ -23,6 +23,8 @@ import { ClassroomsService } from '../../../services/classrooms/classrooms.servi
 
 import { Student } from '../../../models/students.dto';
 import { Classroom } from '../../../models/classrooms.dto';
+import { AccessibleModal } from '../../../directives/accessible-modal';
+import { focusMainHeading } from '../../../utils/focus-management';
 
 declare var bootstrap: any;
 
@@ -34,6 +36,7 @@ declare var bootstrap: any;
     SelecionarTurmaComponent,
     SelecionarAlunoComponent,
     FormAdicionarAnotacaoComponent,
+    AccessibleModal,
   ],
   templateUrl: './adicionar-anotacoes.html',
 })
@@ -103,6 +106,7 @@ export class AdicionarAnotacoes implements AfterViewInit {
       next: (alunos) => {
         this.alunos.set(alunos);
         this.etapa.set('aluno');
+        focusMainHeading();
       },
       error: (err) => {
         console.error(err);
@@ -111,18 +115,40 @@ export class AdicionarAnotacoes implements AfterViewInit {
     });
   }
 
+  atualizarTurmas(): void {
+    this.classroomsService.getMyClassrooms().subscribe({
+      next: (turmas) => this.turmas.set(turmas),
+      error: () => this.abrirModal('Não foi possível atualizar as turmas.'),
+    });
+  }
+
+  atualizarAlunos(): void {
+    const turma = this.turmaSelecionada();
+    const request = this.role() === roleEnum.RESPONSIBLE
+      ? this.studentsService.getMyStudentsAsResponsible()
+      : turma ? this.classroomsService.getStudentsByClassroom(turma.id) : null;
+
+    request?.subscribe({
+      next: (alunos) => this.alunos.set(alunos),
+      error: () => this.abrirModal('Não foi possível atualizar os alunos.'),
+    });
+  }
+
   selecionarAluno(aluno: Student): void {
     this.alunoSelecionado.set(aluno);
     this.etapa.set('form');
+    focusMainHeading();
   }
 
   voltarTurma(): void {
     if (this.role() === roleEnum.RESPONSIBLE) return;
     this.etapa.set('turma');
+    focusMainHeading();
   }
 
   voltarAluno(): void {
     this.etapa.set('aluno');
+    focusMainHeading();
   }
 
   salvarAnotacao(dados: any): void {

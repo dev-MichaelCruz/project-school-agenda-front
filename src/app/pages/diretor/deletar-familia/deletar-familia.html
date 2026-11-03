@@ -1,46 +1,70 @@
-<div class="p-4">
-  <h2 class="mb-4">Deletar família</h2>
+<div class="page-content management-page p-4">
+  <header class="page-header">
+    <h2>Deletar família</h2>
+    <app-list-toolbar
+      label="Buscar família"
+      [query]="busca"
+      [loading]="estadoDados() === 'loading'"
+      (search)="busca = $event"
+      (refresh)="carregarFamilias()" />
+  </header>
 
   <!-- TOAST -->
   @if (toastVisivel) {
-    <div class="alert alert-success">
-      {{ toastMensagem }}
+    <div class="alert alert-success d-flex align-items-center justify-content-between gap-3" role="status" aria-live="polite" aria-atomic="true">
+      <p class="mb-0">{{ toastMensagem }}</p>
+      <button type="button" class="btn-close flex-shrink-0" aria-label="Fechar mensagem" (click)="fecharMensagem()"></button>
     </div>
   }
 
-  @for (familia of familias; track familia.responsibleId) {
-    <div class="d-flex align-items-center justify-content-between mb-4">
-      <span class="nome-familia">
-        {{ familia.name }}
-      </span>
-
-      <button class="btn btn-delete btn-danger btn-rounded" (click)="abrirModal(familia)">
-        <i class="bi bi-dash"></i>
-      </button>
-    </div>
-  }
+  <section aria-label="Famílias cadastradas">
+    @if (estadoDados() !== 'loaded') {
+      <app-data-feedback [state]="estadoDados()" (retry)="carregarFamilias()" />
+    } @else {
+      <p class="visually-hidden" role="status" aria-live="polite" aria-atomic="true">{{ familiasFiltradas.length }} famílias encontradas.</p>
+      @for (familia of familiasFiltradas; track familia.responsibleId) {
+        <div class="item-row d-flex align-items-center justify-content-between mb-4">
+          <span class="nome-familia">{{ familia.name }}</span>
+          <button
+            type="button"
+            class="btn btn-delete btn-danger btn-rounded"
+            [attr.aria-label]="'Excluir família ' + familia.name"
+            (click)="abrirModal(familia)">
+            <i class="bi bi-dash" aria-hidden="true"></i>
+          </button>
+        </div>
+      } @empty {
+        <app-data-feedback
+          state="empty"
+          [emptyMessage]="busca.trim() ? 'Nenhum resultado para a busca.' : 'Sem dados encontrados.'" />
+      }
+    }
+  </section>
 </div>
 
-<div class="modal fade" id="modalDeleteFamilia" tabindex="-1" aria-hidden="true">
+<div appAccessibleModal class="modal fade" id="modalDeleteFamilia" tabindex="-1" aria-hidden="true" aria-labelledby="delete-family-title" aria-describedby="delete-family-description">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Confirmar exclusão</h5>
+        <h2 class="modal-title fs-5" id="delete-family-title">Confirmar exclusão</h2>
 
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar confirmação"></button>
       </div>
 
-      <div class="modal-body">
+      <div class="modal-body" id="delete-family-description">
         Deseja deletar
         <strong>
           {{ familiaSelecionada?.name }} </strong
         >?
+        @if (erroExclusao()) {
+          <p class="alert alert-danger mt-3 mb-0" role="alert" aria-atomic="true">{{ erroExclusao() }}</p>
+        }
       </div>
 
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
 
-        <button type="button" class="btn btn-danger" (click)="confirmarDelete()">OK</button>
+        <button type="button" class="btn btn-danger" (click)="confirmarDelete()">Excluir</button>
       </div>
     </div>
   </div>

@@ -1,8 +1,10 @@
 <div class="anotacao-view">
 
+  <header class="page-header">
   <h2>
     {{ titulo() }}
   </h2>
+  </header>
 
   <div class="mt-2 text-muted small">
 
@@ -34,11 +36,13 @@
 
       @for (img of imagens(); track img) {
 
-        <img
-          [src]="img"
-          class="img-anotacao rounded border"
-          alt="Imagem da anotação"
-        />
+        <a [href]="img" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'Abrir imagem ' + ($index + 1) + ' da anotação em uma nova aba'">
+          <img
+            [src]="img"
+            class="img-anotacao rounded border"
+            [alt]="'Imagem ' + ($index + 1) + ' anexada à anotação de ' + autor()"
+          />
+        </a>
 
       }
 

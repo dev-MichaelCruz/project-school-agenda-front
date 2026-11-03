@@ -1,33 +1,81 @@
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6 col-lg-4">
-      <div class="card shadow">
-        <div class="card-body">
-          <h2 class="text-center mb-4">Login</h2>
+<section class="login-page" aria-labelledby="login-title">
+  <div class="login-panel">
+    <h2 id="login-title">Faça seu login</h2>
 
-          <form [formGroup]="form" (ngSubmit)="onSubmit()">
-            <div class="mb-3">
-              <label class="form-label"> Usuário </label>
-
-              <input type="email" class="form-control" formControlName="email" />
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label"> Senha </label>
-
-              <input type="password" class="form-control" formControlName="password" />
-            </div>
-
-            <button class="btn btn-primary w-100" type="submit">Entrar</button>
-          </form>
-
-          @if (error()) {
-            <div class="text-danger mt-3">
-              {{ error() }}
-            </div>
-          }
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" aria-labelledby="login-title">
+      <div class="login-field">
+        <label for="login-email">Email</label>
+        <div
+          class="login-input"
+          [class.invalid]="form.controls.email.touched && form.controls.email.invalid"
+        >
+          <i class="bi bi-envelope" aria-hidden="true"></i>
+          <input
+            id="login-email"
+            type="email"
+            formControlName="email"
+            placeholder="Email"
+            autocomplete="username"
+            inputmode="email"
+            autocapitalize="none"
+            spellcheck="false"
+            [attr.aria-invalid]="form.controls.email.touched && form.controls.email.invalid"
+            [attr.aria-describedby]="
+              form.controls.email.touched && form.controls.email.invalid ? 'login-email-error' : null
+            "
+          />
         </div>
+        @if (form.controls.email.touched && form.controls.email.invalid) {
+          <p class="field-error" id="login-email-error">Informe um email válido.</p>
+        }
       </div>
-    </div>
+
+      <div class="login-field">
+        <label for="login-password">Senha</label>
+        <div
+          class="login-input"
+          [class.invalid]="form.controls.password.touched && form.controls.password.invalid"
+        >
+          <i class="bi bi-lock" aria-hidden="true"></i>
+          <input
+            id="login-password"
+            [type]="passwordVisible() ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Senha"
+            autocomplete="current-password"
+            [attr.aria-invalid]="form.controls.password.touched && form.controls.password.invalid"
+            [attr.aria-describedby]="
+              form.controls.password.touched && form.controls.password.invalid
+                ? 'login-password-error'
+                : null
+            "
+          />
+          <button
+            type="button"
+            class="password-toggle"
+            [attr.aria-label]="passwordVisible() ? 'Ocultar senha' : 'Mostrar senha'"
+            [attr.aria-pressed]="passwordVisible()"
+            aria-controls="login-password"
+            (click)="passwordVisible.set(!passwordVisible())"
+          >
+            <i
+              class="bi"
+              [class.bi-eye]="!passwordVisible()"
+              [class.bi-eye-slash]="passwordVisible()"
+              aria-hidden="true"
+            ></i>
+          </button>
+        </div>
+        @if (form.controls.password.touched && form.controls.password.invalid) {
+          <p class="field-error" id="login-password-error">Informe sua senha.</p>
+        }
+      </div>
+
+      <button class="login-submit" type="submit">Entrar</button>
+
+      @if (error()) {
+        <p class="login-error" role="alert">{{ error() }}</p>
+      }
+    </form>
   </div>
-</div>
+</section>

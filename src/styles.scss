@@ -3,16 +3,62 @@
 :root {
   --bg-color: #E8B30C;
   --bg-white: #FCFEFE;
-  --primary-color: #204E7E;
+  --primary-color: #1B436D;
   --secondary-color: #95B9C8;
 
   --text-primary-color: #ffffff;
 
   --primary-button: #204E7E;
   --default-green: #193F29;
+  --bs-danger-rgb: 176, 42, 55;
 }
 body {
   background-color: #fff;
+}
+
+.skip-link {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 1100;
+  padding: 12px 16px;
+  border-radius: 6px;
+  background: #fff;
+  color: var(--primary-color);
+  transform: translateY(-160%);
+
+  &:focus {
+    transform: translateY(0);
+  }
+}
+
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid var(--primary-color);
+  outline-offset: 3px;
+}
+
+button,
+.btn,
+.form-control,
+.form-select {
+  min-height: 44px;
+}
+
+.btn-rounded {
+  min-width: 44px;
+}
+
+.form-hint {
+  font-size: 0.875rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 .btn-rounded{
@@ -21,4 +67,185 @@ body {
 }
 .btn-default-green{
   background: var(--default-green);
+}
+
+.page-header {
+  display: contents;
+}
+
+@media (min-width: 768px) {
+  .page-content .item-row {
+    gap: 16px;
+
+    > span {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    > button {
+      flex-shrink: 0;
+    }
+  }
+
+  .page-content .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px 24px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #8ba0af;
+
+    > h2 {
+      flex: 1 1 260px;
+      min-width: 0;
+      margin: 0;
+      color: #515151;
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+
+    small {
+      color: #656565;
+      font-size: 1.125rem;
+      font-weight: 400;
+    }
+
+    > app-list-toolbar {
+      flex: 0 1 520px;
+      max-width: 100%;
+      margin: 0;
+    }
+  }
+}
+
+@media (max-width: 767.98px) {
+  .main-content.p-4 {
+    padding: 24px 16px !important;
+  }
+
+  .page-content.p-4 {
+    padding: 0 !important;
+  }
+
+  .page-content {
+    color: #343434;
+
+    .row {
+      --bs-gutter-x: 24px;
+    }
+
+    .row.g-2 {
+      --bs-gutter-x: 8px;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-size: clamp(1.5rem, 6.5vw, 1.875rem);
+      font-weight: 700;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+
+      small {
+        display: block;
+        margin-top: 6px;
+        font-size: 1rem;
+        font-weight: 400;
+      }
+    }
+
+    &.management-page .page-header > h2 {
+      padding-bottom: 16px;
+      border-bottom: 1px solid #95afc3;
+    }
+
+    .form-control,
+    .form-select {
+      min-height: 52px;
+      border-color: #c8c8c8;
+      border-radius: 8px;
+      background-color: #f7f7f7;
+      font-size: 1rem;
+    }
+
+    .form-label {
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+
+    .btn {
+      min-height: 44px;
+      border-radius: 8px;
+      overflow-wrap: anywhere;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+
+    .btn-danger {
+      background-color: #9d3027;
+      border-color: #9d3027;
+    }
+
+    .btn-default-green,
+    .btn-success {
+      background-color: #587b3e;
+      border-color: #587b3e;
+    }
+
+    .btn-rounded {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      border-radius: 50%;
+      font-size: 1.5rem;
+    }
+
+    form > button[type='submit'] {
+      width: 100%;
+      min-height: 52px;
+      font-size: 1.125rem;
+    }
+
+    .item-row {
+      gap: 16px;
+      min-height: 80px;
+      margin-bottom: 0 !important;
+      padding-block: 16px;
+      border-bottom: 1px solid #e0e0e0;
+
+      > span {
+        min-width: 0;
+        overflow-wrap: anywhere;
+        font-size: 1.125rem;
+      }
+    }
+  }
+
+  .modal-dialog {
+    margin: 12px;
+  }
+
+  .modal-body {
+    overflow-wrap: anywhere;
+  }
+
+  .modal-footer .btn,
+  .modal-header .btn-close {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  body:has(.sidebar-open) {
+    overflow: hidden;
+  }
 }

@@ -7,6 +7,8 @@ import {
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
+import { AccessibleControl } from '../../../../directives/accessible-control';
+import { AccessibleForm } from '../../../../directives/accessible-form';
 
 import {
   ReactiveFormsModule,
@@ -17,7 +19,7 @@ import {
 @Component({
   selector: 'app-form-adicionar-anotacao',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AccessibleControl, AccessibleForm],
   templateUrl: './form-adicionar-anotacao.component.html',
   styleUrl: './form-adicionar-anotacao.component.scss'
 })
