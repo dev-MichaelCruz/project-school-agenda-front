@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
 
-  apiUrl: 'https://projectschoolagenda.onrender.com/api',
+  apiUrl: 'https://p01--apischoolagenda--gfz82mmxptyg.code.run/api',
 };

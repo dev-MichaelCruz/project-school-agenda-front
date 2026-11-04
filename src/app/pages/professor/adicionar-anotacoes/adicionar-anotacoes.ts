@@ -60,6 +60,7 @@ export class AdicionarAnotacoes implements AfterViewInit {
   modalMensagem = signal('');
 
   @ViewChild('modalRef') modalElement!: ElementRef;
+  @ViewChild(FormAdicionarAnotacaoComponent) private formulario?: FormAdicionarAnotacaoComponent;
   private modalInstance: any;
 
   ngAfterViewInit() {
@@ -167,6 +168,7 @@ export class AdicionarAnotacoes implements AfterViewInit {
       visibleToResponsible,
       dados.imagem).subscribe({
         next: () => {
+          this.formulario?.limpar();
           this.abrirModal('Anotação salva com sucesso');
 
           // this.etapa.set(role === roleEnum.RESPONSIBLE ? 'aluno' : 'turma');
