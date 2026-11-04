@@ -43,8 +43,8 @@ export class App {
       requestAnimationFrame(() => {
         const heading = document.querySelector('#main-content h2')?.textContent?.trim();
         this.pageTitle.setTitle(heading
-          ? `${heading.replace(/\s+/g, ' ')} | Agenda Virtual Escola Municipal Juruti`
-          : 'Agenda Virtual Escola Municipal Juruti');
+          ? `${heading.replace(/\s+/g, ' ')} | Agenda Virtual Escola Municipal Juriti `
+          : 'Agenda Virtual Escola Municipal Juriti ');
         if (this.hasNavigated) focusMainHeading();
         this.hasNavigated = true;
       });

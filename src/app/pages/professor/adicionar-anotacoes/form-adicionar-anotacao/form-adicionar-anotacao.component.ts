@@ -3,7 +3,9 @@ import {
   output,
   signal,
   inject,
-  input
+  input,
+  ViewChild,
+  ElementRef
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -13,7 +15,8 @@ import { AccessibleForm } from '../../../../directives/accessible-form';
 import {
   ReactiveFormsModule,
   FormBuilder,
-  Validators
+  Validators,
+  FormGroupDirective
 } from '@angular/forms';
 
 @Component({
@@ -41,6 +44,9 @@ export class FormAdicionarAnotacaoComponent {
 
   imagemSelecionada = signal<File | null>(null);
   nomeImagem = signal('');
+
+  @ViewChild(FormGroupDirective) private formDirective!: FormGroupDirective;
+  @ViewChild('fileInput') private fileInput!: ElementRef<HTMLInputElement>;
 
   form = this.fb.nonNullable.group({
     texto: ['', Validators.required],
@@ -78,12 +84,16 @@ export class FormAdicionarAnotacaoComponent {
       imagem: this.imagemSelecionada()
     });
 
-    this.form.reset({
+  }
+
+  limpar(): void {
+    this.formDirective.resetForm({
       texto: '',
       privado: false
     });
 
     this.imagemSelecionada.set(null);
     this.nomeImagem.set('');
+    this.fileInput.nativeElement.value = '';
   }
 }

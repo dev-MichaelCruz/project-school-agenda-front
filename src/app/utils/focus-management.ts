@@ -35,7 +35,7 @@ export function focusMainHeading(): void {
     if (document.querySelector('.modal.show, .sidebar-open')) return;
     const heading = document.querySelector<HTMLElement>('#main-content h2');
     const name = heading?.textContent?.trim().replace(/\s+/g, ' ');
-    if (name) document.title = `${name} | Agenda Virtual Escola Municipal Juruti`;
+    if (name) document.title = `${name} | Agenda Virtual Escola Municipal Juriti `;
     const target = heading ?? document.getElementById('main-content');
     if (target) {
       target.tabIndex = -1;
